@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  WAREHOUSE
+  VIEWER
+}
+
+enum MaterialStatus {
+  ACTIVE
+  INACTIVE
+  OBSOLETE
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  IMPORT
+  EXPORT
+  PHOTO_UPLOAD
+  LOGIN
+  ERROR_REPORT
+}
+
+model User {
+  id           String     @id @default(cuid())
+  name         String
+  email        String     @unique
+  passwordHash String
+  role         Role       @default(VIEWER)
+  active       Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  auditLogs    AuditLog[]
+  searchLogs   SearchLog[]
+}
+
+model Material {
+  id               String         @id @default(cuid())
+  code             String         @unique
+  alternateCode    String?
+  name             String
+  description      String?
+  category         String?
+  brand            String?
+  model            String?
+  unit             String?
+  stock            Decimal?       @db.Decimal(14, 3)
+  averageCost      Decimal?       @db.Decimal(14, 2)
+  currency         String?        @default("CLP")
+  location         String?
+  status           MaterialStatus @default(ACTIVE)
+  mainPhotoPath    String?
+  validated        Boolean        @default(false)
+  lastUpdatedAt    DateTime       @updatedAt
+  createdAt        DateTime       @default(now())
+  auditLogs        AuditLog[]
+
+  @@index([code])
+  @@index([name])
+  @@index([category])
+  @@index([location])
+}
+
+model AuditLog {
+  id         String      @id @default(cuid())
+  action     AuditAction
+  entity     String
+  entityId   String?
+  before     Json?
+  after      Json?
+  note       String?
+  userId     String?
+  user       User?       @relation(fields: [userId], references: [id])
+  materialId String?
+  material   Material?   @relation(fields: [materialId], references: [id])
+  createdAt  DateTime    @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}
+
+model SearchLog {
+  id            String   @id @default(cuid())
+  query         String
+  requesterName String?
+  requesterRut  String?
+  resultCount   Int
+  hasResults    Boolean
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id])
+  ipAddress     String?
+  createdAt     DateTime @default(now())
+
+  @@index([query])
+  @@index([hasResults])
+  @@index([createdAt])
+}
+
+model IntegrationOutbox {
+  id          String   @id @default(cuid())
+  source      String
+  payload     Json
+  processed   Boolean  @default(false)
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([source])
+  @@index([processed])
+}

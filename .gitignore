@@ -1,0 +1,17 @@
+node_modules
+dist
+.env
+.env.local
+.env.*.local
+apps/api/uploads/*
+!apps/api/uploads/.gitkeep
+!apps/api/uploads/materials/.gitkeep
+*.log
+.DS_Store
+backups
+
+node_modules
+.env
+dist
+.env.local
+.env.production
