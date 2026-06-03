@@ -17,13 +17,31 @@ const __dirname = path.dirname(__filename);
 
 export const app = express();
 
+const configuredOrigins = env.CORS_ORIGIN.split(",").map((origin) => origin.trim()).filter(Boolean);
+const allowedOrigins = new Set([...configuredOrigins, "http://localhost:5173", "http://127.0.0.1:5173"]);
+
 app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } }));
-app.use(cors({ origin: env.WEB_ORIGIN }));
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`Origen no permitido por CORS: ${origin}`));
+    }
+  })
+);
 app.use(express.json({ limit: "2mb" }));
 app.use("/uploads", express.static(path.resolve(__dirname, "../uploads")));
 
+app.get("/health", (_request, response) => {
+  response.json({ status: "OK", name: "Bodega360 API" });
+});
+
 app.get("/api/health", (_request, response) => {
-  response.json({ status: "ok", name: "Bodega360 API" });
+  response.json({ status: "OK", name: "Bodega360 API" });
 });
 
 app.use("/api/auth", authRouter);

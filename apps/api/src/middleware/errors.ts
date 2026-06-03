@@ -11,6 +11,19 @@ export function errorHandler(error: unknown, _request: Request, response: Respon
     return;
   }
 
+  if (isPrismaConnectionError(error)) {
+    response.status(503).json({
+      message: "No fue posible conectar con PostgreSQL. Revisa DATABASE_URL y que la base de datos este disponible."
+    });
+    return;
+  }
+
   console.error(error);
   response.status(500).json({ message: "Error interno del servidor." });
+}
+
+function isPrismaConnectionError(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as { code?: string; message?: string };
+  return candidate.code === "P1000" || candidate.code === "P1001" || candidate.message?.includes("Can't reach database server");
 }

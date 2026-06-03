@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bodega360 - Búsqueda de Materiales</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Vista Principal / Búsqueda -->
+    <div id="public-view" class="view active">
+        <header class="main-header">
+            <div class="logo-container">
+                <img src="assets/img/master-drilling-logo.png" onerror="this.onerror=null;this.src='https://masterdrilling.com/wp-content/uploads/2023/07/Master-Drilling-horizontal-1.png';" alt="Master Drilling Logo" class="logo">
+            </div>
+            <div class="header-title">Bodega360 Local</div>
+            <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
+                <button id="btn-toggle-theme" class="btn-secondary" style="min-height:36px; padding:0.4rem 0.8rem; font-size:0.8rem;">🌓 Tema</button>
+                <button id="btn-toggle-consulta" class="btn-secondary" style="min-height:36px; padding:0.4rem 0.8rem; font-size:0.8rem;">🖥️ Modo Consulta</button>
+            </div>
+        </header>
+
+        <main class="search-container">
+            <div class="search-box-wrapper">
+                <div class="search-box">
+                    <h2>Consulta de Materiales</h2>
+                    <div class="input-group">
+                        <label for="search-user">Nombre o RUT de quien consulta</label>
+                        <input type="text" id="search-user" placeholder="Ej: 12.345.678-9 o Juan Pérez">
+                    </div>
+                    
+                    <div class="input-group" style="position: relative;">
+                        <label for="search-query">¿Qué buscas?</label>
+                        <input type="text" id="search-query" placeholder="Buscar por código, nombre, alias, ubicación..." autocomplete="off">
+                        <div id="search-suggestions" class="suggestions-list hidden"></div>
+                    </div>
+
+                    <button id="btn-search" class="btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        Buscar Material
+                    </button>
+                </div>
+                
+                <div id="empty-db-warning" class="hidden text-muted text-center mt-4">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.5rem; display:block; margin: 0 auto 0.5rem auto;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    No hay base de materiales cargada todavía. Solicite a bodega cargar la base maestra.
+                </div>
+            </div>
+
+            <div id="search-results-container" class="results-container hidden">
+                <h3 style="margin-bottom: 1rem;">Resultados de Búsqueda</h3>
+                <div id="search-results" class="results-grid">
+                    <!-- Los resultados se inyectan aquí mediante JS -->
+                </div>
+            </div>
+
+            <div id="no-results-container" class="no-results-card hidden text-center" style="background: white; padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); width: 100%; max-width: 680px; margin-top: 1.5rem;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1rem auto; color: var(--text-muted);"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                <h3>No se encontraron resultados</h3>
+                <p class="text-muted" id="no-results-message" style="margin-bottom: 1rem;">¿Quizás quisiste decir alguno de estos?</p>
+                <div id="levenshtein-suggestions" class="flex-row" style="justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; gap: 0.5rem;">
+                    <!-- Sugerencias Levenshtein van aquí -->
+                </div>
+                <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
+                    <p class="text-muted mb-4">¿No encuentras el material que buscas? Puedes solicitar que se cargue al sistema.</p>
+                    <button id="btn-request-alta" class="btn-primary">
+                        📝 Solicitar carga de material
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <button id="btn-open-admin-login" class="btn-admin-trigger">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.3rem;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+            Modo Admin
+        </button>
+    </div>
+
+    <!-- Modal Login Admin -->
+    <div id="login-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Acceso Administrador</h2>
+                <button class="close-btn" id="close-login-modal">&times;</button>
+            </div>
+            <div class="input-group">
+                <label for="admin-user">Usuario</label>
+                <input type="text" id="admin-user" autocomplete="username">
+            </div>
+            <div class="input-group">
+                <label for="admin-pass">Contraseña</label>
+                <input type="password" id="admin-pass" autocomplete="current-password">
+            </div>
+            <p id="login-error" class="error-msg hidden">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                Credenciales incorrectas.
+            </p>
+            <button id="btn-login" class="btn-primary" style="width: 100%; margin-top: 1rem;">Ingresar</button>
+        </div>
+    </div>
+
+    <!-- Vista Admin -->
+    <div id="admin-view" class="view hidden">
+        <header class="admin-header">
+            <div class="header-left">
+                <img src="assets/img/master-drilling-logo.png" onerror="this.onerror=null;this.src='https://masterdrilling.com/wp-content/uploads/2023/07/Master-Drilling-horizontal-1.png';" alt="Master Drilling Logo" class="logo-small">
+                <span>Bodega360 - Admin</span>
+            </div>
+            <button id="btn-logout" class="btn-secondary">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                Salir
+            </button>
+        </header>
+
+        <div class="admin-layout">
+            <nav class="admin-sidebar">
+                <button class="tab-btn active" data-target="admin-materials">Materiales</button>
+                <button class="tab-btn" data-target="admin-add-material">Agregar Material</button>
+                <button class="tab-btn" data-target="admin-inventory-mode">Modo Inventario 📱</button>
+                <button class="tab-btn" data-target="admin-master">Base Maestra</button>
+                <button class="tab-btn" data-target="admin-dictionary">Diccionario Búsqueda</button>
+                <button class="tab-btn" data-target="admin-categories">Categorías</button>
+                <button class="tab-btn" data-target="admin-history">Historial Consultas</button>
+                <button class="tab-btn" data-target="admin-tickets">Tickets / Solicitudes 📝</button>
+                <button class="tab-btn" data-target="admin-pendings">Pendientes</button>
+                <button class="tab-btn" data-target="admin-reports">Reportes 📊</button>
+                <button class="tab-btn" data-target="admin-diagnostics">Diagnóstico ⚕️</button>
+                <button class="tab-btn" data-target="admin-data">Importar / Exportar</button>
+            </nav>
+
+            <main class="admin-content">
+                <!-- Tab: Materiales -->
+                <section id="admin-materials" class="tab-content active">
+                    <h2>Lista de Materiales</h2>
+                    <div class="table-actions">
+                        <div class="input-group table-search">
+                            <input type="text" id="admin-search-materials" placeholder="Filtrar materiales por código o nombre...">
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="materials-table">
+                            <thead>
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Categoría</th>
+                                    <th>Stock</th>
+                                    <th>Ubicación</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Materiales inyectados aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tab: Agregar / Editar Material -->
+                <section id="admin-add-material" class="tab-content hidden">
+                    <h2 id="form-material-title">Agregar Material</h2>
+                    <div class="form-card">
+                        <form id="material-form">
+                            <input type="hidden" id="mat-old-code">
+                            <div class="form-grid">
+                                <div class="input-group">
+                                    <label for="mat-codigo">Código *</label>
+                                    <input type="text" id="mat-codigo" required>
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-codigo-barra">Código de Barra</label>
+                                    <input type="text" id="mat-codigo-barra" placeholder="Escanear o ingresar EAN/QR">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-codigo-alt">Código Alternativo</label>
+                                    <input type="text" id="mat-codigo-alt">
+                                </div>
+                                <div class="input-group full-width">
+                                    <label for="mat-nombre">Nombre *</label>
+                                    <input type="text" id="mat-nombre" required>
+                                </div>
+                                <div class="input-group full-width">
+                                    <label for="mat-descripcion">Descripción</label>
+                                    <textarea id="mat-descripcion" rows="3"></textarea>
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-categoria">Categoría</label>
+                                    <input type="text" id="mat-categoria" list="categories-datalist">
+                                    <datalist id="categories-datalist"></datalist>
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-marca">Marca</label>
+                                    <input type="text" id="mat-marca">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-modelo">Modelo</label>
+                                    <input type="text" id="mat-modelo">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-unidad">Unidad de Medida</label>
+                                    <input type="text" id="mat-unidad">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-stock">Stock</label>
+                                    <input type="number" id="mat-stock">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-stock-minimo">Stock Mínimo</label>
+                                    <input type="number" id="mat-stock-minimo" placeholder="Ej: 5">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-costo">Costo Promedio</label>
+                                    <input type="number" id="mat-costo">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-fecha-costo">Fecha Costo Promedio</label>
+                                    <input type="date" id="mat-fecha-costo">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-origen-costo">Origen Costo</label>
+                                    <select id="mat-origen-costo">
+                                        <option value="Manual" selected>Manual</option>
+                                        <option value="Excel">Excel</option>
+                                        <option value="ERP">ERP futuro</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-moneda">Moneda</label>
+                                    <input type="text" id="mat-moneda" value="CLP">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-ubicacion">Ubicación</label>
+                                    <input type="text" id="mat-ubicacion">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-estado">Estado</label>
+                                    <input type="text" id="mat-estado" value="Activo">
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-equipo">Equipo Asociado</label>
+                                    <input type="text" id="mat-equipo" placeholder="Ej: Camión Extracción">
+                                </div>
+                                <div class="input-group full-width">
+                                    <label for="mat-alias">Alias de Búsqueda (separados por comas)</label>
+                                    <input type="text" id="mat-alias" placeholder="Ej: rulemán, rodamiento, cojinete">
+                                </div>
+                                <div class="input-group checkbox-group" style="margin-bottom: 0;">
+                                    <input type="checkbox" id="mat-validado">
+                                    <label for="mat-validado">Material Validado Revisado</label>
+                                </div>
+                                <div class="input-group checkbox-group" style="margin-bottom: 0;">
+                                    <input type="checkbox" id="mat-es-critico">
+                                    <label for="mat-es-critico" style="color:var(--danger-color); font-weight:bold;">⚠️ Material Crítico</label>
+                                </div>
+                                <div class="input-group">
+                                    <label for="mat-estado-revision">Estado de Revisión</label>
+                                    <select id="mat-estado-revision">
+                                        <option value="Pendiente" selected>Pendiente</option>
+                                        <option value="En revisión">En revisión</option>
+                                        <option value="Validado">Validado</option>
+                                    </select>
+                                </div>
+                                <div class="input-group full-width" style="border: 1px dashed var(--border-color); padding: 1rem; border-radius: var(--radius-md);">
+                                    <label>Foto Principal (Opcional: subir, capturar o ruta relativa)</label>
+                                    <div style="display:flex; gap:1rem; align-items:center;">
+                                        <input type="file" id="mat-foto-file" accept="image/*" capture="environment" style="border:none; padding:0; min-height:auto;">
+                                        <input type="text" id="mat-foto" placeholder="Ej: assets/fotos/CODIGO.webp o dejar vacio" style="flex:1;">
+                                    </div>
+                                    <div id="mat-foto-preview-container" class="hidden mt-2" style="display:flex; gap:1rem; align-items:center;">
+                                        <img id="mat-foto-preview" style="max-height:100px; border-radius:var(--radius-sm); border:1px solid var(--border-color);">
+                                        <div>
+                                            <p id="mat-foto-size" class="text-muted" style="font-size:0.75rem;"></p>
+                                            <p id="mat-foto-warning" class="text-muted" style="font-size:0.75rem;">Guardar fotos en el navegador es solo para prototipo local.</p>
+                                            <button type="button" id="btn-remove-photo" class="action-btn text-danger" style="min-height:auto; padding:0.2rem 0.5rem; font-size:0.8rem;">Eliminar foto</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="input-group full-width">
+                                    <label for="mat-fotos-adicionales">Fotos adicionales (Opcional, rutas separadas por comas)</label>
+                                    <input type="text" id="mat-fotos-adicionales" placeholder="Ej: assets/fotos/CODIGO-lado.webp, assets/fotos/CODIGO-serie.webp">
+                                </div>
+                                <div class="input-group full-width">
+                                    <label for="mat-observaciones">Observaciones</label>
+                                    <textarea id="mat-observaciones" rows="2"></textarea>
+                                </div>
+                            </div>
+                            <p id="form-error" class="error-msg hidden">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                                <span>Error en el formulario</span>
+                            </p>
+                            <div class="form-actions">
+                                <button type="button" id="btn-cancel-material" class="btn-secondary hidden">Cancelar</button>
+                                <button type="submit" class="btn-primary">Guardar Material</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Tab: Modo Inventario -->
+                <section id="admin-inventory-mode" class="tab-content hidden">
+                    <h2>Modo Inventario</h2>
+                    <p class="text-muted mb-4">Flujo opcional para tablet. Permite validar datos, ubicacion, stock y foto sin bloquear la consulta principal.</p>
+                    <div class="inventory-toolbar">
+                        <div class="input-group" style="margin-bottom:0; flex:1;">
+                            <label for="inventory-search">Buscar codigo o material</label>
+                            <input type="text" id="inventory-search" placeholder="Escanear codigo o buscar nombre...">
+                        </div>
+                        <button id="btn-inventory-search" class="btn-primary inventory-big-btn" type="button">Buscar</button>
+                    </div>
+                    <div id="inventory-empty" class="empty-state-box">
+                        Busca un material para abrir su ficha rapida de inventario.
+                    </div>
+                    <div id="inventory-card" class="inventory-card hidden">
+                        <div class="inventory-photo-panel" id="inventory-photo-panel"></div>
+                        <div class="inventory-info-panel">
+                            <div class="inventory-kicker" id="inventory-status-photo">Sin foto</div>
+                            <h3 id="inventory-name">Material</h3>
+                            <div class="inventory-code" id="inventory-code">-</div>
+                            <div class="inventory-grid">
+                                <div><span>Ubicacion</span><input type="text" id="inventory-location"></div>
+                                <div><span>Stock</span><input type="number" id="inventory-stock"></div>
+                                <div><span>Costo prom.</span><strong id="inventory-cost">-</strong></div>
+                                <div><span>Estado</span><strong id="inventory-state">-</strong></div>
+                                <div><span>Validado</span><strong id="inventory-validated">No</strong></div>
+                                <div><span>Foto</span><strong id="inventory-photo-state">Sin foto</strong></div>
+                            </div>
+                            <input type="file" id="inventory-photo-file" accept="image/*" capture="environment" class="hidden">
+                            <div class="inventory-actions">
+                                <button id="btn-inventory-confirm-location" class="btn-secondary inventory-big-btn" type="button">Confirmar ubicacion</button>
+                                <button id="btn-inventory-change-photo" class="btn-secondary inventory-big-btn" type="button">Tomar / subir foto</button>
+                                <button id="btn-inventory-validate" class="btn-secondary inventory-big-btn" type="button">Marcar validado</button>
+                                <button id="btn-inventory-save" class="btn-primary inventory-big-btn" type="button">Guardar</button>
+                                <button id="btn-inventory-next" class="btn-secondary inventory-big-btn" type="button">Siguiente</button>
+                            </div>
+                            <p id="inventory-photo-note" class="text-muted mt-4">Fotos opcionales. En servidor interno deben guardarse en carpeta central, no como base64 masivo en localStorage.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Base Maestra -->
+                <section id="admin-master" class="tab-content hidden">
+                    <h2>Base Maestra de Códigos</h2>
+                    <p class="text-muted mb-4">Carga un catálogo completo usando archivos CSV o JSON. Esto alimentará el buscador público.</p>
+                    
+                    <div class="data-actions-grid mb-4">
+                        <div class="data-card info-card">
+                            <h3>1. Cargar Archivo Maestro</h3>
+                            <p>Sube un archivo .csv o .json con el catálogo.</p>
+                            <input type="file" id="file-master-catalog" accept=".json,.csv">
+                            <button id="btn-load-local-catalog" class="btn-secondary mt-4">Cargar local (data/catalogo...)</button>
+                        </div>
+                        <div class="data-card">
+                            <h3>Plantillas</h3>
+                            <p>Descarga un archivo con las columnas sugeridas.</p>
+                            <div class="flex-row">
+                                <button id="btn-download-csv-template" class="btn-secondary">CSV</button>
+                                <button id="btn-download-json-template" class="btn-secondary">JSON</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="master-preview-section" class="hidden">
+                        <h3 class="mt-4 mb-4">Vista Previa de Importación</h3>
+                        <div class="stats-grid" id="master-stats-container">
+                            <!-- Stats inyectadas aquí -->
+                        </div>
+                        
+                        <div class="form-card mb-4" style="padding: 1.5rem;">
+                            <div class="input-group" style="margin-bottom:0;">
+                                <label for="master-import-policy">Política de Importación</label>
+                                <select id="master-import-policy">
+                                    <option value="skip">Omitir existentes (Actualiza solo nuevos)</option>
+                                    <option value="update">Actualizar existentes y crear nuevos</option>
+                                    <option value="new_only">Crear solo nuevos (Ignorar existentes y cambios)</option>
+                                    <option value="replace_all">Reemplazar toda la base actual (⚠️ Peligro)</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="table-actions">
+                            <button id="btn-confirm-master-import" class="btn-primary">Confirmar e Importar</button>
+                            <button id="btn-cancel-master-import" class="btn-secondary">Cancelar</button>
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                            <table id="master-preview-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fila</th>
+                                        <th>Código</th>
+                                        <th>Nombre</th>
+                                        <th>Categoría</th>
+                                        <th>Stock</th>
+                                        <th>Costo Prom.</th>
+                                        <th>Ubicación</th>
+                                        <th>Estado</th>
+                                        <th>Validación</th>
+                                        <th>Detalle</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Vista previa inyectada aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <h3>Historial de Cargas</h3>
+                        <div class="table-responsive">
+                            <table id="master-history-table">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Archivo</th>
+                                        <th>Total</th>
+                                        <th>Importados</th>
+                                        <th>Actualizados</th>
+                                        <th>Omitidos</th>
+                                        <th>Errores</th>
+                                        <th>Política</th>
+                                        <th>Usuario</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Historial inyectado aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Diccionario de Busqueda -->
+                <section id="admin-dictionary" class="tab-content hidden">
+                    <h2>Diccionario de Busqueda</h2>
+                    <p class="text-muted mb-4">Equivalencias usadas por el buscador. Ejemplo: ruleman -> rodamiento.</p>
+                    <div class="form-card mb-4">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label for="dict-word">Palabra</label>
+                                <input type="text" id="dict-word" placeholder="Ej: ruleman">
+                            </div>
+                            <div class="input-group">
+                                <label for="dict-equivalent">Equivalente</label>
+                                <input type="text" id="dict-equivalent" placeholder="Ej: rodamiento">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button id="btn-save-dictionary" class="btn-primary" type="button">Guardar equivalencia</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="dictionary-table">
+                            <thead>
+                                <tr>
+                                    <th>Palabra</th>
+                                    <th>Equivalente</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tab: Categorias -->
+                <section id="admin-categories" class="tab-content hidden">
+                    <h2>Categorias</h2>
+                    <p class="text-muted mb-4">Categorias oficiales para ordenar el catalogo. No bloquean materiales con categoria libre.</p>
+                    <div class="form-card mb-4">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label for="category-name">Categoria oficial</label>
+                                <input type="text" id="category-name" placeholder="Ej: Hidraulico">
+                            </div>
+                            <div class="input-group">
+                                <label for="category-active">Estado</label>
+                                <select id="category-active">
+                                    <option value="true">Activa</option>
+                                    <option value="false">Inactiva</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="category-suggestion" class="text-muted hidden"></div>
+                        <div class="form-actions">
+                            <button id="btn-save-category" class="btn-primary" type="button">Guardar categoria</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="categories-table">
+                            <thead>
+                                <tr>
+                                    <th>Categoria</th>
+                                    <th>Estado</th>
+                                    <th>Materiales</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tab: Historial de Consultas -->
+                <section id="admin-history" class="tab-content hidden">
+                    <h2>Historial de Consultas</h2>
+                    <p class="text-muted mb-4">Registro de todas las búsquedas realizadas por los usuarios.</p>
+                    
+                    <div class="stats-grid" id="history-stats-container">
+                        <!-- Stats inyectadas aquí -->
+                    </div>
+
+                    <div class="filters-bar">
+                        <div class="filter-item">
+                            <label for="filter-history-person">Persona / RUT</label>
+                            <input type="text" id="filter-history-person" placeholder="Ej: Juan">
+                        </div>
+                        <div class="filter-item">
+                            <label for="filter-history-term">Término Buscado</label>
+                            <input type="text" id="filter-history-term" placeholder="Ej: Filtro">
+                        </div>
+                        <div class="filter-item">
+                            <label for="filter-history-result">Resultado</label>
+                            <select id="filter-history-result">
+                                <option value="all">Todos los resultados</option>
+                                <option value="found">Encontrado</option>
+                                <option value="not_found">Sin resultado</option>
+                            </select>
+                        </div>
+                        <div class="flex-row" style="align-items: flex-end;">
+                            <button id="btn-export-history-csv" class="btn-secondary">Exportar CSV</button>
+                            <button id="btn-clear-history" class="btn-danger">Limpiar Historial</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="history-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Hora</th>
+                                    <th>Persona / RUT</th>
+                                    <th>Término Buscado</th>
+                                    <th>Resultado</th>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Historial inyectado aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tab: Pendientes -->
+                <section id="admin-pendings" class="tab-content hidden">
+                    <h2>Pendientes y Métricas</h2>
+                    <p class="text-muted mb-4">Métricas de calidad de la base de materiales y gestión de búsquedas sin resultado.</p>
+                    
+                    <div class="stats-grid" id="stats-container">
+                        <!-- Stats inyectadas aquí -->
+                    </div>
+
+                    <h3 class="mt-4">Búsquedas sin Resultado</h3>
+                    <p class="text-muted mb-4">Agrupados por término buscado. Útil para identificar qué materiales falta cargar en la base.</p>
+                    <div class="table-actions">
+                        <button id="btn-export-pendings-csv" class="btn-secondary">Exportar pendientes CSV</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="missing-searches-table">
+                            <thead>
+                                <tr>
+                                    <th>Término Buscado</th>
+                                    <th>Veces</th>
+                                    <th>Últ. Fecha</th>
+                                    <th>Últ. Hora</th>
+                                    <th>Consultantes</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Pendientes inyectados aquí -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tab: Tickets -->
+                <section id="admin-tickets" class="tab-content hidden">
+                    <h2>Tickets / Solicitudes</h2>
+                    <p class="text-muted mb-4">Solicitudes creadas desde busquedas sin resultado, altas de material y reportes de error.</p>
+                    <div class="table-actions">
+                        <button id="btn-new-ticket" class="btn-primary">Crear ticket manual</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="tickets-table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Estado</th>
+                                    <th>Prioridad</th>
+                                    <th>Persona/RUT</th>
+                                    <th>Termino / Material</th>
+                                    <th>Comentario</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Tab: Reportes -->
+                <section id="admin-reports" class="tab-content hidden">
+                    <h2>Reportes</h2>
+                    <p class="text-muted mb-4">Herramienta admin de control y presentacion de valor. No afecta la consulta normal de bodega.</p>
+                    <div class="report-toolbar">
+                        <div class="input-group" style="margin-bottom:0;">
+                            <label for="report-period">Periodo</label>
+                            <select id="report-period">
+                                <option value="today">Hoy</option>
+                                <option value="7d" selected>Ultimos 7 dias</option>
+                                <option value="30d">Ultimos 30 dias</option>
+                                <option value="month">Mes actual</option>
+                                <option value="custom">Rango personalizado</option>
+                            </select>
+                        </div>
+                        <div class="input-group report-custom-range hidden" style="margin-bottom:0;">
+                            <label for="report-start">Desde</label>
+                            <input type="date" id="report-start">
+                        </div>
+                        <div class="input-group report-custom-range hidden" style="margin-bottom:0;">
+                            <label for="report-end">Hasta</label>
+                            <input type="date" id="report-end">
+                        </div>
+                        <div class="input-group" style="margin-bottom:0; max-width:220px;">
+                            <label for="setting-minutes-saved">Min. ahorro/consulta</label>
+                            <input type="number" id="setting-minutes-saved" min="1" value="2">
+                        </div>
+                        <button id="btn-export-executive-report" class="btn-primary" type="button">Exportar reporte ejecutivo</button>
+                    </div>
+                    <div class="stats-grid" id="reports-stats-container"></div>
+                    <div id="reports-empty" class="empty-state-box hidden">Sin datos suficientes para el periodo seleccionado.</div>
+                    <div class="report-actions-grid">
+                        <button id="btn-export-report-searches-csv" class="btn-secondary" type="button">CSV busquedas del periodo</button>
+                        <button id="btn-export-report-missing-csv" class="btn-secondary" type="button">CSV busquedas sin resultado</button>
+                        <button id="btn-export-report-incomplete-csv" class="btn-secondary" type="button">CSV datos incompletos</button>
+                        <button id="btn-export-report-critical-csv" class="btn-secondary" type="button">CSV criticos sin stock</button>
+                        <button id="btn-export-report-tickets-csv" class="btn-secondary" type="button">CSV tickets</button>
+                    </div>
+                    <div class="report-grid" id="reports-charts-container"></div>
+                    <h3 class="mt-4">Top 10 Problemas</h3>
+                    <div class="report-grid" id="reports-problems-container"></div>
+                    <h3 class="mt-4">Recomendaciones</h3>
+                    <div id="reports-recommendations" class="recommendations-list"></div>
+                </section>
+
+                <!-- Tab: Diagnostico -->
+                <section id="admin-diagnostics" class="tab-content hidden">
+                    <h2>Diagnostico</h2>
+                    <p class="text-muted mb-4">Estado del prototipo HTML local y uso de localStorage.</p>
+                    <div id="backup-reminder" class="backup-reminder hidden">
+                        <strong>Se recomienda exportar respaldo.</strong>
+                        <span>Hay cambios recientes o el respaldo esta vencido.</span>
+                        <button id="btn-backup-now" class="btn-primary" type="button">Exportar respaldo ahora</button>
+                    </div>
+                    <div class="stats-grid" id="diagnostics-stats-container"></div>
+                    <div id="diagnostics-warnings" class="recommendations-list"></div>
+                    <div class="table-actions">
+                        <button id="btn-export-diagnostics-json" class="btn-secondary" type="button">Exportar diagnostico JSON</button>
+                        <button id="btn-export-diagnostics-csv" class="btn-secondary" type="button">Exportar diagnostico CSV</button>
+                    </div>
+                </section>
+
+                <!-- Tab: Datos (Importar/Exportar) -->
+                <section id="admin-data" class="tab-content hidden">
+                    <h2>Gestión de Datos Locales</h2>
+                    <p class="text-muted mb-4">Opciones avanzadas para respaldar toda la base de datos local y restaurar el sistema.</p>
+                    
+                    <div class="data-actions-grid">
+                        <div class="data-card info-card">
+                            <h3>Exportar Respaldo</h3>
+                            <p>Descarga un archivo JSON con todos los datos (materiales, historiales, etc).</p>
+                            <button id="btn-export-backup" class="btn-primary mt-4">Exportar a JSON</button>
+                        </div>
+                        
+                        <div class="data-card">
+                            <h3>Importar Datos (Legacy)</h3>
+                            <p>Carga un array JSON de materiales simple.</p>
+                            <input type="file" id="file-import-data" accept=".json,.csv">
+                            <select id="import-mode">
+                                <option value="skip">Omitir existentes</option>
+                                <option value="update">Actualizar existentes</option>
+                            </select>
+                            <button id="btn-import-data" class="btn-secondary mt-4">Procesar Importación</button>
+                        </div>
+
+                        <div class="data-card warning-card">
+                            <h3>Restaurar Respaldo</h3>
+                            <p>Reemplazará todos los datos locales actuales con el archivo seleccionado.</p>
+                            <input type="file" id="file-restore-backup" accept=".json">
+                            <button id="btn-restore-backup" class="btn-danger mt-4">Restaurar Respaldo</button>
+                        </div>
+
+                        <div class="data-card danger-card">
+                            <h3>Limpiar Datos Locales</h3>
+                            <p>Elimina todos los datos guardados en el navegador de este dispositivo.</p>
+                            <button id="btn-clear-data" class="btn-danger mt-4">Borrar Todo</button>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Detalle Material -->
+    <div id="detail-modal" class="modal hidden">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2 id="detail-title">Detalle de Material</h2>
+                <button class="close-btn" id="close-detail-modal">&times;</button>
+            </div>
+            <div id="detail-content" class="detail-grid">
+                <!-- Detalles inyectados aquí -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Ticket / Solicitud -->
+    <div id="ticket-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="ticket-modal-title">Crear ticket</h2>
+                <button class="close-btn" id="close-ticket-modal">&times;</button>
+            </div>
+            <input type="hidden" id="ticket-related-code">
+            <input type="hidden" id="ticket-related-name">
+            <div class="input-group">
+                <label for="ticket-type">Tipo</label>
+                <select id="ticket-type">
+                    <option>Alta de material</option>
+                    <option>Error de dato</option>
+                    <option>Busqueda sin resultado</option>
+                    <option>Revision de costo</option>
+                    <option>Revision de stock</option>
+                    <option>Otro</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="ticket-person">Persona/RUT</label>
+                <input type="text" id="ticket-person" placeholder="Opcional">
+            </div>
+            <div class="input-group">
+                <label for="ticket-term">Termino buscado o campo con problema</label>
+                <input type="text" id="ticket-term" placeholder="Ej: ubicacion incorrecta">
+            </div>
+            <div class="input-group">
+                <label for="ticket-priority">Prioridad</label>
+                <select id="ticket-priority">
+                    <option>Baja</option>
+                    <option selected>Media</option>
+                    <option>Alta</option>
+                    <option>Critica</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="ticket-comment">Comentario</label>
+                <textarea id="ticket-comment" rows="3" placeholder="Detalle breve de la solicitud"></textarea>
+            </div>
+            <div class="form-actions">
+                <button id="btn-save-ticket" class="btn-primary">Guardar ticket</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

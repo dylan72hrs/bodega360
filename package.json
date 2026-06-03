@@ -9,15 +9,22 @@
   "scripts": {
     "dev": "concurrently \"npm:dev -w apps/api\" \"npm:dev -w apps/web\"",
     "build": "npm run build -w apps/api && npm run build -w apps/web",
+    "build:api": "npm run build -w apps/api",
+    "build:web": "npm run build -w apps/web",
     "typecheck": "npm run typecheck -w apps/api && npm run typecheck -w apps/web",
     "lint": "npm run lint -w apps/web",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "tsx prisma/seed.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate:deploy": "prisma migrate deploy",
+    "prisma:seed": "tsx prisma/seed.ts",
+    "start:api": "node apps/api/dist/server.js",
     "backup:db": "powershell -ExecutionPolicy Bypass -File scripts/backup-db.ps1"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",
+    "dotenv": "^17.2.3",
     "prisma": "^6.19.0",
     "tsx": "^4.20.6",
     "typescript": "^5.9.3"
