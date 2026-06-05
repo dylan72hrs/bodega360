@@ -1397,6 +1397,7 @@ function renderSearchResults(results, isTruncated, rawQuery = '') {
         const body = collapsible.querySelector('#collapsible-body');
         toggle.addEventListener('click', () => {
             const isHidden = body.classList.toggle('hidden');
+            collapsible.classList.toggle('expanded');
             toggle.querySelector('svg').style.transform = isHidden ? 'rotate(0deg)' : 'rotate(90deg)';
             if (!isHidden && secondaryPageIndex === 0) {
                 renderSecondaryPage();

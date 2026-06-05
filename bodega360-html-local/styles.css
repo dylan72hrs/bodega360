@@ -515,18 +515,14 @@ body.consulta-mode .public-shell { grid-template-columns: minmax(520px, 1fr); }
     margin-bottom: 0.6rem;
 }
 .collapsible-section {
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius-md);
-    background: rgba(255,255,255,0.96);
     margin-top: 1rem;
-    overflow: hidden;
 }
 .collapsible-header {
     width: 100%;
     background: var(--primary-soft);
-    border: none;
-    border-bottom: 1px solid var(--border-color);
-    padding: 0.85rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1rem;
     font-size: 0.9rem;
     font-weight: 650;
     color: var(--primary-color);
@@ -537,10 +533,19 @@ body.consulta-mode .public-shell { grid-template-columns: minmax(520px, 1fr); }
     min-height: 44px;
     text-align: left;
     justify-content: flex-start;
+    transition: border-radius var(--transition-fast);
 }
 .collapsible-header:hover { background: var(--primary-light); }
+.collapsible-section.expanded .collapsible-header {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    border-bottom: none;
+}
 .collapsible-body {
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
     padding: 1rem;
+    background: rgba(255,255,255,0.96);
 }
 .collapsible-body .results-grid {
     margin-top: 0;
