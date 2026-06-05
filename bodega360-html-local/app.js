@@ -999,7 +999,9 @@ function renderSearchSuggestions() {
         return;
     }
 
-    const suggestions = rankMaterials(rawQuery, 80).slice(0, 6);
+    const allSuggestions = rankMaterials(rawQuery, 80);
+    const suggestions = allSuggestions.slice(0, 8);
+    const hasMore = allSuggestions.length > 8;
     if (suggestions.length === 0) {
         box.classList.add('hidden');
         box.innerHTML = '';
@@ -1015,7 +1017,7 @@ function renderSearchSuggestions() {
                 <span class="suggestion-meta">${escapeHtml(item.ubicacion || item.categoria || '')}</span>
             </button>
         `;
-    }).join('');
+    }).join('') + (hasMore ? '<div class="suggestion-more-hint">Mas coincidencias disponibles...</div>' : '');
     box.classList.remove('hidden');
 }
 
@@ -1252,6 +1254,51 @@ function performSearch() {
     StorageAdapter.saveSearchLogs(searchLogs);
 }
 
+function buildResultCardHtml(r, isPrimary) {
+    const item = normalizeMaterial(r.item);
+    const stockInfo = getStockInfo(item);
+    const stockBadge = `<span class="badge ${stockInfo.className}">${escapeHtml(stockInfo.label)}${item.unidadMedida ? ' ' + escapeHtml(item.unidadMedida) : ''}</span>`;
+
+    let matchBadge = '';
+    if (r.matchType === 'exact') matchBadge = `<span class="badge badge-primary">Exacta</span>`;
+    else if (r.matchType === 'partial') matchBadge = `<span class="badge badge-neutral">Parcial</span>`;
+    else if (r.matchType === 'possible') matchBadge = `<span class="badge badge-warning">Posible</span>`;
+
+    const costBadge = isCostOutdated(item) ? `<span class="badge badge-warning">Costo antiguo</span>` : '';
+    const qualityBadge = `<span class="badge ${item.calidadDato >= 75 ? 'badge-success' : item.calidadDato >= 45 ? 'badge-warning' : 'badge-danger'}">Dato ${item.calidadDato}%</span>`;
+
+    const sourceInfo = item.sourceSheet ? escapeHtml(item.sourceSheet) : (item.recordType ? escapeHtml(item.recordType) : '');
+    const sourceBadge = sourceInfo ? `<span class="badge badge-neutral" style="font-size:0.72rem;">${sourceInfo}</span>` : '';
+
+    return `
+        <div class="${isPrimary ? 'primary-result-card' : 'result-card'}">
+            ${renderPhotoHtml(item, 'result-photo', item.nombre)}
+            <div class="card-header">
+                <div>
+                    <span class="card-code" style="display:inline-block; margin-bottom:0.2rem;">${escapeHtml(item.codigo)}</span>
+                    <div class="badge-row" style="margin-top:0.25rem;">${matchBadge}${item.esCritico ? '<span class="badge badge-danger">Critico</span>' : ''}${qualityBadge}${costBadge}${sourceBadge}</div>
+                </div>
+                ${stockBadge}
+            </div>
+            <div class="card-title">${escapeHtml(item.nombre || 'Sin nombre')}</div>
+            ${item.descripcion ? `<div class="card-desc">${escapeHtml(item.descripcion)}</div>` : ''}
+            <div class="card-meta">
+                ${item.categoria ? `<div><strong>Categoria</strong> <span>${escapeHtml(item.categoria)}</span></div>` : ''}
+                ${item.ubicacion ? `<div><strong>Ubicacion</strong> <span>${escapeHtml(item.ubicacion)}</span></div>` : ''}
+                ${item.equipoAsociado ? `<div><strong>Equipo</strong> <span>${escapeHtml(item.equipoAsociado)}</span></div>` : ''}
+                ${item.costoPromedio !== '' && item.costoPromedio !== null ? `<div><strong>Costo</strong> <span>${escapeHtml(formatCurrency(item.costoPromedio))}</span></div>` : ''}
+                ${item.estado ? `<div><strong>Estado</strong> <span>${escapeHtml(item.estado)}</span></div>` : ''}
+                ${item.proyecto ? `<div><strong>Proyecto</strong> <span>${escapeHtml(item.proyecto)}</span></div>` : ''}
+                ${item.stock !== '' && item.stock !== null && item.stock !== undefined ? `<div><strong>Stock</strong> <span>${escapeHtml(String(item.stock))}</span></div>` : ''}
+            </div>
+            <div class="card-actions">
+                <button class="btn-secondary btn-copy-code" data-codigo="${escapeAttr(item.codigo)}">Copiar codigo</button>
+                <button class="btn-secondary btn-detail" data-codigo="${escapeAttr(item.codigo)}">Ver detalle</button>
+            </div>
+        </div>
+    `;
+}
+
 function renderSearchResults(results, isTruncated, rawQuery = '') {
     const container = document.getElementById('search-results-container');
     const grid = document.getElementById('search-results');
@@ -1285,109 +1332,86 @@ function renderSearchResults(results, isTruncated, rawQuery = '') {
     noResults.classList.add('hidden');
     container.classList.remove('hidden');
 
-    results.forEach(r => {
-        const item = normalizeMaterial(r.item);
-        const stockInfo = getStockInfo(item);
-        const stockBadge = `<span class="badge ${stockInfo.className}">${escapeHtml(stockInfo.label)} ${item.unidadMedida ? escapeHtml(item.unidadMedida) : ''}</span>`;
+    // Separate primary (best match) from secondary results
+    let primaryResult = results[0];
+    // If first result is exact or first in ranking, use it as primary
+    // The rest go to secondary
+    const secondaryResults = results.slice(1);
 
-        let matchBadge = '';
-        if (r.matchType === 'exact') matchBadge = `<span class="badge badge-primary" style="font-size:0.7rem;">Coincidencia exacta</span>`;
-        else if (r.matchType === 'partial') matchBadge = `<span class="badge badge-secondary" style="font-size:0.7rem; background:#E2E8F0; color:#334155;">Coincidencia parcial</span>`;
-        else if (r.matchType === 'possible') matchBadge = `<span class="badge badge-warning" style="font-size:0.7rem; background:#FEF3C7; color:#B45309;">Posible coincidencia</span>`;
+    // Render primary result
+    grid.innerHTML = '<div class="primary-result-badge">Resultado mas probable</div>';
+    grid.innerHTML += buildResultCardHtml(primaryResult, true);
 
-        const costBadge = isCostOutdated(item) ? `<span class="badge badge-warning">Costo antiguo</span>` : '';
-        const qualityBadge = `<span class="badge ${item.calidadDato >= 75 ? 'badge-success' : item.calidadDato >= 45 ? 'badge-warning' : 'badge-danger'}">Dato ${item.calidadDato}%</span>`;
-        const photoState = getPhotoState(item);
-        const photoBadge = `<span class="badge ${photoState === 'Con foto' ? 'badge-success' : 'badge-neutral'}">${escapeHtml(photoState)}</span>`;
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        card.innerHTML = `
-            ${renderPhotoHtml(item, 'result-photo', item.nombre)}
-            <div class="card-header">
-                <div>
-                    <span class="card-code" style="display:inline-block; margin-bottom: 0.2rem;">${escapeHtml(item.codigo)}</span><br>
-                    <div class="badge-row">${matchBadge}${item.esCritico ? '<span class="badge badge-danger">Critico</span>' : ''}${qualityBadge}${costBadge}${photoBadge}</div>
-                </div>
-                ${stockBadge}
-            </div>
-            <div class="card-title">${escapeHtml(item.nombre || 'Sin nombre')}</div>
-            <div class="card-desc">${escapeHtml(item.descripcion || 'Sin descripcion')}</div>
-            <div class="card-meta">
-                <div><strong>Categoria</strong> <span>${escapeHtml(item.categoria || '-')}</span></div>
-                <div><strong>Ubicacion</strong> <span>${escapeHtml(item.ubicacion || '-')}</span></div>
-                <div><strong>Equipo</strong> <span>${escapeHtml(item.equipoAsociado || '-')}</span></div>
-                <div><strong>Costo</strong> <span>${item.costoPromedio !== '' && item.costoPromedio !== null ? escapeHtml(formatCurrency(item.costoPromedio)) : '-'}</span></div>
-            </div>
-            <div class="card-actions">
-                <button class="btn-secondary btn-copy-code" data-codigo="${escapeAttr(item.codigo)}">Copiar codigo</button>
-                <button class="btn-secondary btn-detail" data-codigo="${escapeAttr(item.codigo)}">Ver detalle</button>
-            </div>
-        `;
-        grid.appendChild(card);
-    });
-
-    if (isTruncated) {
-        const trunMsg = document.createElement('div');
-        trunMsg.className = 'full-width text-center text-muted';
-        trunMsg.style.padding = '1.5rem';
-        trunMsg.innerHTML = '<em>Hay mas resultados. Por favor refine su busqueda para ser mas especifico.</em>';
-        grid.appendChild(trunMsg);
-    }
-    return;
-    
-    grid.innerHTML = '';
-    container.classList.remove('hidden');
-
-    if (results.length === 0) {
-        grid.innerHTML = '<p class="text-center full-width text-muted" style="padding: 2rem;">No se encontraron resultados para esta búsqueda.</p>';
-        return;
-    }
-
-    results.forEach(r => {
-        const item = r.item;
-        
-        let stockBadge = '';
-        if (item.stock > 10) stockBadge = `<span class="badge badge-success">Stock: ${item.stock} ${item.unidadMedida || 'UN'}</span>`;
-        else if (item.stock > 0) stockBadge = `<span class="badge badge-warning">Stock: ${item.stock} ${item.unidadMedida || 'UN'}</span>`;
-        else if (item.stock === 0) stockBadge = `<span class="badge badge-danger">Sin Stock</span>`;
-        else stockBadge = `<span class="badge badge-neutral">S/I</span>`;
-
-        let matchBadge = '';
-        if (r.matchType === 'exact') matchBadge = `<span class="badge badge-primary" style="font-size:0.7rem;">Coincidencia exacta</span>`;
-        else if (r.matchType === 'partial') matchBadge = `<span class="badge badge-secondary" style="font-size:0.7rem; background:#E2E8F0; color:#334155;">Coincidencia parcial</span>`;
-        else if (r.matchType === 'possible') matchBadge = `<span class="badge badge-warning" style="font-size:0.7rem; background:#FEF3C7; color:#B45309;">Posible coincidencia</span>`;
-
-        const card = document.createElement('div');
-        card.className = 'result-card';
-        card.innerHTML = `
-            <div class="card-header">
-                <div>
-                    <span class="card-code" style="display:inline-block; margin-bottom: 0.2rem;">${item.codigo}</span><br>
-                    ${matchBadge}
-                </div>
-                ${stockBadge}
-            </div>
-            <div class="card-title">${item.nombre}</div>
-            <div class="card-desc">${item.descripcion || 'Sin descripción'}</div>
-            <div class="card-meta">
-                <div><strong>Categoría</strong> <span>${item.categoria || '-'}</span></div>
-                <div><strong>Ubicación</strong> <span>${item.ubicacion || '-'}</span></div>
-            </div>
-            <button class="btn-secondary btn-detail" data-codigo="${item.codigo}" style="width:100%;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                Ver detalle
+    // Render secondary results (collapsible, 8 at a time)
+    if (secondaryResults.length > 0 || isTruncated) {
+        const collapsible = document.createElement('div');
+        collapsible.className = 'collapsible-section';
+        const headerText = secondaryResults.length > 0
+            ? `Ver posibles coincidencias (${secondaryResults.length})`
+            : 'Ver posibles coincidencias';
+        collapsible.innerHTML = `
+            <button class="collapsible-header" id="collapsible-toggle">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                ${headerText}
             </button>
+            <div class="collapsible-body hidden" id="collapsible-body">
+                <div class="results-grid" id="secondary-results-grid"></div>
+                <div id="secondary-more-container"></div>
+            </div>
         `;
-        grid.appendChild(card);
-    });
+        grid.appendChild(collapsible);
 
-    if (isTruncated) {
-        const trunMsg = document.createElement('div');
-        trunMsg.className = 'full-width text-center text-muted';
-        trunMsg.style.padding = '1.5rem';
-        trunMsg.innerHTML = '<em>Hay más resultados. Por favor refine su búsqueda para ser más específico.</em>';
-        grid.appendChild(trunMsg);
+        let secondaryPageIndex = 0;
+        const pageSize = 8;
+
+        function renderSecondaryPage() {
+            const secGrid = document.getElementById('secondary-results-grid');
+            const moreContainer = document.getElementById('secondary-more-container');
+            const start = secondaryPageIndex * pageSize;
+            const pageResults = secondaryResults.slice(start, start + pageSize);
+            pageResults.forEach(r => {
+                const div = document.createElement('div');
+                div.innerHTML = buildResultCardHtml(r, false);
+                secGrid.appendChild(div.firstElementChild);
+            });
+            secondaryPageIndex++;
+
+            const remaining = secondaryResults.length - (secondaryPageIndex * pageSize);
+            moreContainer.innerHTML = '';
+            if (remaining > 0) {
+                const btn = document.createElement('button');
+                btn.className = 'show-more-btn';
+                btn.textContent = `Mostrar mas resultados (${Math.min(remaining, pageSize)}+)`;
+                btn.addEventListener('click', renderSecondaryPage);
+                moreContainer.appendChild(btn);
+            }
+            if (isTruncated && remaining <= 0) {
+                const hint = document.createElement('div');
+                hint.className = 'more-hint';
+                hint.textContent = 'Se encontraron mas coincidencias. Refine la busqueda o presione Mostrar mas.';
+                moreContainer.appendChild(hint);
+            }
+        }
+
+        const toggle = collapsible.querySelector('#collapsible-toggle');
+        const body = collapsible.querySelector('#collapsible-body');
+        toggle.addEventListener('click', () => {
+            const isHidden = body.classList.toggle('hidden');
+            toggle.querySelector('svg').style.transform = isHidden ? 'rotate(0deg)' : 'rotate(90deg)';
+            if (!isHidden && secondaryPageIndex === 0) {
+                renderSecondaryPage();
+            }
+        });
     }
+
+    if (isTruncated && secondaryResults.length === 0) {
+        const hint = document.createElement('div');
+        hint.className = 'more-hint';
+        hint.textContent = 'Se encontraron mas coincidencias. Refine la busqueda para obtener resultados mas precisos.';
+        grid.appendChild(hint);
+    }
+
+    return;
 }
 
 // Event Delegation para Resultados Públicos
@@ -1536,27 +1560,32 @@ document.getElementById('close-login-modal').addEventListener('click', () => {
     }, 250);
 });
 
-document.getElementById('btn-login').addEventListener('click', () => {
+function doLogin() {
     const user = document.getElementById('admin-user').value;
     const pass = document.getElementById('admin-pass').value;
-
     if (user === 'admin' && pass === 'admin') {
         isAdmin = true;
         loginModal.classList.remove('active');
         setTimeout(() => { loginModal.classList.add('hidden'); }, 250);
-        
         document.getElementById('public-view').classList.add('hidden');
         document.getElementById('admin-view').classList.remove('hidden');
-        
         document.getElementById('admin-user').value = '';
         document.getElementById('admin-pass').value = '';
         document.getElementById('login-error').classList.add('hidden');
-
         refreshAdminViews();
     } else {
         document.getElementById('login-error').classList.remove('hidden');
     }
+}
+
+document.getElementById('admin-user').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); doLogin(); }
 });
+document.getElementById('admin-pass').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') { e.preventDefault(); doLogin(); }
+});
+
+document.getElementById('btn-login').addEventListener('click', doLogin);
 
 document.getElementById('btn-logout').addEventListener('click', () => {
     isAdmin = false;
@@ -1583,6 +1612,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 function switchTab(tabId) { document.querySelector(`.tab-btn[data-target="${tabId}"]`).click(); }
 
 function refreshAdminViews() {
+    populateAdminFilterDropdowns();
     renderAdminMaterials();
     renderAdminHistory();
     calculatePendings();
@@ -1599,45 +1629,120 @@ function refreshAdminViews() {
 // ============================================================================
 // GESTIÓN DE MATERIALES (ADMIN)
 // ============================================================================
-function renderAdminMaterials() {
+const ADMIN_PAGE_SIZE = 50;
+let adminCurrentPage = 0;
+
+function getAdminFilteredMaterials() {
     const materials = StorageAdapter.getMaterials();
-    const tbody = document.querySelector('#materials-table tbody');
     const filterText = normalizeText(document.getElementById('admin-search-materials').value);
+    const filterSource = document.getElementById('admin-filter-source').value;
+    const filterType = document.getElementById('admin-filter-type').value;
+
+    let filtered = materials;
+    if (filterText) {
+        filtered = filtered.filter(item =>
+            normalizeText(item.codigo).includes(filterText) ||
+            normalizeText(item.nombre).includes(filterText)
+        );
+    }
+    if (filterSource) {
+        filtered = filtered.filter(item => (item.sourceSheet || 'Manual') === filterSource);
+    }
+    if (filterType) {
+        filtered = filtered.filter(item => (item.recordType || 'Manual') === filterType);
+    }
+    return filtered;
+}
+
+function renderAdminMaterials() {
+    const filteredMaterials = getAdminFilteredMaterials();
+    const tbody = document.querySelector('#materials-table tbody');
     
     tbody.innerHTML = '';
-    
-    // Optimización: Si hay filtro mostrar los que machan, sino solo mostrar los primeros 200 para evitar trabar el DOM si hay 50,000 registros
-    const MAX_ADMIN_ROWS = 200; 
-    let count = 0;
 
-    for (let item of materials) {
-        if (filterText) {
-            if (!(normalizeText(item.codigo).includes(filterText) || normalizeText(item.nombre).includes(filterText))) {
-                continue;
-            }
-        }
-        
+    if (filteredMaterials.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Sin materiales que coincidan con los filtros.</td></tr>';
+        document.getElementById('btn-prev-page').disabled = true;
+        document.getElementById('btn-next-page').disabled = true;
+        document.getElementById('pagination-info').textContent = '0 materiales';
+        return;
+    }
+
+    const totalPages = Math.ceil(filteredMaterials.length / ADMIN_PAGE_SIZE);
+    if (adminCurrentPage >= totalPages) adminCurrentPage = totalPages - 1;
+    if (adminCurrentPage < 0) adminCurrentPage = 0;
+
+    const start = adminCurrentPage * ADMIN_PAGE_SIZE;
+    const pageItems = filteredMaterials.slice(start, start + ADMIN_PAGE_SIZE);
+
+    pageItems.forEach(item => {
+        const sourceSheet = item.sourceSheet || 'Manual';
+        const recordType = item.recordType || (item.sourceSheet ? item.sourceSheet.replace(/[^a-zA-Z0-9]/g, '_') : 'Manual');
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><strong>${item.codigo}</strong></td>
-            <td>${item.nombre}</td>
-            <td><span class="badge badge-neutral">${item.categoria || '-'}</span></td>
-            <td>${item.stock !== "" && item.stock !== null ? item.stock : '-'}</td>
-            <td>${item.ubicacion || '-'}</td>
-            <td>${item.estado || 'Activo'}</td>
-            <td><button class="action-btn btn-edit" data-codigo="${item.codigo}">Editar</button></td>
+            <td><strong>${escapeHtml(item.codigo)}</strong></td>
+            <td>${escapeHtml(item.nombre || '')}</td>
+            <td><span class="badge badge-neutral">${escapeHtml(sourceSheet)}</span></td>
+            <td><span class="badge badge-neutral" style="font-size:0.72rem;">${escapeHtml(recordType)}</span></td>
+            <td><span class="badge badge-neutral">${escapeHtml(item.categoria || '-')}</span></td>
+            <td>${item.stock !== "" && item.stock !== null ? escapeHtml(String(item.stock)) : '-'}</td>
+            <td>${escapeHtml(item.ubicacion || '-')}</td>
+            <td>${escapeHtml(item.estado || 'Activo')}</td>
+            <td><button class="action-btn btn-edit" data-codigo="${escapeAttr(item.codigo)}">Editar</button></td>
         `;
         tbody.appendChild(tr);
-        count++;
+    });
 
-        if (count >= MAX_ADMIN_ROWS && !filterText) {
-            const trMsg = document.createElement('tr');
-            trMsg.innerHTML = `<td colspan="7" class="text-center text-muted">Mostrando 200 registros. Use el filtro para buscar específicos.</td>`;
-            tbody.appendChild(trMsg);
-            break; 
-        }
-    }
+    document.getElementById('btn-prev-page').disabled = adminCurrentPage === 0;
+    document.getElementById('btn-next-page').disabled = adminCurrentPage >= totalPages - 1;
+    document.getElementById('pagination-info').textContent = `Mostrando ${start + 1}-${Math.min(start + ADMIN_PAGE_SIZE, filteredMaterials.length)} de ${filteredMaterials.length} materiales`;
 }
+
+function populateAdminFilterDropdowns() {
+    const materials = StorageAdapter.getMaterials();
+    const sourceSet = new Set();
+    const typeSet = new Set();
+    materials.forEach(item => {
+        const src = item.sourceSheet || 'Manual';
+        sourceSet.add(src);
+        const typ = item.recordType || (item.sourceSheet ? item.sourceSheet.replace(/[^a-zA-Z0-9]/g, '_') : 'Manual');
+        typeSet.add(typ);
+    });
+
+    const sourceSelect = document.getElementById('admin-filter-source');
+    const typeSelect = document.getElementById('admin-filter-type');
+    const currentSrc = sourceSelect.value;
+    const currentType = typeSelect.value;
+
+    sourceSelect.innerHTML = '<option value="">Todas las fuentes</option>' +
+        Array.from(sourceSet).sort().map(s => `<option value="${escapeAttr(s)}"${s === currentSrc ? ' selected' : ''}>${escapeHtml(s)}</option>`).join('');
+    typeSelect.innerHTML = '<option value="">Todos los tipos</option>' +
+        Array.from(typeSet).sort().map(t => `<option value="${escapeAttr(t)}"${t === currentType ? ' selected' : ''}>${escapeHtml(t)}</option>`).join('');
+}
+
+document.getElementById('admin-search-materials').addEventListener('input', () => {
+    adminCurrentPage = 0;
+    renderAdminMaterials();
+});
+
+document.getElementById('admin-filter-source').addEventListener('change', () => {
+    adminCurrentPage = 0;
+    renderAdminMaterials();
+});
+
+document.getElementById('admin-filter-type').addEventListener('change', () => {
+    adminCurrentPage = 0;
+    renderAdminMaterials();
+});
+
+document.getElementById('btn-prev-page').addEventListener('click', () => {
+    if (adminCurrentPage > 0) { adminCurrentPage--; renderAdminMaterials(); }
+});
+
+document.getElementById('btn-next-page').addEventListener('click', () => {
+    const total = getAdminFilteredMaterials().length;
+    if ((adminCurrentPage + 1) * ADMIN_PAGE_SIZE < total) { adminCurrentPage++; renderAdminMaterials(); }
+});
 
 // ============================================================================
 // MODO INVENTARIO OPCIONAL (ADMIN / TABLET)
@@ -1764,12 +1869,6 @@ document.getElementById('inventory-photo-file')?.addEventListener('change', asyn
         document.getElementById('inventory-status-photo').textContent = `Foto pendiente (${Math.round(compressed.compressedBytes / 1024)} KB)`;
     });
     e.target.value = '';
-});
-
-document.getElementById('admin-search-materials').addEventListener('input', () => {
-    // Pequeño debounce para la tabla de admin
-    clearTimeout(searchDebounceTimer);
-    searchDebounceTimer = setTimeout(renderAdminMaterials, 300);
 });
 
 // Event Delegation Materiales Admin

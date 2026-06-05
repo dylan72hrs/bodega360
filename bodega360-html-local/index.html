@@ -176,9 +176,22 @@
                 <!-- Tab: Materiales -->
                 <section id="admin-materials" class="tab-content active">
                     <h2>Lista de Materiales</h2>
-                    <div class="table-actions">
-                        <div class="input-group table-search">
-                            <input type="text" id="admin-search-materials" placeholder="Filtrar materiales por código o nombre...">
+                    <div class="admin-filter-bar">
+                        <div class="input-group">
+                            <label for="admin-search-materials">Buscar código/nombre</label>
+                            <input type="text" id="admin-search-materials" placeholder="Filtrar por código o nombre...">
+                        </div>
+                        <div class="input-group">
+                            <label for="admin-filter-source">Fuente/Hoja</label>
+                            <select id="admin-filter-source">
+                                <option value="">Todas las fuentes</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="admin-filter-type">Tipo</label>
+                            <select id="admin-filter-type">
+                                <option value="">Todos los tipos</option>
+                            </select>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -187,6 +200,8 @@
                                 <tr>
                                     <th>Código</th>
                                     <th>Nombre</th>
+                                    <th>Fuente/Hoja</th>
+                                    <th>Tipo</th>
                                     <th>Categoría</th>
                                     <th>Stock</th>
                                     <th>Ubicación</th>
@@ -198,6 +213,11 @@
                                 <!-- Materiales inyectados aquí -->
                             </tbody>
                         </table>
+                    </div>
+                    <div id="admin-materials-pagination" class="pagination-bar">
+                        <button id="btn-prev-page" class="page-btn" disabled>Anterior</button>
+                        <span id="pagination-info" class="pagination-info"></span>
+                        <button id="btn-next-page" class="page-btn" disabled>Siguiente</button>
                     </div>
                 </section>
 

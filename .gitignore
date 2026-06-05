@@ -19,3 +19,6 @@ dist
 .env
 
 .env
+
+~$*.xlsx
+bodega360-html-local/data/~$*.xlsx
