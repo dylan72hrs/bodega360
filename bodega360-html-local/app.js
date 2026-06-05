@@ -15,21 +15,256 @@ const STORAGE_KEYS = {
     PENDING_STATES: 'bodega360_pending_states',
     SETTINGS: 'bodega360_settings',
     WORKBOOK_RAW: 'bodega360_workbook_raw',
-    WORKBOOK_METADATA: 'bodega360_workbook_metadata'
+    WORKBOOK_METADATA: 'bodega360_workbook_metadata',
+    EXCEL_RECORDS: 'bodega360_excel_records'
 };
 
 // ============================================================================
-// STORAGE ADAPTER
+// STORAGE ADAPTER (HÍBRIDO: IndexedDB + localStorage)
 // ============================================================================
 /**
- * CAPA DE ABSTRACCIÓN DE ALMACENAMIENTO (StorageAdapter)
- * Actualmente usa localStorage. 
- * Para un futuro servidor local multiusuario, reemplazar los métodos internos de
- * este adapter por llamadas a una API local (ej: usando fetch hacia Node.js o Python).
- * Toda la app debe interactuar exclusivamente con este adapter para leer/escribir datos.
+ * CAPA DE ABSTRACCIÓN DE ALMACENAMIENTO HÍBRIDO (StorageAdapter)
+ * - IndexedDB (DB v2, 8 object stores):
+ *     materials (keyPath: codigo)
+ *     excelRecords (keyPath: id compuesto sourceSheet:sourceRow:recordType:codigo)
+ *     searchLogs, changeLogs, importLogs (autoIncrement)
+ *     tickets (keyPath: id), workbookRaw (keyPath: sheetName), workbookMetadata (keyPath: id)
+ * - localStorage: dismissedSearches, dictionary, categories, pendingStates, settings
+ * - Escritura: cola serializada (Promise chain) para evitar pérdida en ráfagas
+ * - Lectura: caché en memoria síncrona
+ * - Migración legacy: preserva localStorage original hasta confirmar escritura exitosa en IDB
+ * - Fallback: si IDB falla, usa localStorage limitado
  */
 const StorageAdapter = {
-    // Métodos privados internos actuales (localStorage)
+    _db: null,
+    _dbName: 'Bodega360',
+    _dbVersion: 2,
+    _ready: false,
+    _initPromise: null,
+    _idbAvailable: true,
+    _migrationStatus: 'not_needed',
+    _writeQueue: Promise.resolve(),
+    _MIGRATION_FLAG_KEY: 'bodega360_migration_ok',
+    _cache: {
+        materials: [],
+        excelRecords: [],
+        searchLogs: [],
+        changeLogs: [],
+        importLogs: [],
+        tickets: [],
+        workbookRaw: null,
+        workbookMetadata: null
+    },
+
+    // ── Initialization ──────────────────────────────────────────────────────
+
+    async init() {
+        if (this._ready) return;
+        if (this._initPromise) return this._initPromise;
+        this._initPromise = this._doInit();
+        return this._initPromise;
+    },
+
+    async _doInit() {
+        try {
+            this._db = await this._openDB();
+            await this._loadFromIDB();
+        } catch (err) {
+            console.warn('IndexedDB no disponible, usando localStorage como fallback:', err.message);
+            this._idbAvailable = false;
+            this._loadFromLS();
+        }
+        this._ready = true;
+    },
+
+    _openDB() {
+        return new Promise((resolve, reject) => {
+            const request = indexedDB.open(this._dbName, this._dbVersion);
+            request.onerror = () => reject(request.error);
+            request.onsuccess = () => resolve(request.result);
+            request.onupgradeneeded = (ev) => {
+                const db = ev.target.result;
+                const stores = {
+                    materials: { keyPath: 'codigo' },
+                    excelRecords: { keyPath: 'id' },
+                    searchLogs: { autoIncrement: true },
+                    changeLogs: { autoIncrement: true },
+                    importLogs: { autoIncrement: true },
+                    tickets: { keyPath: 'id' },
+                    workbookRaw: { keyPath: 'sheetName' },
+                    workbookMetadata: { keyPath: 'id' }
+                };
+                Object.entries(stores).forEach(([name, opts]) => {
+                    if (!db.objectStoreNames.contains(name)) {
+                        db.createObjectStore(name, opts);
+                    }
+                });
+            };
+        });
+    },
+
+    // ── Load from IDB (async, on init) ──────────────────────────────────────
+
+    async _loadFromIDB() {
+        const loadAll = (name) => new Promise((resolve, reject) => {
+            try {
+                const tx = this._db.transaction(name, 'readonly');
+                const store = tx.objectStore(name);
+                const req = store.getAll();
+                req.onerror = () => reject(req.error);
+                req.onsuccess = () => resolve(req.result);
+            } catch (e) { reject(e); }
+        });
+
+        this._cache.materials = await loadAll('materials');
+        this._cache.excelRecords = await loadAll('excelRecords');
+        this._cache.searchLogs = await loadAll('searchLogs');
+        this._cache.changeLogs = await loadAll('changeLogs');
+        this._cache.importLogs = await loadAll('importLogs');
+        this._cache.tickets = await loadAll('tickets');
+
+        const rawSheets = await loadAll('workbookRaw');
+        this._cache.workbookRaw = rawSheets.length > 0 ? rawSheets : null;
+
+        const metaArr = await loadAll('workbookMetadata');
+        this._cache.workbookMetadata = metaArr.length > 0 ? metaArr[0] : null;
+        if (this._cache.workbookMetadata && 'id' in this._cache.workbookMetadata) {
+            delete this._cache.workbookMetadata.id;
+        }
+
+        const migrationDone = localStorage.getItem(this._MIGRATION_FLAG_KEY) === '1';
+        if (this._cache.materials.length === 0 && !migrationDone) {
+            await this._migrateFromLS();
+        } else if (migrationDone) {
+            this._migrationStatus = 'completed';
+        }
+    },
+
+    // ── Migration from localStorage (preserves legacy data) ─────────────────
+
+    async _migrateFromLS() {
+        const lsMaterials = this._loadLocal(STORAGE_KEYS.MATERIALS);
+        if (!lsMaterials || lsMaterials.length === 0) {
+            this._migrationStatus = 'not_needed';
+            return;
+        }
+        this._migrationStatus = 'pending';
+
+        const writeAll = (name, items) => {
+            if (!items || items.length === 0) return Promise.resolve();
+            return new Promise((resolve, reject) => {
+                try {
+                    const tx = this._db.transaction(name, 'readwrite');
+                    const store = tx.objectStore(name);
+                    items.forEach(item => { try { store.put(item); } catch (e) {} });
+                    tx.oncomplete = () => resolve();
+                    tx.onerror = () => reject(tx.error);
+                } catch (e) { reject(e); }
+            });
+        };
+
+        try {
+            await writeAll('materials', lsMaterials);
+            this._cache.materials = lsMaterials;
+
+            const migratePair = async (lsKey, storeName) => {
+                const data = this._loadLocal(lsKey);
+                if (data && data.length > 0) {
+                    await writeAll(storeName, data);
+                    this._cache[storeName] = data;
+                }
+            };
+
+            await migratePair(STORAGE_KEYS.SEARCH_LOGS, 'searchLogs');
+            await migratePair(STORAGE_KEYS.CHANGE_LOGS, 'changeLogs');
+            await migratePair(STORAGE_KEYS.IMPORT_LOGS, 'importLogs');
+            await migratePair(STORAGE_KEYS.TICKETS, 'tickets');
+
+            const lsRaw = this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, null);
+            if (lsRaw && Array.isArray(lsRaw)) {
+                this._cache.workbookRaw = lsRaw;
+                await writeAll('workbookRaw', lsRaw);
+            }
+
+            const lsMeta = this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, null);
+            if (lsMeta) {
+                this._cache.workbookMetadata = lsMeta;
+                await writeAll('workbookMetadata', [{ ...lsMeta, id: 'main' }]);
+            }
+
+            // Verificar escritura: leer de vuelta
+            const verifyTx = this._db.transaction('materials', 'readonly');
+            const verifyReq = verifyTx.objectStore('materials').count();
+            const verifyCount = await new Promise((res, rej) => {
+                verifyReq.onsuccess = () => res(verifyReq.result);
+                verifyReq.onerror = () => rej(verifyReq.error);
+            });
+
+            if (verifyCount === lsMaterials.length) {
+                this._migrationStatus = 'completed';
+                localStorage.setItem(this._MIGRATION_FLAG_KEY, '1');
+                // No borramos localStorage legacy - se preserva como respaldo.
+            } else {
+                this._migrationStatus = 'failed';
+                console.warn('Migracion IDB: conteo no coincide, se conserva localStorage legacy.');
+            }
+        } catch (err) {
+            this._migrationStatus = 'failed';
+            console.warn('Migracion IDB fallo:', err.message, '; se conserva localStorage legacy.');
+        }
+    },
+
+    // ── Fallback: load from localStorage directly ───────────────────────────
+
+    _loadFromLS() {
+        this._cache.materials = this._loadLocal(STORAGE_KEYS.MATERIALS);
+        this._cache.excelRecords = this._loadLocal('bodega360_excel_records');
+        this._cache.searchLogs = this._loadLocal(STORAGE_KEYS.SEARCH_LOGS);
+        this._cache.changeLogs = this._loadLocal(STORAGE_KEYS.CHANGE_LOGS);
+        this._cache.importLogs = this._loadLocal(STORAGE_KEYS.IMPORT_LOGS);
+        this._cache.tickets = this._loadLocal(STORAGE_KEYS.TICKETS);
+        this._cache.workbookRaw = this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, null);
+        this._cache.workbookMetadata = this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, null);
+    },
+
+    // ── Write queue (serialized, no lost updates) ───────────────────────────
+
+    _enqueueWrite(fn) {
+        this._writeQueue = this._writeQueue.then(() => fn()).catch(err => {
+            console.warn('IDB write error:', err.message);
+        });
+    },
+
+    _writeStoreAtomic(storeName, items) {
+        return new Promise((resolve, reject) => {
+            try {
+                const tx = this._db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                store.clear();
+                if (items && items.length > 0) {
+                    items.forEach(item => { try { store.put(item); } catch (e) {} });
+                }
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            } catch (e) { reject(e); }
+        });
+    },
+
+    _putStoreAtomic(storeName, items) {
+        if (!items || items.length === 0) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+            try {
+                const tx = this._db.transaction(storeName, 'readwrite');
+                const store = tx.objectStore(storeName);
+                items.forEach(item => { try { store.put(item); } catch (e) {} });
+                tx.oncomplete = () => resolve();
+                tx.onerror = () => reject(tx.error);
+            } catch (e) { reject(e); }
+        });
+    },
+
+    // ── LocalStorage helpers (config liviana) ───────────────────────────────
+
     _loadLocal(key) {
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : [];
@@ -37,7 +272,7 @@ const StorageAdapter = {
     _saveLocal(key, data) {
         localStorage.setItem(key, JSON.stringify(data));
     },
-    _loadObjectLocal(key, fallback = null) {
+    _loadObjectLocal(key, fallback) {
         const data = localStorage.getItem(key);
         return data ? JSON.parse(data) : fallback;
     },
@@ -45,19 +280,111 @@ const StorageAdapter = {
         localStorage.setItem(key, JSON.stringify(data));
     },
 
-    // Métodos públicos de la API de Almacenamiento
-    getMaterials() { return this._loadLocal(STORAGE_KEYS.MATERIALS); },
-    saveMaterials(data) { this._saveLocal(STORAGE_KEYS.MATERIALS, data); },
-    
-    getSearchLogs() { return this._loadLocal(STORAGE_KEYS.SEARCH_LOGS); },
-    saveSearchLogs(data) { this._saveLocal(STORAGE_KEYS.SEARCH_LOGS, data); },
-    
-    getChangeLogs() { return this._loadLocal(STORAGE_KEYS.CHANGE_LOGS); },
-    saveChangeLogs(data) { this._saveLocal(STORAGE_KEYS.CHANGE_LOGS, data); },
-    
-    getImportLogs() { return this._loadLocal(STORAGE_KEYS.IMPORT_LOGS); },
-    saveImportLogs(data) { this._saveLocal(STORAGE_KEYS.IMPORT_LOGS, data); },
-    
+    // ── Public API: Materials (catálogo consolidado, keyPath: codigo) ───────
+
+    getMaterials() { return this._cache.materials; },
+
+    saveMaterials(data) {
+        this._cache.materials = data;
+        if (this._idbAvailable) {
+            const snap = data.slice();
+            this._enqueueWrite(() => this._writeStoreAtomic('materials', snap));
+        } else {
+            this._saveLocal(STORAGE_KEYS.MATERIALS, data);
+        }
+    },
+
+    upsertMaterials(items) {
+        if (!items || !items.length) return;
+        const idxMap = {};
+        this._cache.materials.forEach((m, i) => { idxMap[m.codigo] = i; });
+        items.forEach(item => {
+            if (idxMap[item.codigo] !== undefined) {
+                this._cache.materials[idxMap[item.codigo]] = item;
+            } else {
+                idxMap[item.codigo] = this._cache.materials.length;
+                this._cache.materials.push(item);
+            }
+        });
+        if (this._idbAvailable) {
+            const snap = items.map(i => ({ ...i }));
+            this._enqueueWrite(() => this._putStoreAtomic('materials', snap));
+        } else {
+            this._saveLocal(STORAGE_KEYS.MATERIALS, this._cache.materials);
+        }
+    },
+
+    // ── Public API: ExcelRecords (multi-sheet, keyPath: id compuesto) ───────
+
+    getExcelRecords() { return this._cache.excelRecords; },
+
+    saveExcelRecords(data) {
+        this._cache.excelRecords = data;
+        if (this._idbAvailable) {
+            const snap = data.slice();
+            this._enqueueWrite(() => this._writeStoreAtomic('excelRecords', snap));
+        } else {
+            this._saveLocal('bodega360_excel_records', data);
+        }
+    },
+
+    upsertExcelRecords(records) {
+        if (!records || !records.length) return;
+        const idxMap = {};
+        this._cache.excelRecords.forEach((r, i) => { idxMap[r.id] = i; });
+        records.forEach(rec => {
+            if (idxMap[rec.id] !== undefined) {
+                this._cache.excelRecords[idxMap[rec.id]] = rec;
+            } else {
+                idxMap[rec.id] = this._cache.excelRecords.length;
+                this._cache.excelRecords.push(rec);
+            }
+        });
+        if (this._idbAvailable) {
+            const snap = records.map(r => ({ ...r }));
+            this._enqueueWrite(() => this._putStoreAtomic('excelRecords', snap));
+        } else {
+            this._saveLocal('bodega360_excel_records', this._cache.excelRecords);
+        }
+    },
+
+    // ── Public API: SearchLogs, ChangeLogs, ImportLogs ──────────────────────
+
+    getSearchLogs() { return this._cache.searchLogs; },
+    saveSearchLogs(data) {
+        this._cache.searchLogs = data;
+        if (this._idbAvailable) {
+            const snap = data.slice();
+            this._enqueueWrite(() => this._writeStoreAtomic('searchLogs', snap));
+        } else {
+            this._saveLocal(STORAGE_KEYS.SEARCH_LOGS, data);
+        }
+    },
+
+    getChangeLogs() { return this._cache.changeLogs; },
+    saveChangeLogs(data) {
+        this._cache.changeLogs = data;
+        if (this._idbAvailable) {
+            const snap = data.slice();
+            this._enqueueWrite(() => this._writeStoreAtomic('changeLogs', snap));
+        } else {
+            this._saveLocal(STORAGE_KEYS.CHANGE_LOGS, data);
+        }
+    },
+
+    getImportLogs() { return this._cache.importLogs; },
+    saveImportLogs(data) {
+        this._cache.importLogs = data;
+        if (this._idbAvailable) {
+            const snap = data.slice();
+            this._enqueueWrite(() => this._writeStoreAtomic('importLogs', snap));
+        } else {
+            this._saveLocal(STORAGE_KEYS.IMPORT_LOGS, data);
+        }
+    },
+
+    // ── Public API: localStorage-only data ──────────────────────────────────
+
     getDismissedSearches() { return this._loadLocal(STORAGE_KEYS.DISMISSED_SEARCHES); },
     saveDismissedSearches(data) { this._saveLocal(STORAGE_KEYS.DISMISSED_SEARCHES, data); },
 
@@ -66,9 +393,6 @@ const StorageAdapter = {
 
     getCategories() { return this._loadLocal(STORAGE_KEYS.CATEGORIES); },
     saveCategories(data) { this._saveLocal(STORAGE_KEYS.CATEGORIES, data); },
-
-    getTickets() { return this._loadLocal(STORAGE_KEYS.TICKETS); },
-    saveTickets(data) { this._saveLocal(STORAGE_KEYS.TICKETS, data); },
 
     getPendingStates() {
         const data = localStorage.getItem(STORAGE_KEYS.PENDING_STATES);
@@ -92,14 +416,81 @@ const StorageAdapter = {
         localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(data));
     },
 
-    getWorkbookRaw() { return this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, null); },
-    saveWorkbookRaw(data) { this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, data); },
-    clearWorkbookRaw() { localStorage.removeItem(STORAGE_KEYS.WORKBOOK_RAW); },
+    // ── Public API: Tickets ─────────────────────────────────────────────────
 
-    getWorkbookMetadata() { return this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, null); },
-    saveWorkbookMetadata(data) { this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, data); },
-    
-    clearAll() { localStorage.clear(); }
+    getTickets() { return this._cache.tickets; },
+    saveTickets(data) {
+        this._cache.tickets = data;
+        if (this._idbAvailable) {
+            const snap = data.slice();
+            this._enqueueWrite(() => this._writeStoreAtomic('tickets', snap));
+        } else {
+            this._saveLocal(STORAGE_KEYS.TICKETS, data);
+        }
+    },
+
+    // ── Public API: Workbook data ───────────────────────────────────────────
+
+    getWorkbookRaw() { return this._cache.workbookRaw; },
+    saveWorkbookRaw(data) {
+        this._cache.workbookRaw = data;
+        if (this._idbAvailable) {
+            const snap = data && Array.isArray(data) ? data.slice() : [];
+            this._enqueueWrite(() => this._writeStoreAtomic('workbookRaw', snap));
+        } else {
+            this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, data);
+        }
+    },
+    clearWorkbookRaw() {
+        this._cache.workbookRaw = null;
+        if (this._idbAvailable) {
+            this._enqueueWrite(() => this._writeStoreAtomic('workbookRaw', []));
+        } else {
+            this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, null);
+        }
+    },
+
+    getWorkbookMetadata() { return this._cache.workbookMetadata; },
+    saveWorkbookMetadata(data) {
+        this._cache.workbookMetadata = data;
+        if (this._idbAvailable) {
+            const snap = data ? [{ ...data, id: 'main' }] : [];
+            this._enqueueWrite(() => this._writeStoreAtomic('workbookMetadata', snap));
+        } else {
+            this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, data);
+        }
+    },
+
+    // ── Public API: Diagnostics ─────────────────────────────────────────────
+
+    getStorageInfo() {
+        return {
+            adapter: this._idbAvailable ? 'IndexedDB + localStorage (config)' : 'localStorage (fallback)',
+            idbStatus: this._idbAvailable ? 'OK' : 'ERROR',
+            migrationStatus: this._migrationStatus,
+            materials: this._cache.materials.length,
+            excelRecords: this._cache.excelRecords.length,
+            searchLogs: this._cache.searchLogs.length,
+            changeLogs: this._cache.changeLogs.length,
+            importLogs: this._cache.importLogs.length,
+            tickets: this._cache.tickets.length
+        };
+    },
+
+    // ── Clear all ───────────────────────────────────────────────────────────
+
+    clearAll() {
+        if (this._idbAvailable && this._db) {
+            ['materials','excelRecords','searchLogs','changeLogs','importLogs','tickets','workbookRaw','workbookMetadata'].forEach(name => {
+                try { this._db.transaction(name, 'readwrite').objectStore(name).clear(); } catch (e) {}
+            });
+        }
+        Object.keys(this._cache).forEach(k => {
+            if (Array.isArray(this._cache[k])) this._cache[k] = [];
+            else this._cache[k] = null;
+        });
+        localStorage.clear();
+    }
 };
 
 // ============================================================================
@@ -3026,6 +3417,26 @@ document.getElementById('btn-confirm-master-import').addEventListener('click', (
     try {
         StorageAdapter.saveMaterials(nextMaterials.map(normalizeMaterial));
         persistWorkbookImportState(currentImportData, validItemsNew);
+
+        const excelRecords = validItemsNew.filter(i => i.sourceSheet).map(item => ({
+            id: String(item.sourceSheet) + ':' + String(item.sourceRow) + ':' + (item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_') + ':' + String(item.codigo),
+            sheetName: item.sourceSheet,
+            sourceRow: item.sourceRow,
+            recordType: (item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_'),
+            codigo: item.codigo,
+            rawData: item.rawData || {},
+            mappedFields: {
+                codigo: item.codigo,
+                nombre: item.nombre,
+                codigoAlternativo: item.codigoAlternativo || '',
+                unidadMedida: item.unidadMedida || '',
+                categoria: item.categoria || '',
+                stock: item.stock,
+                costoPromedio: item.costoPromedio
+            },
+            importedAt: new Date().toISOString()
+        }));
+        if (excelRecords.length > 0) StorageAdapter.upsertExcelRecords(excelRecords);
     } catch (err) {
         alert(`No se pudo guardar la importacion en localStorage: ${err.message}. Seleccione menos hojas o exporte/limpie datos antes de reintentar.`);
         return;
@@ -3473,15 +3884,20 @@ function buildDiagnosticsData(reportData = buildReportData()) {
     const rawDataMaterials = reportData.materials.filter(m => m.rawData && typeof m.rawData === 'object').length;
     if (rawDataMaterials > 1000 || mb > 4) warnings.push('Se esta guardando mucho rawData. Exporte respaldo y conserve el .xlsx original.');
     const backupRecommended = !lastBackup || daysSinceBackup > 7 || changesSinceBackup > 50;
+    const storageInfo = StorageAdapter.getStorageInfo();
+    if (storageInfo.idbStatus !== 'OK') warnings.push('IndexedDB no disponible: usando localStorage como fallback limitado.');
     return {
         version: 'Bodega360 HTML Local v3-reportes',
         generatedAt: new Date().toISOString(),
-        storageAdapter: 'localStorage',
-        materials: reportData.materials.length,
-        searches: StorageAdapter.getSearchLogs().length,
-        tickets: StorageAdapter.getTickets().length,
-        changes: StorageAdapter.getChangeLogs().length,
-        imports: StorageAdapter.getImportLogs().length,
+        storageAdapter: storageInfo.adapter,
+        idbStatus: storageInfo.idbStatus,
+        migrationStatus: storageInfo.migrationStatus,
+        materials: storageInfo.materials,
+        excelRecords: storageInfo.excelRecords,
+        searches: storageInfo.searchLogs,
+        tickets: storageInfo.tickets,
+        changes: storageInfo.changeLogs,
+        imports: storageInfo.importLogs,
         localStorageBytes: bytes,
         localStorageMB: mb,
         lastImport,
@@ -3510,13 +3926,16 @@ function renderDiagnostics() {
     document.getElementById('backup-reminder')?.classList.toggle('hidden', !data.backupRecommended);
     container.innerHTML = [
         ['Version', data.version],
-        ['StorageAdapter', data.storageAdapter],
-        ['Materiales', data.materials],
-        ['Busquedas', data.searches],
-        ['Tickets', data.tickets],
-        ['Cambios', data.changes],
-        ['Importaciones', data.imports],
-        ['localStorage', `${data.localStorageMB} MB`],
+        ['Motor almacenamiento', data.storageAdapter],
+        ['Estado IndexedDB', data.idbStatus],
+        ['Migracion legacy', data.migrationStatus],
+        ['Total materials', data.materials],
+        ['Total excelRecords', data.excelRecords],
+        ['Total searchLogs', data.searches],
+        ['Total importLogs', data.imports],
+        ['Total changeLogs', data.changes],
+        ['Total tickets', data.tickets],
+        ['localStorage config', `${data.localStorageMB} MB`],
         ['Ultima importacion', data.lastImport ? `${data.lastImport.fecha} ${data.lastImport.hora}` : 'Sin importaciones'],
         ['Ultimo respaldo', data.lastBackup ? new Date(data.lastBackup).toLocaleString('es-CL') : 'Sin respaldo registrado'],
         ['Cambios desde respaldo', data.changesSinceBackup],
@@ -3781,9 +4200,12 @@ document.getElementById('btn-download-json-template').addEventListener('click', 
     downloadFile(JSON.stringify(json, null, 2), "plantilla-bodega360.json", "application/json");
 });
 
-// Init
-if (localStorage.getItem('bodega360_theme') === 'dark') {
-    document.body.classList.add('dark-mode');
-}
-checkEmptyDBWarning();
-refreshAdminViews();
+// Init (async: espera StorageAdapter IndexedDB listo)
+(async () => {
+    await StorageAdapter.init();
+    if (localStorage.getItem('bodega360_theme') === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+    checkEmptyDBWarning();
+    refreshAdminViews();
+})();
