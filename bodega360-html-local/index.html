@@ -505,6 +505,40 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- Sheet Summary Panel -->
+                    <div class="mt-4" id="sheet-summary-section">
+                        <h3>Base cargada actualmente</h3>
+                        <div class="admin-filter-bar mb-4" style="display:flex;gap:0.5rem;flex-wrap:wrap;">
+                            <input type="text" id="sheet-summary-filter-text" placeholder="Filtrar hoja..." style="flex:1;min-width:120px;">
+                            <select id="sheet-summary-filter-type" style="min-width:120px;">
+                                <option value="">Todos los tipos</option>
+                            </select>
+                            <select id="sheet-summary-filter-errors" style="min-width:120px;">
+                                <option value="">Todos los estados</option>
+                                <option value="errors">Con errores</option>
+                                <option value="noerrors">Sin errores</option>
+                            </select>
+                            <button id="btn-export-sheet-summary" class="btn-secondary" type="button">Exportar resumen</button>
+                        </div>
+                        <div id="duplicate-stats" class="mb-4" style="font-size:0.9rem;color:var(--text-muted);"></div>
+                        <div class="table-responsive">
+                            <table id="sheet-summary-table">
+                                <thead>
+                                    <tr>
+                                        <th>Hoja</th>
+                                        <th>Tipo principal</th>
+                                        <th>Registros cargados</th>
+                                        <th>Última importación</th>
+                                        <th>Archivo origen</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Tab: Diccionario de Busqueda -->
@@ -745,6 +779,7 @@
                     </div>
                     <div class="stats-grid" id="diagnostics-stats-container"></div>
                     <div id="diagnostics-warnings" class="recommendations-list"></div>
+                    <div class="stats-grid" id="diagnostics-sheet-stats" style="margin-top:1rem;"></div>
                     <div class="table-actions">
                         <button id="btn-export-diagnostics-json" class="btn-secondary" type="button">Exportar diagnostico JSON</button>
                         <button id="btn-export-diagnostics-csv" class="btn-secondary" type="button">Exportar diagnostico CSV</button>

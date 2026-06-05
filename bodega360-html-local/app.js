@@ -477,6 +477,41 @@ const StorageAdapter = {
         };
     },
 
+    // ── Delete by sheet ────────────────────────────────────────────────────
+
+    deleteMaterialsBySheet(sheetName) {
+        const materials = this.getMaterials();
+        const remaining = materials.filter(m => (m.sourceSheet || 'Manual') !== sheetName);
+        this.saveMaterials(remaining);
+        return materials.length - remaining.length;
+    },
+
+    deleteExcelRecordsBySheet(sheetName) {
+        const records = this.getExcelRecords() || [];
+        const remaining = records.filter(r => (r.sheetName || '') !== sheetName);
+        this._cache.excelRecords = remaining;
+        if (this._idbAvailable && this._db) {
+            try {
+                const tx = this._db.transaction('excelRecords', 'readwrite');
+                tx.objectStore('excelRecords').clear();
+                remaining.forEach(r => tx.objectStore('excelRecords').put(r));
+            } catch (e) {}
+        }
+        return records.length - remaining.length;
+    },
+
+    getMaterialsBySheet(sheetName) {
+        const materials = this.getMaterials();
+        return materials.filter(m => (m.sourceSheet || 'Manual') === sheetName);
+    },
+
+    getSheetNames() {
+        const materials = this.getMaterials();
+        const sheets = new Set();
+        materials.forEach(m => sheets.add(m.sourceSheet || 'Manual'));
+        return Array.from(sheets).sort();
+    },
+
     // ── Clear all ───────────────────────────────────────────────────────────
 
     clearAll() {
@@ -1607,6 +1642,10 @@ function refreshAdminViews() {
     renderDiagnostics();
     updateCategoriesDatalist();
     renderInventoryCard();
+    renderSheetSummary();
+    renderDuplicateStats();
+    populateSheetSummaryFilters();
+    renderDiagnosticsSheetStats();
 }
 
 // ============================================================================
@@ -1685,6 +1724,264 @@ function renderAdminMaterials() {
     document.getElementById('btn-prev-page').disabled = adminCurrentPage === 0;
     document.getElementById('btn-next-page').disabled = adminCurrentPage >= totalPages - 1;
     document.getElementById('pagination-info').textContent = `Mostrando ${start + 1}-${Math.min(start + ADMIN_PAGE_SIZE, filteredMaterials.length)} de ${filteredMaterials.length} materiales`;
+}
+
+// ============================================================================
+// GESTIÓN DE BASE MAESTRA (FASE 2C)
+// ============================================================================
+
+function getSheetSummary() {
+    const materials = StorageAdapter.getMaterials();
+    const importLogs = StorageAdapter.getImportLogs() || [];
+    const sheets = {};
+
+    materials.forEach(m => {
+        const s = m.sourceSheet || 'Manual';
+        if (!sheets[s]) {
+            sheets[s] = { sheetName: s, count: 0, errors: 0, warnings: 0, latestImport: '', latestFile: '' };
+        }
+        sheets[s].count++;
+        if (m._errors && m._errors.length) sheets[s].errors++;
+        if (m._warnings && m._warnings.length) sheets[s].warnings++;
+    });
+
+    importLogs.forEach(log => {
+        const sheetNames = log.hojas || log.hojasProcesadas;
+        if (!sheetNames || !Array.isArray(sheetNames)) return;
+        sheetNames.forEach(h => {
+            const s = typeof h === 'string' ? h : (h.nombre || h);
+            if (sheets[s]) {
+                if (!sheets[s].latestImport || log.fecha + ' ' + log.hora > sheets[s].latestImport) {
+                    sheets[s].latestImport = (log.fecha || '') + ' ' + (log.hora || '');
+                    sheets[s].latestFile = log.archivo || log.nombreArchivo || log.fileName || '';
+                }
+            }
+        });
+    });
+
+    const result = Object.values(sheets).sort((a, b) => b.count - a.count);
+
+    result.forEach(s => {
+        if (!s.latestImport) {
+            s.latestImport = '—';
+            s.latestFile = '—';
+        }
+    });
+
+    return result;
+}
+
+function renderSheetSummary() {
+    const tbody = document.querySelector('#sheet-summary-table tbody');
+    if (!tbody) return;
+    const summaries = getSheetSummary();
+
+    const filterText = (document.getElementById('sheet-summary-filter-text')?.value || '').toLowerCase();
+    const filterType = document.getElementById('sheet-summary-filter-type')?.value || '';
+    const filterErrors = document.getElementById('sheet-summary-filter-errors')?.value || '';
+
+    const filtered = summaries.filter(s => {
+        if (filterText && !s.sheetName.toLowerCase().includes(filterText)) return false;
+        if (filterType && canonicalRecordType({ recordType: '', sourceSheet: s.sheetName }) !== filterType) return false;
+        if (filterErrors === 'errors' && s.errors === 0) return false;
+        if (filterErrors === 'noerrors' && s.errors > 0) return false;
+        return true;
+    });
+
+    if (filtered.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Sin datos de base cargada.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = filtered.map(s => {
+        const typeLabel = getRecordTypeLabel(canonicalRecordType({ recordType: '', sourceSheet: s.sheetName }));
+        const estado = s.errors > 0 ? `<span class="badge badge-warning">Con errores (${s.errors})</span>` : '<span class="badge badge-success">Activa</span>';
+        return `<tr>
+            <td><strong>${escapeHtml(s.sheetName)}</strong></td>
+            <td><span class="badge badge-neutral" style="font-size:0.72rem;">${escapeHtml(typeLabel)}</span></td>
+            <td>${s.count}</td>
+            <td style="font-size:0.8rem;">${escapeHtml(s.latestImport)}</td>
+            <td style="font-size:0.8rem;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escapeAttr(s.latestFile)}">${escapeHtml(s.latestFile)}</td>
+            <td>${estado}</td>
+            <td>
+                <button class="action-btn" onclick="deleteSheet('${escapeAttr(s.sheetName)}')" style="color:var(--danger-color);">Eliminar hoja</button>
+                <button class="action-btn" onclick="reimportSheet('${escapeAttr(s.sheetName)}')">Reimportar</button>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function deleteSheet(sheetName) {
+    if (!confirm(`Esto eliminar\u00e1 todos los registros importados desde la hoja ${sheetName}. \u00bfContinuar?`)) return;
+    const materials = StorageAdapter.getMaterials();
+    const toDelete = materials.filter(m => (m.sourceSheet || 'Manual') === sheetName);
+    const count = toDelete.length;
+    if (count === 0) { showToast('No hay registros para esa hoja.'); return; }
+    StorageAdapter.deleteMaterialsBySheet(sheetName);
+    StorageAdapter.deleteExcelRecordsBySheet(sheetName);
+    const changeLogs = StorageAdapter.getChangeLogs() || [];
+    changeLogs.push({
+        fecha: new Date().toISOString().slice(0,10),
+        hora: new Date().toTimeString().slice(0,5),
+        usuario: 'admin',
+        codigo: `BULK_DELETE_${sheetName}_${Date.now()}`,
+        campoModificado: 'delete_sheet',
+        valorAnterior: `${count} registros`,
+        valorNuevo: 'eliminado'
+    });
+    StorageAdapter.saveChangeLogs(changeLogs);
+    const logs = StorageAdapter.getImportLogs() || [];
+    logs.push({
+        fecha: new Date().toISOString().slice(0,10),
+        hora: new Date().toTimeString().slice(0,5),
+        archivo: '',
+        hojas: [sheetName],
+        accion: 'delete_sheet',
+        total: count,
+        importados: 0,
+        actualizados: 0,
+        omitidos: 0,
+        errores: 0,
+        politica: 'delete_sheet',
+        usuario: 'admin'
+    });
+    StorageAdapter.saveImportLogs(logs);
+    renderSheetSummary();
+    renderDuplicateStats();
+    refreshAdminViews();
+    showToast(`Hoja ${sheetName} eliminada (${count} registros).`);
+}
+
+function getDuplicateStats() {
+    const materials = StorageAdapter.getMaterials();
+    const codeMap = {};
+    const intraSheetDups = new Set();
+    const crossSheetDups = new Set();
+
+    materials.forEach(m => {
+        const code = m.codigo;
+        if (!code) return;
+        if (!codeMap[code]) codeMap[code] = [];
+        codeMap[code].push(m.sourceSheet || 'Manual');
+    });
+
+    Object.entries(codeMap).forEach(([code, sheets]) => {
+        if (sheets.length < 2) return;
+        const uniqueSheets = [...new Set(sheets)];
+        if (uniqueSheets.length > 1) crossSheetDups.add(code);
+        if (sheets.length > uniqueSheets.length) intraSheetDups.add(code);
+    });
+
+    return {
+        crossSheetCount: crossSheetDups.size,
+        intraSheetCount: intraSheetDups.size,
+        crossSheetCodes: Array.from(crossSheetDups),
+        intraSheetCodes: Array.from(intraSheetDups)
+    };
+}
+
+function renderDuplicateStats() {
+    const el = document.getElementById('duplicate-stats');
+    if (!el) return;
+    const dups = getDuplicateStats();
+    const parts = [];
+    if (dups.crossSheetCount > 0) parts.push(`C\u00f3digos repetidos entre hojas: ${dups.crossSheetCount}`);
+    if (dups.intraSheetCount > 0) parts.push(`C\u00f3digos repetidos dentro de la misma hoja: ${dups.intraSheetCount}`);
+    el.textContent = parts.length ? parts.join(' | ') : 'Sin c\u00f3digos duplicados.';
+}
+
+function exportSheetSummary() {
+    const summaries = getSheetSummary();
+    let csv = 'Hoja,Tipo,Registros,Ultima importacion,Archivo,Errores,Advertencias\n';
+    summaries.forEach(s => {
+        const typeLabel = getRecordTypeLabel(canonicalRecordType({ recordType: '', sourceSheet: s.sheetName }));
+        csv += [s.sheetName, typeLabel, s.count, s.latestImport, s.latestFile, s.errors, s.warnings].map(v => '"' + String(v).replace(/"/g, '""') + '"').join(',') + '\n';
+    });
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'resumen_base_maestra_' + new Date().toISOString().slice(0,10) + '.csv';
+    link.click();
+    URL.revokeObjectURL(link.href);
+    showToast('Resumen exportado como CSV.');
+}
+
+function reimportSheet(sheetName) {
+    const policy = prompt(
+        `Reimportar hoja "${sheetName}".\n\nElige una opci\u00f3n:\n1 = Reemplazar solo esta hoja\n2 = Actualizar existentes\n3 = Omitir existentes`,
+        '1'
+    );
+    if (!policy) return;
+    const policyMap = { '1': 'replace_sheet', '2': 'update', '3': 'skip' };
+    const importPolicy = policyMap[policy];
+    if (!importPolicy) { showToast('Opci\u00f3n no v\u00e1lida. Cancela o elige 1, 2 o 3.'); return; }
+
+    if (importPolicy === 'replace_sheet') {
+        if (!confirm(`Esto eliminar\u00e1 los registros de "${sheetName}" y los reimportar\u00e1 desde el archivo. \u00bfContinuar?`)) return;
+        StorageAdapter.deleteMaterialsBySheet(sheetName);
+        StorageAdapter.deleteExcelRecordsBySheet(sheetName);
+    }
+
+    if (!currentImportData || !currentImportData.sheets) {
+        showToast('No hay datos de Excel cargados. Carga el Excel primero desde "Importar Excel Maestro".');
+        return;
+    }
+    const sheetData = currentImportData.sheets.find(s => s.sheetName === sheetName);
+    if (!sheetData) {
+        showToast(`La hoja "${sheetName}" no est\u00e1 en los datos de Excel actuales. Vuelve a cargar el archivo.`);
+        return;
+    }
+    document.getElementById('master-import-policy').value = importPolicy;
+    const importCopy = JSON.parse(JSON.stringify(currentImportData));
+    importCopy.sheets = [JSON.parse(JSON.stringify(sheetData))];
+    currentImportData = importCopy;
+    renderMasterPreview();
+    document.getElementById('master-preview-section').classList.remove('hidden');
+    document.getElementById('btn-confirm-master-import').scrollIntoView({ behavior: 'smooth' });
+    showToast(`Listo para reimportar "${sheetName}". Revisa la vista previa y confirma.`);
+}
+
+// Populate sheet summary filter dropdowns
+function populateSheetSummaryFilters() {
+    const typeSelect = document.getElementById('sheet-summary-filter-type');
+    if (!typeSelect) return;
+    const summaries = getSheetSummary();
+    const types = new Set();
+    summaries.forEach(s => {
+        const t = canonicalRecordType({ recordType: '', sourceSheet: s.sheetName });
+        types.add(t);
+    });
+    typeSelect.innerHTML = '<option value="">Todos los tipos</option>' +
+        Array.from(types).sort().map(t => `<option value="${escapeAttr(t)}">${escapeHtml(getRecordTypeLabel(t))}</option>`).join('');
+}
+
+// Update renderDiagnostics to show per-sheet stats
+function renderDiagnosticsSheetStats() {
+    const container = document.getElementById('diagnostics-sheet-stats');
+    if (!container) return;
+    const summaries = getSheetSummary();
+    const dups = getDuplicateStats();
+    if (summaries.length === 0) { container.innerHTML = ''; return; }
+    const totalRegs = summaries.reduce((s, x) => s + x.count, 0);
+    const totalSheets = summaries.length;
+    const sheetsWithErrors = summaries.filter(s => s.errors > 0).length;
+    const sheetsEmpty = summaries.filter(s => s.count === 0).length;
+
+    container.innerHTML = [
+        ['Total registros', totalRegs],
+        ['Hojas activas', totalSheets],
+        ['Hojas con errores', sheetsWithErrors],
+        ['Hojas sin registros', sheetsEmpty],
+        ['Duplicados entre hojas', dups.crossSheetCount],
+        ['Duplicados intra-hoja', dups.intraSheetCount]
+    ].map(([label, value]) => `<div class="stat-card"><div class="stat-value" style="font-size:1.3rem;">${value}</div><div class="stat-label">${escapeHtml(label)}</div></div>`).join('');
+
+    if (summaries.length > 0) {
+        const detailHtml = '<div style="margin-top:0.8rem;display:flex;flex-wrap:wrap;gap:0.3rem;">' +
+            summaries.map(s => `<span class="badge badge-neutral" style="font-size:0.72rem;">${escapeHtml(s.sheetName)}: ${s.count}</span>`).join('') +
+            '</div>';
+        container.innerHTML += detailHtml;
+    }
 }
 
 function populateAdminFilterDropdowns() {
@@ -1779,6 +2076,12 @@ document.getElementById('btn-next-page').addEventListener('click', () => {
     const total = getAdminFilteredMaterials().length;
     if ((adminCurrentPage + 1) * ADMIN_PAGE_SIZE < total) { adminCurrentPage++; renderAdminMaterials(); }
 });
+
+// Sheet summary event listeners
+document.getElementById('sheet-summary-filter-text')?.addEventListener('input', () => renderSheetSummary());
+document.getElementById('sheet-summary-filter-type')?.addEventListener('change', () => renderSheetSummary());
+document.getElementById('sheet-summary-filter-errors')?.addEventListener('change', () => renderSheetSummary());
+document.getElementById('btn-export-sheet-summary')?.addEventListener('click', exportSheetSummary);
 
 // ============================================================================
 // MODO INVENTARIO OPCIONAL (ADMIN / TABLET)
@@ -4298,6 +4601,7 @@ function renderDiagnostics() {
     document.getElementById('diagnostics-warnings').innerHTML = data.warnings.length
         ? data.warnings.map(w => `<div class="recommendation-item warning">${escapeHtml(w)}</div>`).join('')
         : '<div class="recommendation-item">Sin advertencias relevantes.</div>';
+    renderDiagnosticsSheetStats();
 }
 
 function exportRowsToCsv(rows, fileName) {
