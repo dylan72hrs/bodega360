@@ -1272,6 +1272,7 @@ function buildResultCardHtml(r, isPrimary) {
 
     return `
         <div class="${isPrimary ? 'primary-result-card' : 'result-card'}">
+            ${isPrimary ? '<div class="primary-result-badge">Resultado mas probable</div>' : ''}
             ${renderPhotoHtml(item, 'result-photo', item.nombre)}
             <div class="card-header">
                 <div>
@@ -1339,8 +1340,7 @@ function renderSearchResults(results, isTruncated, rawQuery = '') {
     const secondaryResults = results.slice(1);
 
     // Render primary result
-    grid.innerHTML = '<div class="primary-result-badge">Resultado mas probable</div>';
-    grid.innerHTML += buildResultCardHtml(primaryResult, true);
+    grid.innerHTML = buildResultCardHtml(primaryResult, true);
 
     // Render secondary results (collapsible, 8 at a time)
     if (secondaryResults.length > 0 || isTruncated) {
