@@ -515,12 +515,12 @@ const DEFAULT_MATERIAL_SHEETS = new Set([
     'TRICONOS',
     'REPTOS. MALI',
     'MATERIALES SIN CONSUMO',
-    'REPUESTOS A PERU'
+    'REPUESTOS A PERU',
+    'S-A PEND ENTREGA'
 ]);
 const CONTROL_SHEETS = new Set([
     'CONTROL SC CHILE',
     'CONTROL SC EXTRANJERO',
-    'S-A PEND ENTREGA',
     'ACTIVOS',
     'HOJA1',
     'HOJA2',
@@ -588,33 +588,29 @@ function splitKeywords(value) {
 
 function normalizeMaterial(material) {
     const normalized = { ...material };
-    normalized.codigo = String(getField(material, 'codigo', 'code')).trim();
-    normalized.codigoAlternativo = String(getField(material, 'codigoAlternativo', 'alternateCode')).trim();
-    normalized.codigoBarra = String(getField(material, 'codigoBarra', 'barcode', 'ean')).trim();
-    normalized.nombre = String(getField(material, 'nombre', 'name')).trim();
-    normalized.descripcion = String(getField(material, 'descripcion', 'description')).trim();
-    normalized.categoria = String(getField(material, 'categoria', 'category')).trim();
-    normalized.marca = String(getField(material, 'marca', 'brand')).trim();
-    normalized.modelo = String(getField(material, 'modelo', 'model')).trim();
-    normalized.unidadMedida = String(getField(material, 'unidadMedida', 'unidad', 'unit') || 'UN').trim();
-    normalized.ubicacion = String(getField(material, 'ubicacion', 'location')).trim();
-    normalized.equipoAsociado = String(getField(material, 'equipoAsociado', 'equipo')).trim();
-    normalized.aliasBusqueda = String(getField(material, 'aliasBusqueda', 'alias', 'sinonimos')).trim();
+    for (const k of ['codigo','codigoAlternativo','codigoBarra','nombre','descripcion','categoria','marca','modelo','unidadMedida','ubicacion','equipoAsociado','aliasBusqueda','fechaCostoPromedio','origenCosto','estadoRevision','id','sourceSheet','sourceFile','moneda','estado','proyecto','localidad','pedido','entrega','oc','fecha','fechaAprobacion','fechaEntrega','ultimoConsumo','observaciones','notas','recordType','sa','linea']) {
+        const val = getField(material, k);
+        normalized[k] = val !== undefined && val !== null ? String(val).trim() : '';
+    }
     normalized.fotoPrincipal = String(getField(material, 'fotoPrincipal', 'foto', 'imagen', 'urlFoto')).trim();
     normalized.foto = normalized.fotoPrincipal;
     normalized.fotosAdicionales = Array.isArray(material.fotosAdicionales)
         ? material.fotosAdicionales
         : splitKeywords(getField(material, 'fotosAdicionales', 'fotos', 'imagenes'));
-    normalized.stockMinimo = getField(material, 'stockMinimo') === '' ? '' : Number(getField(material, 'stockMinimo'));
-    normalized.fechaCostoPromedio = String(getField(material, 'fechaCostoPromedio', 'fechaCosto')).trim();
-    normalized.origenCosto = String(getField(material, 'origenCosto') || 'Manual').trim();
+    for (const k of ['stock','stockMinimo','cantidad','valorUnitario','valorTotal','costoPromedio','pendiente']) {
+        const val = getField(material, k);
+        normalized[k] = val === '' || val === null || val === undefined ? '' : Number(val);
+    }
+    normalized.recordType = canonicalRecordType(normalized);
+    normalized.origenCosto = normalized.origenCosto || 'Manual';
+    normalized.unidadMedida = normalized.unidadMedida || 'UN';
+    normalized.estado = normalized.estado || 'Activo';
+    normalized.estadoRevision = normalized.estadoRevision || 'Pendiente';
     normalized.esCritico = material.esCritico === true || String(material.esCritico).toLowerCase() === 'true' || String(material.esCritico).toLowerCase() === 'si';
-    normalized.estadoRevision = String(getField(material, 'estadoRevision') || 'Pendiente').trim();
     normalized.validado = material.validado === true || String(material.validado).toLowerCase() === 'true' || String(material.validado).toLowerCase() === 'si';
-    normalized.id = String(getField(material, 'id') || normalized.codigo || '').trim();
-    normalized.sourceSheet = String(getField(material, 'sourceSheet', 'nombreHoja') || '').trim();
-    normalized.sourceRow = getField(material, 'sourceRow', 'filaOriginal') || '';
-    normalized.sourceFile = String(getField(material, 'sourceFile') || '').trim();
+    normalized.id = normalized.id || normalized.codigo || '';
+    normalized.sourceRow = getField(material, 'sourceRow', 'filaOriginal');
+    normalized.sourceRow = normalized.sourceRow !== undefined && normalized.sourceRow !== null ? String(normalized.sourceRow).trim() : '';
     normalized.rawData = material.rawData && typeof material.rawData === 'object' ? material.rawData : (material.rawData || null);
     normalized.importWarnings = Array.isArray(material.importWarnings) ? material.importWarnings : [];
     normalized.ultimaModificacion = normalized.ultimaModificacion || new Date().toISOString();
@@ -904,20 +900,17 @@ function checkEmptyDBWarning() {
 function getSearchableText(material) {
     const m = normalizeMaterial(material);
     return [
-        m.codigo,
-        m.codigoAlternativo,
-        m.codigoBarra,
-        m.nombre,
-        m.descripcion,
-        m.categoria,
-        m.marca,
-        m.modelo,
-        m.unidadMedida,
-        m.ubicacion,
-        m.equipoAsociado,
-        m.sourceSheet,
-        m.aliasBusqueda,
-        splitKeywords(m.aliasBusqueda).join(' '),
+        m.codigo, m.codigoAlternativo, m.codigoBarra,
+        m.nombre, m.descripcion,
+        m.categoria, m.marca, m.modelo, m.unidadMedida,
+        m.ubicacion, m.equipoAsociado,
+        m.sourceSheet, m.recordType,
+        m.aliasBusqueda, splitKeywords(m.aliasBusqueda).join(' '),
+        m.proyecto, m.localidad, m.estado,
+        m.notas, m.observaciones,
+        m.ultimoConsumo, m.pedido, m.entrega, m.oc,
+        String(m.pendiente || ''), String(m.stock || ''), String(m.cantidad || ''),
+        String(m.valorUnitario || ''), String(m.valorTotal || ''),
         m.rawData && typeof m.rawData === 'object' ? Object.values(m.rawData).join(' ') : ''
     ].map(normalizeText).join(' ');
 }
@@ -935,8 +928,19 @@ function scoreMaterial(material, rawQuery) {
     const alt = normalizeText(item.codigoAlternativo);
     const barcode = normalizeText(item.codigoBarra);
     const name = normalizeText(item.nombre);
+    const desc = normalizeText(item.descripcion);
     const aliases = splitKeywords(item.aliasBusqueda).map(normalizeText);
     const searchable = getSearchableText(item);
+    const proyecto = normalizeText(item.proyecto);
+    const localidad = normalizeText(item.localidad);
+    const estado = normalizeText(item.estado);
+    const pedido = normalizeText(item.pedido);
+    const entrega = normalizeText(item.entrega);
+    const oc = normalizeText(item.oc);
+    const notas = normalizeText(item.notas);
+    const observaciones = normalizeText(item.observaciones);
+    const recordType = normalizeText(item.recordType);
+    const sourceSheet = normalizeText(item.sourceSheet);
 
     queryTerms.forEach(term => {
         if (!term) return;
@@ -944,9 +948,13 @@ function scoreMaterial(material, rawQuery) {
         if (alt === term || barcode === term) { score = Math.max(score, 940); matchType = 'exact'; }
         if (code.startsWith(term) || alt.startsWith(term) || barcode.startsWith(term)) { score = Math.max(score, 820); matchType = matchType || 'partial'; }
         if (code.includes(term) || alt.includes(term) || barcode.includes(term)) { score = Math.max(score, 740); matchType = matchType || 'partial'; }
-        if (name.includes(term)) { score = Math.max(score, 640); matchType = matchType || 'partial'; }
+        if (name.includes(term) || desc.includes(term)) { score = Math.max(score, 640); matchType = matchType || 'partial'; }
         if (aliases.some(a => a === term || a.includes(term) || term.includes(a))) { score = Math.max(score, 620); matchType = matchType || 'partial'; }
-        if (searchable.includes(term)) { score = Math.max(score, 520); matchType = matchType || 'partial'; }
+        if (proyecto.includes(term) || localidad.includes(term)) { score = Math.max(score, 560); matchType = matchType || 'partial'; }
+        if (pedido.includes(term) || entrega.includes(term) || oc.includes(term)) { score = Math.max(score, 540); matchType = matchType || 'partial'; }
+        if (estado.includes(term) || recordType.includes(term) || sourceSheet.includes(term)) { score = Math.max(score, 530); matchType = matchType || 'partial'; }
+        if (notas.includes(term) || observaciones.includes(term)) { score = Math.max(score, 510); matchType = matchType || 'partial'; }
+        if (searchable.includes(term)) { score = Math.max(score, 500); matchType = matchType || 'partial'; }
     });
 
     queryWords.forEach(word => {
@@ -984,6 +992,7 @@ function scoreMaterial(material, rawQuery) {
 
 function rankMaterials(rawQuery, minScore = 50) {
     return StorageAdapter.getMaterials()
+        .filter(m => !isFakeHeaderRecord(m))
         .map(m => scoreMaterial(m, rawQuery))
         .filter(r => r.score >= minScore || r.matchType === 'possible')
         .sort((a, b) => b.score - a.score);
@@ -1267,8 +1276,12 @@ function buildResultCardHtml(r, isPrimary) {
     const costBadge = isCostOutdated(item) ? `<span class="badge badge-warning">Costo antiguo</span>` : '';
     const qualityBadge = `<span class="badge ${item.calidadDato >= 75 ? 'badge-success' : item.calidadDato >= 45 ? 'badge-warning' : 'badge-danger'}">Dato ${item.calidadDato}%</span>`;
 
-    const sourceInfo = item.sourceSheet ? escapeHtml(item.sourceSheet) : (item.recordType ? escapeHtml(item.recordType) : '');
+    const sourceInfo = item.sourceSheet ? escapeHtml(item.sourceSheet) : '';
     const sourceBadge = sourceInfo ? `<span class="badge badge-neutral" style="font-size:0.72rem;">${sourceInfo}</span>` : '';
+
+    const canonicalType = canonicalRecordType(item);
+    const recordTypeLabel = getRecordTypeLabel(canonicalType);
+    const typeBadge = canonicalType !== 'catalogo_codigo' && canonicalType !== 'hoja_generica' ? `<span class="badge badge-primary" style="font-size:0.7rem; background:var(--accent-color); color:white;">${escapeHtml(recordTypeLabel.toUpperCase())}</span>` : '';
 
     return `
         <div class="${isPrimary ? 'primary-result-card' : 'result-card'}">
@@ -1277,20 +1290,27 @@ function buildResultCardHtml(r, isPrimary) {
             <div class="card-header">
                 <div>
                     <span class="card-code" style="display:inline-block; margin-bottom:0.2rem;">${escapeHtml(item.codigo)}</span>
-                    <div class="badge-row" style="margin-top:0.25rem;">${matchBadge}${item.esCritico ? '<span class="badge badge-danger">Critico</span>' : ''}${qualityBadge}${costBadge}${sourceBadge}</div>
+                    <div class="badge-row" style="margin-top:0.25rem;">${matchBadge}${typeBadge}${item.esCritico ? '<span class="badge badge-danger">Critico</span>' : ''}${qualityBadge}${costBadge}${sourceBadge}</div>
                 </div>
                 ${stockBadge}
             </div>
-            <div class="card-title">${escapeHtml(item.nombre || 'Sin nombre')}</div>
-            ${item.descripcion ? `<div class="card-desc">${escapeHtml(item.descripcion)}</div>` : ''}
+            <div class="card-title">${escapeHtml(item.nombre || item.descripcion || 'Sin nombre')}</div>
+            ${item.descripcion && item.descripcion !== item.nombre ? `<div class="card-desc">${escapeHtml(item.descripcion)}</div>` : ''}
             <div class="card-meta">
                 ${item.categoria ? `<div><strong>Categoria</strong> <span>${escapeHtml(item.categoria)}</span></div>` : ''}
                 ${item.ubicacion ? `<div><strong>Ubicacion</strong> <span>${escapeHtml(item.ubicacion)}</span></div>` : ''}
                 ${item.equipoAsociado ? `<div><strong>Equipo</strong> <span>${escapeHtml(item.equipoAsociado)}</span></div>` : ''}
                 ${item.costoPromedio !== '' && item.costoPromedio !== null ? `<div><strong>Costo</strong> <span>${escapeHtml(formatCurrency(item.costoPromedio))}</span></div>` : ''}
-                ${item.estado ? `<div><strong>Estado</strong> <span>${escapeHtml(item.estado)}</span></div>` : ''}
+                ${item.estado && item.estado !== 'Activo' ? `<div><strong>Estado</strong> <span>${escapeHtml(item.estado)}</span></div>` : ''}
                 ${item.proyecto ? `<div><strong>Proyecto</strong> <span>${escapeHtml(item.proyecto)}</span></div>` : ''}
+                ${item.pendiente !== '' && item.pendiente !== null && item.pendiente !== undefined ? `<div><strong>Pendiente</strong> <span>${escapeHtml(String(item.pendiente))}</span></div>` : ''}
+                ${item.pedido ? `<div><strong>Pedido</strong> <span>${escapeHtml(item.pedido)}</span></div>` : ''}
+                ${item.entrega ? `<div><strong>Entrega</strong> <span>${escapeHtml(item.entrega)}</span></div>` : ''}
+                ${item.localidad ? `<div><strong>Localidad</strong> <span>${escapeHtml(item.localidad)}</span></div>` : ''}
+                ${item.ultimoConsumo ? `<div><strong>Ult. consumo</strong> <span>${escapeHtml(item.ultimoConsumo)}</span></div>` : ''}
+                ${item.observaciones ? `<div><strong>Obs.</strong> <span>${escapeHtml(item.observaciones)}</span></div>` : ''}
                 ${item.stock !== '' && item.stock !== null && item.stock !== undefined ? `<div><strong>Stock</strong> <span>${escapeHtml(String(item.stock))}</span></div>` : ''}
+                ${item.cantidad !== '' && item.cantidad !== null && item.cantidad !== undefined ? `<div><strong>Cantidad</strong> <span>${escapeHtml(String(item.cantidad))}</span></div>` : ''}
             </div>
             <div class="card-actions">
                 <button class="btn-secondary btn-copy-code" data-codigo="${escapeAttr(item.codigo)}">Copiar codigo</button>
@@ -1466,46 +1486,8 @@ function openDetailModal(codigo) {
         ? `<details class="raw-data-panel detail-full"><summary>Ver datos originales</summary><pre>${escapeHtml(JSON.stringify(detail.rawData, null, 2))}</pre></details>`
         : '';
 
+    const recordTypeLabel = getRecordTypeLabel(detail.recordType);
     const content = document.getElementById('detail-content');
-    content.innerHTML = `
-        ${renderPhotoHtml(detail, 'detail-img', detail.nombre)}
-        <div class="detail-item"><div class="detail-label">Codigo</div><div class="detail-value">${escapeHtml(detail.codigo)}</div></div>
-        <div class="detail-item"><div class="detail-label">Codigo de barra</div><div class="detail-value">${escapeHtml(detail.codigoBarra || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Codigo alternativo</div><div class="detail-value">${escapeHtml(detail.codigoAlternativo || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Estado dato</div><div class="detail-value">${escapeHtml(detail.estadoRevision || '-')} / ${detail.calidadDato}%</div></div>
-        <div class="detail-item detail-full"><div class="detail-label">Nombre</div><div class="detail-value">${escapeHtml(detail.nombre)}</div></div>
-        <div class="detail-item detail-full"><div class="detail-label">Descripcion</div><div class="detail-value">${escapeHtml(detail.descripcion || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Categoria</div><div class="detail-value">${escapeHtml(detail.categoria || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Marca / Modelo</div><div class="detail-value">${escapeHtml([detail.marca, detail.modelo].filter(Boolean).join(' / ') || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Stock</div><div class="detail-value"><span class="badge ${stockInfo.className}">${escapeHtml(stockInfo.label)}</span></div></div>
-        <div class="detail-item"><div class="detail-label">Stock minimo</div><div class="detail-value">${detail.stockMinimo !== '' && detail.stockMinimo !== null ? escapeHtml(detail.stockMinimo) : '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Costo promedio</div><div class="detail-value">${detail.costoPromedio !== '' && detail.costoPromedio !== null ? escapeHtml(formatCurrency(detail.costoPromedio)) + ' ' + escapeHtml(detail.moneda || 'CLP') : '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Fecha costo</div><div class="detail-value">${escapeHtml(detail.fechaCostoPromedio || '-')}${costOld ? ' <span class="badge badge-warning">antiguo</span>' : ''}</div></div>
-        <div class="detail-item"><div class="detail-label">Ubicacion</div><div class="detail-value">${escapeHtml(detail.ubicacion || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Equipo asociado</div><div class="detail-value">${escapeHtml(detail.equipoAsociado || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Estado</div><div class="detail-value">${escapeHtml(detail.estado || '-')}</div></div>
-        <div class="detail-item"><div class="detail-label">Validado</div><div class="detail-value">${detail.validado ? 'Si' : 'No'}${detail.esCritico ? ' <span class="badge badge-danger">Critico</span>' : ''}</div></div>
-        <div class="detail-item"><div class="detail-label">Ultima modificacion</div><div class="detail-value">${escapeHtml(modDateText)}</div></div>
-        <div class="detail-item"><div class="detail-label">Origen costo</div><div class="detail-value">${escapeHtml(detail.origenCosto || '-')}</div></div>
-        ${hasSource ? `
-            <div class="detail-item"><div class="detail-label">Archivo origen</div><div class="detail-value">${escapeHtml(detail.sourceFile || '-')}</div></div>
-            <div class="detail-item"><div class="detail-label">Hoja / fila origen</div><div class="detail-value">${escapeHtml([detail.sourceSheet, detail.sourceRow ? 'fila ' + detail.sourceRow : ''].filter(Boolean).join(' / ') || '-')}</div></div>
-        ` : ''}
-        <div class="detail-item detail-full"><div class="detail-label">Alias de busqueda</div><div class="detail-value">${escapeHtml(detail.aliasBusqueda || '-')}</div></div>
-        <div class="detail-item detail-full"><div class="detail-label">Observaciones</div><div class="detail-value">${escapeHtml(detail.observaciones || '-')}</div></div>
-        ${rawDataHtml}
-        <div class="detail-item detail-full">
-            <div class="detail-actions">
-                <button class="btn-secondary" type="button" onclick="copyText('${escapeAttr(detail.codigo)}')">Copiar codigo</button>
-                <button class="btn-secondary" type="button" onclick="openTicketModal({ type: 'Reporte error', code: '${escapeAttr(detail.codigo)}', name: '${escapeAttr(detail.nombre)}' })">Reportar error</button>
-                ${isAdmin ? `<button class="btn-secondary" type="button" onclick="changePhotoFromDetail('${escapeAttr(detail.codigo)}')">Cambiar foto</button>` : ''}
-            </div>
-        </div>
-    `;
-
-    document.getElementById('detail-modal').classList.remove('hidden');
-    setTimeout(() => { document.getElementById('detail-modal').classList.add('active'); }, 10);
-    return;
     content.innerHTML = `
         ${item.foto ? `<img src="${item.foto}" class="detail-img" alt="${item.nombre}">` : ''}
         <div class="detail-item"><div class="detail-label">Código</div><div class="detail-value">${item.codigo}</div></div>
@@ -1650,8 +1632,9 @@ function getAdminFilteredMaterials() {
         filtered = filtered.filter(item => (item.sourceSheet || 'Manual') === filterSource);
     }
     if (filterType) {
-        filtered = filtered.filter(item => (item.recordType || 'Manual') === filterType);
+        filtered = filtered.filter(item => canonicalRecordType(item) === filterType);
     }
+    filtered = filtered.filter(item => !isFakeHeaderRecord(item));
     return filtered;
 }
 
@@ -1662,7 +1645,12 @@ function renderAdminMaterials() {
     tbody.innerHTML = '';
 
     if (filteredMaterials.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">Sin materiales que coincidan con los filtros.</td></tr>';
+        const filterSource = document.getElementById('admin-filter-source').value;
+        const filterType = document.getElementById('admin-filter-type').value;
+        const msg = filterSource || filterType
+            ? 'Sin materiales para esta combinaci\u00f3n de filtros. Cambie Fuente/Hoja o Tipo.'
+            : 'Sin materiales que coincidan con los filtros.';
+        tbody.innerHTML = '<tr><td colspan="9" class="text-center text-muted">' + msg + '</td></tr>';
         document.getElementById('btn-prev-page').disabled = true;
         document.getElementById('btn-next-page').disabled = true;
         document.getElementById('pagination-info').textContent = '0 materiales';
@@ -1678,18 +1666,18 @@ function renderAdminMaterials() {
 
     pageItems.forEach(item => {
         const sourceSheet = item.sourceSheet || 'Manual';
-        const recordType = item.recordType || (item.sourceSheet ? item.sourceSheet.replace(/[^a-zA-Z0-9]/g, '_') : 'Manual');
+        const typeLabel = getRecordTypeLabel(canonicalRecordType(item));
         const tr = document.createElement('tr');
         tr.innerHTML = `
             <td><strong>${escapeHtml(item.codigo)}</strong></td>
             <td>${escapeHtml(item.nombre || '')}</td>
             <td><span class="badge badge-neutral">${escapeHtml(sourceSheet)}</span></td>
-            <td><span class="badge badge-neutral" style="font-size:0.72rem;">${escapeHtml(recordType)}</span></td>
+            <td><span class="badge badge-neutral" style="font-size:0.72rem;">${escapeHtml(typeLabel)}</span></td>
             <td><span class="badge badge-neutral">${escapeHtml(item.categoria || '-')}</span></td>
             <td>${item.stock !== "" && item.stock !== null ? escapeHtml(String(item.stock)) : '-'}</td>
             <td>${escapeHtml(item.ubicacion || '-')}</td>
             <td>${escapeHtml(item.estado || 'Activo')}</td>
-            <td><button class="action-btn btn-edit" data-codigo="${escapeAttr(item.codigo)}">Editar</button></td>
+            <td><button class="action-btn btn-view" onclick="openDetailModal('${escapeAttr(item.codigo)}')">Ver detalle</button> <button class="action-btn btn-edit" data-codigo="${escapeAttr(item.codigo)}">Editar</button></td>
         `;
         tbody.appendChild(tr);
     });
@@ -1702,12 +1690,8 @@ function renderAdminMaterials() {
 function populateAdminFilterDropdowns() {
     const materials = StorageAdapter.getMaterials();
     const sourceSet = new Set();
-    const typeSet = new Set();
     materials.forEach(item => {
-        const src = item.sourceSheet || 'Manual';
-        sourceSet.add(src);
-        const typ = item.recordType || (item.sourceSheet ? item.sourceSheet.replace(/[^a-zA-Z0-9]/g, '_') : 'Manual');
-        typeSet.add(typ);
+        sourceSet.add(item.sourceSheet || 'Manual');
     });
 
     const sourceSelect = document.getElementById('admin-filter-source');
@@ -1717,8 +1701,57 @@ function populateAdminFilterDropdowns() {
 
     sourceSelect.innerHTML = '<option value="">Todas las fuentes</option>' +
         Array.from(sourceSet).sort().map(s => `<option value="${escapeAttr(s)}"${s === currentSrc ? ' selected' : ''}>${escapeHtml(s)}</option>`).join('');
+
+    rebuildTypeDropdown();
+}
+
+function rebuildTypeDropdown() {
+    const materials = StorageAdapter.getMaterials();
+    const sourceSelect = document.getElementById('admin-filter-source');
+    const typeSelect = document.getElementById('admin-filter-type');
+    const activeSource = sourceSelect.value;
+    const currentType = typeSelect.value;
+
+    let typeSet = new Set();
+    materials.forEach(item => {
+        const src = item.sourceSheet || 'Manual';
+        if (activeSource && src !== activeSource) return;
+        if (isFakeHeaderRecord(item)) return;
+        const typ = canonicalRecordType(item);
+        typeSet.add(typ);
+    });
+
+    const sorted = Array.from(typeSet).sort();
     typeSelect.innerHTML = '<option value="">Todos los tipos</option>' +
-        Array.from(typeSet).sort().map(t => `<option value="${escapeAttr(t)}"${t === currentType ? ' selected' : ''}>${escapeHtml(t)}</option>`).join('');
+        sorted.map(t => `<option value="${escapeAttr(t)}"${t === currentType ? ' selected' : ''}>${escapeHtml(getRecordTypeLabel(t))}</option>`).join('');
+
+    if (currentType && !typeSet.has(currentType)) {
+        typeSelect.value = '';
+    }
+}
+
+function rebuildSourceDropdown() {
+    const materials = StorageAdapter.getMaterials();
+    const typeSelect = document.getElementById('admin-filter-type');
+    const sourceSelect = document.getElementById('admin-filter-source');
+    const activeType = typeSelect.value;
+    const currentSrc = sourceSelect.value;
+
+    let sourceSet = new Set();
+    materials.forEach(item => {
+        if (isFakeHeaderRecord(item)) return;
+        const typ = canonicalRecordType(item);
+        if (activeType && typ !== activeType) return;
+        sourceSet.add(item.sourceSheet || 'Manual');
+    });
+
+    const sorted = Array.from(sourceSet).sort();
+    sourceSelect.innerHTML = '<option value="">Todas las fuentes</option>' +
+        sorted.map(s => `<option value="${escapeAttr(s)}"${s === currentSrc ? ' selected' : ''}>${escapeHtml(s)}</option>`).join('');
+
+    if (currentSrc && !sourceSet.has(currentSrc)) {
+        sourceSelect.value = '';
+    }
 }
 
 document.getElementById('admin-search-materials').addEventListener('input', () => {
@@ -1728,11 +1761,13 @@ document.getElementById('admin-search-materials').addEventListener('input', () =
 
 document.getElementById('admin-filter-source').addEventListener('change', () => {
     adminCurrentPage = 0;
+    rebuildTypeDropdown();
     renderAdminMaterials();
 });
 
 document.getElementById('admin-filter-type').addEventListener('change', () => {
     adminCurrentPage = 0;
+    rebuildSourceDropdown();
     renderAdminMaterials();
 });
 
@@ -2722,6 +2757,194 @@ function getCellDisplayValue(cell) {
     return '';
 }
 
+// ============================================================================
+// SHEET PROFILES
+// ============================================================================
+function getSheetProfile(sheetName) {
+    const n = normalizeText(sheetName).toUpperCase();
+    const profiles = [
+        { match: 'CODIGOS KONEC', recordType: 'codigo_konec', displayName: 'CODIGOS KONEC', detectCodigoAlt: true },
+        { match: 'MIN-MAX', recordType: 'min_max', displayName: 'MIN-MAX', fields: ['codigo','descripcion','stock','cantidad','oc','observaciones'] },
+        { match: 'S-A PEND ENTREGA', recordType: 'pendiente_entrega', displayName: 'S-A PEND ENTREGA',
+            fields: ['codigo','nombre','descripcion','cantidad','pedido','entrega','unidadMedida','pendiente','localidad','proyecto','fechaAprobacion','notas','fechaEntrega','sa','linea'],
+            deriveEstado: function(row) {
+                const text = normalizeText((row.notas || '') + ' ' + (row.fechaEntrega || ''));
+                if (text.includes('sin stock')) return 'Sin stock';
+                if (text.includes('parcial')) return 'Parcial';
+                if (text.includes('proyecto cerrado')) return 'Proyecto cerrado';
+                if (text.includes('entregados') || text.includes('entregado')) return 'Entregado';
+                return 'Pendiente';
+            }
+        },
+        { match: 'ACTIVOS', recordType: 'activo', displayName: 'Activos',
+            fields: ['codigo','descripcion','estado','ubicacion','equipoAsociado','observaciones'],
+            requiresCodigo: false
+        },
+        { match: 'MATERIALES SIN CONSUMO', recordType: 'material_sin_movimiento', displayName: 'MATERIALES SIN CONSUMO',
+            fields: ['codigo','descripcion','estado','stock','ultimoConsumo','valorUnitario','valorTotal'] },
+        { match: 'REPTOS. MALI', recordType: 'repuesto_mali', displayName: 'REPTOS. MALI',
+            fields: ['codigo','descripcion','stock','cantidad','oc','observaciones'] },
+        { match: 'INSUMOS REAMERS', recordType: 'insumo_reamer', displayName: 'INSUMOS REAMERS',
+            fields: ['codigo','descripcion','stock','cantidad','observaciones','equipoAsociado'] },
+        { match: 'TRICONOS', recordType: 'tricono', displayName: 'TRICONOS',
+            fields: ['codigo','descripcion','stock','cantidad','observaciones','equipoAsociado'] },
+        { match: 'REPUESTOS A PERU', recordType: 'repuesto_peru', displayName: 'REPUESTOS A PERU',
+            fields: ['codigo','descripcion','stock','cantidad','proyecto','observaciones','estado'] },
+        { match: 'CONTROL SC CHILE', recordType: 'control_sc_chile', displayName: 'CONTROL SC CHILE',
+            fields: ['codigo','descripcion','estado','proyecto','observaciones','notas','fecha'],
+            requiresCodigo: false },
+        { match: 'CONTROL SC EXTRANJERO', recordType: 'control_sc_extranjero', displayName: 'CONTROL SC EXTRANJERO',
+            fields: ['codigo','descripcion','estado','proyecto','observaciones','notas','fecha'],
+            requiresCodigo: false },
+        { match: '', recordType: 'catalogo_codigo', displayName: 'CODIGOS', isDefault: true }
+    ];
+    for (const p of profiles) {
+        if (p.match && n.includes(p.match)) return p;
+    }
+    if (n === 'CODIGOS' || n.startsWith('CODIGO')) return profiles.find(p => p.isDefault);
+    return { recordType: 'hoja_generica', displayName: sheetName, fields: ['codigo','nombre','descripcion'], requiresCodigo: false };
+}
+
+function getRecordTypeLabel(recordType) {
+    const labels = {
+        'catalogo_codigo': 'Catálogo código',
+        'codigo_konec': 'Códigos KONEC',
+        'min_max': 'Min-Max / Stock',
+        'pendiente_entrega': 'Pendiente entrega',
+        'activo': 'Activo',
+        'material_sin_movimiento': 'Material sin consumo',
+        'repuesto_mali': 'Repuestos MALI',
+        'insumo_reamer': 'Insumos Reamers',
+        'tricono': 'Triconos',
+        'repuesto_peru': 'Repuestos a Perú',
+        'control_sc_chile': 'Control SC Chile',
+        'control_sc_extranjero': 'Control SC Extranjero',
+        'hoja_generica': 'Hoja genérica'
+    };
+    const label = labels[recordType];
+    if (label) return label;
+    return recordType ? recordType.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Manual';
+}
+
+function canonicalRecordType(material) {
+    const raw = material.recordType || material.sourceSheet || '';
+    if (!raw) return 'hoja_generica';
+    const n = normalizeText(raw).replace(/\s+/g, '_').replace(/[^a-z0-9_]/g, '').toUpperCase();
+    const map = {
+        'CONTROL_SC_CHILE': 'control_sc_chile',
+        'CONTROL_SC_EXTRANJERO': 'control_sc_extranjero',
+        'CODIGOS_KONEC': 'codigo_konec',
+        'MIN_MAX': 'min_max',
+        'S_A_PEND_ENTREGA': 'pendiente_entrega',
+        'MATERIALES_SIN_CONSUMO': 'material_sin_movimiento',
+        'REPTOS_MALI': 'repuesto_mali',
+        'INSUMOS_REAMERS': 'insumo_reamer',
+        'TRICONOS': 'tricono',
+        'REPUESTOS_A_PERU': 'repuesto_peru',
+        'ACTIVOS': 'activo'
+    };
+    if (map[n]) return map[n];
+    if (n === 'CODIGOS' || n.startsWith('CODIGO') || n === 'CATALOGO_CODIGO') return 'catalogo_codigo';
+    const profile = getSheetProfile(raw);
+    if (profile.recordType !== 'hoja_generica') return profile.recordType;
+    const fromSource = getSheetProfile(material.sourceSheet || '');
+    return fromSource.recordType !== 'hoja_generica' ? fromSource.recordType : 'hoja_generica';
+}
+
+function isFakeHeaderRecord(material) {
+    if (!material) return true;
+    const code = String(material.codigo || '').trim().toUpperCase();
+    const name = String(material.nombre || '').trim().toUpperCase();
+    const desc = String(material.descripcion || '').trim().toUpperCase();
+    if (code === 'CODIGO' || code === 'CÓDIGO') return true;
+    if (code === 'ITEMS COD' || code === 'ITEM COD') return true;
+    if (desc === 'DESCRIPCION MATERIAL' || desc === 'DESCRIPCIÓN MATERIAL') return true;
+    if (name === 'DESCRIPCION MATERIAL' || name === 'DESCRIPCIÓN MATERIAL') return true;
+    if (name === 'DESCRIPTION' || name === 'NOMBRE DEL PRODUCTO') return true;
+    return false;
+}
+
+function PARSE_BY_PROFILE_FIELDS() {} // placeholder for field definitions
+
+function parseRowBySheetProfile(sheetName, row, rowNumber, headerMap, fileName) {
+    const profile = getSheetProfile(sheetName);
+    const raw = { ...row };
+    const codigo = getMappedValue(row, headerMap.codigo) || '';
+    const nombre = getMappedValue(row, headerMap.nombre) || getMappedValue(row, headerMap.descripcion) || '';
+    const descripcion = getMappedValue(row, headerMap.descripcion) || nombre;
+    const codigoAlternativo = getMappedValue(row, headerMap.codigoAlternativo) || '';
+
+    let item = {
+        id: `${fileName}::${sheetName}::${rowNumber}::${codigo || codigoAlternativo || nombre}`,
+        codigo,
+        codigoAlternativo,
+        codigoBarra: getMappedValue(row, headerMap.codigoBarra) || '',
+        nombre,
+        descripcion,
+        unidadMedida: getMappedValue(row, headerMap.unidadMedida) || 'UN',
+        categoria: getMappedValue(row, headerMap.categoria) || '',
+        marca: getMappedValue(row, headerMap.marca) || '',
+        modelo: getMappedValue(row, headerMap.modelo) || '',
+        stock: toNumberOrBlank(getMappedValue(row, headerMap.stock)),
+        stockMinimo: toNumberOrBlank(getMappedValue(row, headerMap.stockMinimo)),
+        cantidad: toNumberOrBlank(getMappedValue(row, headerMap.cantidad)),
+        valorUnitario: toNumberOrBlank(getMappedValue(row, headerMap.valorUnitario)),
+        valorTotal: toNumberOrBlank(getMappedValue(row, headerMap.valorTotal)),
+        costoPromedio: toNumberOrBlank(getMappedValue(row, headerMap.costoPromedio)),
+        moneda: getMappedValue(row, headerMap.moneda) || 'CLP',
+        ubicacion: getMappedValue(row, headerMap.ubicacion) || '',
+        estado: getMappedValue(row, headerMap.estado) || 'Activo',
+        proyecto: getMappedValue(row, headerMap.proyecto) || '',
+        localidad: getMappedValue(row, headerMap.localidad) || '',
+        pedido: getMappedValue(row, headerMap.pedido) || '',
+        entrega: getMappedValue(row, headerMap.entrega) || '',
+        pendiente: toNumberOrBlank(getMappedValue(row, headerMap.pendiente)),
+        oc: getMappedValue(row, headerMap.oc) || '',
+        fecha: getMappedValue(row, headerMap.fecha) || '',
+        fechaAprobacion: getMappedValue(row, headerMap.fechaAprobacion) || '',
+        fechaEntrega: getMappedValue(row, headerMap.fechaEntrega) || '',
+        ultimoConsumo: getMappedValue(row, headerMap.ultimoConsumo) || '',
+        observaciones: getMappedValue(row, headerMap.observaciones) || '',
+        notas: getMappedValue(row, headerMap.notas) || '',
+        equipoAsociado: getMappedValue(row, headerMap.equipoAsociado) || '',
+        aliasBusqueda: [getMappedValue(row, headerMap.aliasBusqueda), codigoAlternativo].filter(Boolean).join(', '),
+        estadoRevision: 'Pendiente',
+        validado: headerMap.validado ? parseBooleanLike(getMappedValue(row, headerMap.validado)) : true,
+        esCritico: false,
+        origenCosto: 'Excel',
+        sourceSheet: sheetName,
+        sourceRow: rowNumber,
+        sourceFile: fileName,
+        rawData: { ...raw },
+        recordType: profile.recordType,
+        encabezadosDetectados: { ...headerMap },
+        importWarnings: []
+    };
+
+    if (profile.deriveEstado) {
+        item.estado = profile.deriveEstado(item);
+    }
+
+    item.searchableText = buildSearchableText(item);
+    return item;
+}
+
+function buildSearchableText(item) {
+    const fields = [
+        item.codigo, item.codigoAlternativo, item.codigoBarra,
+        item.nombre, item.descripcion,
+        item.categoria, item.marca, item.modelo,
+        item.ubicacion, item.equipoAsociado,
+        item.sourceSheet, item.recordType,
+        item.proyecto, item.localidad, item.estado,
+        item.notas, item.observaciones,
+        item.ultimoConsumo, item.pedido, item.entrega, item.oc,
+        item.aliasBusqueda,
+        String(item.pendiente), String(item.stock), String(item.cantidad)
+    ];
+    return normalizeText(fields.filter(Boolean).join(' '));
+}
+
 function processWorkbookArrayBuffer(buffer, fileName, sourcePath = fileName) {
     if (!ensureXlsxAvailable()) return;
     const workbook = XLSX.read(buffer, { type: 'array', cellText: true, cellDates: false, raw: true });
@@ -2850,7 +3073,9 @@ function collectWorkbookWarnings(sheets) {
 function shouldSelectSheetByDefault(sheetName, detected, sheetItems) {
     const upperName = normalizeText(sheetName).toUpperCase();
     if (CONTROL_SHEETS.has(upperName)) return false;
-    if (DEFAULT_MATERIAL_SHEETS.has(sheetName.toUpperCase())) return sheetItems.length > 0;
+    const profile = getSheetProfile(sheetName);
+    if (profile.recordType === 'hoja_generica') return false;
+    if (DEFAULT_MATERIAL_SHEETS.has(sheetName.toUpperCase()) || profile.recordType !== 'catalogo_codigo') return sheetItems.length > 0;
     return sheetItems.length >= 5 && detected.confidence >= 4;
 }
 
@@ -2987,23 +3212,38 @@ function detectHeaderField(label) {
     if (!n) return null;
     if (/(barcode|ean|upc|barra)/.test(n)) return 'codigoBarra';
     if (/(alternativo|altern|corto|referencia|parte|part number|partnumber|nombre busqueda|search name)/.test(n)) return 'codigoAlternativo';
-    if (/(codigo prod|codigo producto|codigo|cod\b|sku|item code|itemcode|items code|stock code|material code)/.test(n) || ['cod', 'codigo', 'sku'].includes(c)) return 'codigo';
-    if (/(u\/m|um\b|unidad|unidad medida|unid|med\b)/.test(n) || ['um', 'unid'].includes(c)) return 'unidadMedida';
-    if (/(stock minimo|minimo|stock critico)/.test(n)) return 'stockMinimo';
-    if (/(stock|cantidad|existencia|cant\b|qty|disp)/.test(n)) return 'stock';
-    if (/(costo promedio|costo|precio|valor unit|v unit|valor|v unitario)/.test(n)) return 'costoPromedio';
+    if (/(codigo\s*prod|codigo\s*producto|codigo|code|cod\b|sku|item\s*code|itemcode|items\s*code|stock\s*code|material\s*code)/.test(n) || ['cod', 'codigo', 'code', 'sku'].includes(c)) return 'codigo';
+    if (/(u\/m|um\b|unidad\s*medida|unid|med\b|unidad)/.test(n) || ['um', 'unid', 'unidad'].includes(c)) return 'unidadMedida';
+    if (/(stock\s*minimo|minimo|stock\s*critico)/.test(n)) return 'stockMinimo';
+    if (/(^stock$|stock\s|existencia|disp)/.test(n) && !/stock.minimo/.test(n)) return 'stock';
+    if (/(costo\s*promedio|costo|precio)/.test(n)) return 'costoPromedio';
     if (/moneda/.test(n)) return 'moneda';
     if (/(ubicacion|bodega|sector|estante|location)/.test(n)) return 'ubicacion';
-    if (/(categoria|familia|grupo|tipo de producto|subtipo)/.test(n)) return 'categoria';
+    if (/(categoria|familia|grupo|tipo\s*de\s*producto|subtipo)/.test(n)) return 'categoria';
     if (/marca|brand/.test(n)) return 'marca';
     if (/modelo|model/.test(n)) return 'modelo';
     if (/equipo|maquina/.test(n)) return 'equipoAsociado';
-    if (/(observacion|observaciones|nota|comentario|obs)/.test(n)) return 'observaciones';
+    if (/(^observacion$|^observaciones$|obs\.?$|comentario)/.test(n)) return 'observaciones';
     if (/(validado|revisado|activo)/.test(n)) return 'validado';
     if (/estado|status/.test(n)) return 'estado';
     if (/(alias|sinonimo|keyword)/.test(n)) return 'aliasBusqueda';
-    if (/(descripcion corta|nombre del producto|nombre producto|producto|material name|description|descripcion del producto|descripcion|descripci)/.test(n)) return 'nombre';
-    if (/(detalle|glosa|texto breve)/.test(n)) return 'descripcion';
+    if (/(descripcion\s*corta|nombre\s*del\s*producto|nombre\s*producto|nombre\s*del\s*material|producto|material\s*name|description|descripcion\s*del\s*producto|descripcion|descripci)/.test(n)) return 'nombre';
+    if (/(detalle|glosa|texto\s*breve|descripcion|description)/.test(n)) return 'descripcion';
+    if (/(id\.?\s*de\s*proyecto|id\s*proyecto|proyecto|project)/.test(n)) return 'proyecto';
+    if (/(localidad|locacion|locaci.n|ciudad|sector)/.test(n)) return 'localidad';
+    if (/(pedido|orden\s*de\s*compra|no\.?\s*pedido|po\b)/.test(n)) return 'pedido';
+    if (/entrega/.test(n)) return 'entrega';
+    if (/(pendiente|pend|saldo)/.test(n)) return 'pendiente';
+    if (/(oc\b|o\.c|orden\s*compra|oc\s+puest)/.test(n)) return 'oc';
+    if (/(fecha\s*aprob|fecha\s*aprob\.?\s*sol)/.test(n)) return 'fechaAprobacion';
+    if (/(fecha\s*entrega|fec\s*entrega)/.test(n)) return 'fechaEntrega';
+    if (/(ultimo\s*consumo|ult\.?\s*consumo|ultimo\s*consumo|fecha\s*consumo|fec\s*consumo|consumo)/.test(n)) return 'ultimoConsumo';
+    if (/(^notas$|notas\s|notas$)/.test(n) && !/(observaciones|obs)/.test(n)) return 'notas';
+    if (/(valor\s*unit|v\.?\s*unit|v\.?\s*unitario|precio\s*unit)/.test(n)) return 'valorUnitario';
+    if (/(valor\s*total|v\.?\s*total|importe|monto)/.test(n)) return 'valorTotal';
+    if (/(cantidad\s*neta|cantidad|cant\b|qty)/.test(n) && !/(stock|disp|existencia)/.test(n)) return 'cantidad';
+    if (/(s\.?\/?\s?a|sa\b)/.test(n) && (c === 'sa' || n === 'sa')) return 'sa';
+    if (/(linea|line)/.test(n)) return 'linea';
     return null;
 }
 
@@ -3073,68 +3313,72 @@ function parseBooleanLike(value) {
     return ['si', 's', 'true', '1', 'validado', 'activo', 'yes'].includes(text);
 }
 
+function isHeaderRowValue(val) {
+    if (!val || typeof val !== 'string') return false;
+    const s = val.trim();
+    if (!s) return false;
+    const headerPatterns = [
+        /^(codigo|código|code|items\s*cod|item\s*cod)$/i,
+        /^(descripcion|descripción|description)$/i,
+        /^(nombre\s*del\s*producto)$/i,
+        /^(stock)$/i,
+        /^(pend|pendiente)$/i
+    ];
+    return headerPatterns.some(p => p.test(s));
+}
+
 function buildMaterialsFromSheet(sheetRaw, detected, fileName) {
     const existingCodes = new Set(StorageAdapter.getMaterials().map(m => String(m.codigo)));
     const localCodes = new Set();
+    const profile = getSheetProfile(sheetRaw.sheetName);
     return sheetRaw.rows
         .filter(row => row.rowNumber >= detected.dataStartRow)
-        .map(row => buildMaterialCandidate(row, sheetRaw.sheetName, detected, fileName))
+        .filter(row => !isHeaderRowValue(row.raw[detected.mapping.codigo]) && !isHeaderRowValue(row.raw[detected.mapping.nombre]))
+        .map(row => buildMaterialCandidate(row, sheetRaw.sheetName, detected, fileName, profile))
         .filter(Boolean)
+        .filter(item => !isFakeHeaderRecord(item))
         .map(item => {
             item._errors = [];
             item._warnings = [];
             item._isExisting = existingCodes.has(item.codigo);
+            const reqCode = profile.requiresCodigo !== false;
 
-            if(!item.codigo) item._errors.push('Codigo vacio');
-            if(!item.nombre) item._errors.push('Nombre vacio');
-            if(item.codigo && localCodes.has(item.codigo)) item._warnings.push('Codigo duplicado en esta importacion; se omitira despues de la primera aparicion');
-            if(item.codigo) localCodes.add(item.codigo);
-            if(!item.ubicacion) item._warnings.push('Sin ubicacion');
-            if(!item.foto) item._warnings.push('Sin foto');
-            if(item.stock === '') item._warnings.push('Sin stock');
-            if(item.costoPromedio === '') item._warnings.push('Sin costo');
-            if(item._isExisting) item._warnings.push('Material ya existe');
+            if (!item.codigo) {
+                if (reqCode) item._errors.push('Codigo vacio');
+                else {
+                    item.codigo = item.recordType + ':' + item.sourceSheet + ':' + item.sourceRow;
+                    item.id = item.codigo;
+                }
+            }
+            if (!item.nombre && !item.descripcion) {
+                if (reqCode) item._errors.push('Nombre/descripcion vacio');
+            }
+            if (item.codigo && localCodes.has(item.codigo)) item._warnings.push('Codigo duplicado en esta importacion');
+            if (item.codigo) localCodes.add(item.codigo);
+            if (!item.ubicacion && profile.recordType === 'catalogo_codigo') item._warnings.push('Sin ubicacion');
+            if (!item.foto && profile.recordType === 'catalogo_codigo') item._warnings.push('Sin foto');
+            if (item.stock === '' && profile.recordType === 'catalogo_codigo') item._warnings.push('Sin stock');
+            if (item.costoPromedio === '' && profile.recordType === 'catalogo_codigo') item._warnings.push('Sin costo');
+            if (item._isExisting) item._warnings.push('Material ya existe en base');
             return item;
         });
 }
 
-function buildMaterialCandidate(row, sheetName, detected, fileName) {
-    if (!isCandidateRawRow(row, detected.mapping)) return null;
+function buildMaterialCandidate(row, sheetName, detected, fileName, profile) {
+    if (!profile || profile.recordType === 'hoja_generica') {
+        if (!isCandidateRawRow(row, detected.mapping)) return null;
+    }
     const m = detected.mapping;
-    const nombre = getMappedValue(row.raw, m.nombre) || getMappedValue(row.raw, m.descripcion);
-    const descripcion = getMappedValue(row.raw, m.descripcion) || (getMappedValue(row.raw, m.nombre) === nombre ? '' : getMappedValue(row.raw, m.nombre));
-    const codigo = getMappedValue(row.raw, m.codigo);
-    const codigoAlternativo = getMappedValue(row.raw, m.codigoAlternativo);
-    const alias = [getMappedValue(row.raw, m.aliasBusqueda), codigoAlternativo].filter(Boolean).join(', ');
+
+    const parsed = parseRowBySheetProfile(sheetName, row.raw, row.rowNumber, m, fileName);
+
+    if (!profile || profile.recordType === 'hoja_generica') {
+        if (!parsed.codigo && !parsed.nombre && !parsed.descripcion) return null;
+    }
+
     const item = {
-        id: `${fileName}::${sheetName}::${row.rowNumber}::${codigo || codigoAlternativo || nombre}`,
-        codigo,
-        codigoAlternativo,
-        codigoBarra: getMappedValue(row.raw, m.codigoBarra),
-        nombre,
-        descripcion,
-        unidadMedida: getMappedValue(row.raw, m.unidadMedida) || 'UN',
-        categoria: getMappedValue(row.raw, m.categoria),
-        marca: getMappedValue(row.raw, m.marca),
-        modelo: getMappedValue(row.raw, m.modelo),
-        stock: toNumberOrBlank(getMappedValue(row.raw, m.stock)),
-        stockMinimo: toNumberOrBlank(getMappedValue(row.raw, m.stockMinimo)),
-        costoPromedio: toNumberOrBlank(getMappedValue(row.raw, m.costoPromedio)),
-        moneda: getMappedValue(row.raw, m.moneda) || 'CLP',
-        ubicacion: getMappedValue(row.raw, m.ubicacion),
-        estado: getMappedValue(row.raw, m.estado) || 'Activo',
-        aliasBusqueda: alias,
-        equipoAsociado: getMappedValue(row.raw, m.equipoAsociado),
-        observaciones: getMappedValue(row.raw, m.observaciones),
+        ...parsed,
         origenCosto: 'Excel',
-        estadoRevision: 'Pendiente',
-        validado: m.validado ? parseBooleanLike(getMappedValue(row.raw, m.validado)) : true,
-        esCritico: false,
-        sourceSheet: sheetName,
-        sourceRow: row.rowNumber,
-        sourceFile: fileName,
-        rawData: { ...row.raw },
-        encabezadosDetectados: { ...detected.headersByColumn },
         importWarnings: detected.warnings || []
     };
     return normalizeMaterial(item);
@@ -3433,17 +3677,19 @@ function renderMasterPreviewBody() {
         if(item._errors.length > 0) tr.style.backgroundColor = 'var(--danger-light)';
         const errsHtml = item._errors.map(e => `<span class="preview-error">${escapeHtml(e)}</span>`).join('');
         const warnsHtml = item._warnings.map(e => `<span class="preview-warning">${escapeHtml(e)}</span>`).join('');
+        const typeLabel = getRecordTypeLabel(canonicalRecordType(item));
         tr.innerHTML = `
             <td>${escapeHtml(item.sourceSheet || 'Archivo')}</td>
             <td>${escapeHtml(item.sourceRow || item._originalRow || '')}</td>
             <td><strong>${escapeHtml(item.codigo)}</strong></td>
-            <td>${escapeHtml(item.codigoAlternativo || '')}</td>
-            <td>${escapeHtml(item.unidadMedida || '')}</td>
+            <td>${escapeHtml(typeLabel || '')}</td>
             <td>${escapeHtml(item.nombre || item.descripcion || '')}</td>
-            <td>${escapeHtml(item.categoria || '')}</td>
             <td>${item.stock !== '' ? escapeHtml(item.stock) : ''}</td>
-            <td>${item.costoPromedio !== '' ? escapeHtml(formatCurrency(item.costoPromedio)) : ''}</td>
-            <td>${item._errors.length === 0 ? '<span class="badge badge-success">OK</span>' : '<span class="badge badge-danger">Error</span>'}</td>
+            <td>${item.pendiente !== '' && item.pendiente !== null ? escapeHtml(String(item.pendiente)) : ''}</td>
+            <td>${item.proyecto ? escapeHtml(item.proyecto) : ''}</td>
+            <td>${item.estado ? escapeHtml(item.estado) : ''}</td>
+            <td>${item.ultimoConsumo ? escapeHtml(item.ultimoConsumo) : ''}</td>
+            <td>${item.observaciones ? escapeHtml(item.observaciones) : ''}</td>
             <td>${errsHtml}${warnsHtml}</td>
         `;
         tbody.appendChild(tr);
@@ -3519,10 +3765,10 @@ document.getElementById('btn-confirm-master-import').addEventListener('click', (
         persistWorkbookImportState(currentImportData, validItemsNew);
 
         const excelRecords = validItemsNew.filter(i => i.sourceSheet).map(item => ({
-            id: String(item.sourceSheet) + ':' + String(item.sourceRow) + ':' + (item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_') + ':' + String(item.codigo),
+            id: String(item.sourceSheet) + ':' + String(item.sourceRow) + ':' + (item.recordType || item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_') + ':' + String(item.codigo),
             sheetName: item.sourceSheet,
             sourceRow: item.sourceRow,
-            recordType: (item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_'),
+            recordType: item.recordType || (item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_'),
             codigo: item.codigo,
             rawData: item.rawData || {},
             mappedFields: {
