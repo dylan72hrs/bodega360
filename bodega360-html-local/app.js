@@ -13,7 +13,9 @@ const STORAGE_KEYS = {
     CATEGORIES: 'bodega360_categories',
     TICKETS: 'bodega360_tickets',
     PENDING_STATES: 'bodega360_pending_states',
-    SETTINGS: 'bodega360_settings'
+    SETTINGS: 'bodega360_settings',
+    WORKBOOK_RAW: 'bodega360_workbook_raw',
+    WORKBOOK_METADATA: 'bodega360_workbook_metadata'
 };
 
 // ============================================================================
@@ -33,6 +35,13 @@ const StorageAdapter = {
         return data ? JSON.parse(data) : [];
     },
     _saveLocal(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    },
+    _loadObjectLocal(key, fallback = null) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : fallback;
+    },
+    _saveObjectLocal(key, data) {
         localStorage.setItem(key, JSON.stringify(data));
     },
 
@@ -82,6 +91,13 @@ const StorageAdapter = {
     saveSettings(data) {
         localStorage.setItem(STORAGE_KEYS.SETTINGS, JSON.stringify(data));
     },
+
+    getWorkbookRaw() { return this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, null); },
+    saveWorkbookRaw(data) { this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_RAW, data); },
+    clearWorkbookRaw() { localStorage.removeItem(STORAGE_KEYS.WORKBOOK_RAW); },
+
+    getWorkbookMetadata() { return this._loadObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, null); },
+    saveWorkbookMetadata(data) { this._saveObjectLocal(STORAGE_KEYS.WORKBOOK_METADATA, data); },
     
     clearAll() { localStorage.clear(); }
 };
@@ -98,6 +114,30 @@ let currentPendingTerm = null;
 let currentTicketContext = null;
 let currentInventoryCode = null;
 let inventoryPhotoDraft = null;
+const DEFAULT_MASTER_EXCEL_PATH = 'data/CODIGOS HOMOLOGADOS-CL-JFredes-31.xlsx';
+const WORKBOOK_RAW_STORAGE_LIMIT_BYTES = 2.5 * 1024 * 1024;
+const DEFAULT_MATERIAL_SHEETS = new Set([
+    'CODIGOS',
+    'CODIGOS KONEC',
+    'MIN-MAX',
+    'INSUMOS REAMERS',
+    'TRICONOS',
+    'REPTOS. MALI',
+    'MATERIALES SIN CONSUMO',
+    'REPUESTOS A PERU'
+]);
+const CONTROL_SHEETS = new Set([
+    'CONTROL SC CHILE',
+    'CONTROL SC EXTRANJERO',
+    'S-A PEND ENTREGA',
+    'ACTIVOS',
+    'HOJA1',
+    'HOJA2',
+    'HOJA4',
+    'HOJA5',
+    'HOJA6',
+    'HOJA7'
+]);
 
 // ============================================================================
 // FUNCIONES UTILITARIAS Y DE SIMILITUD
@@ -180,6 +220,12 @@ function normalizeMaterial(material) {
     normalized.esCritico = material.esCritico === true || String(material.esCritico).toLowerCase() === 'true' || String(material.esCritico).toLowerCase() === 'si';
     normalized.estadoRevision = String(getField(material, 'estadoRevision') || 'Pendiente').trim();
     normalized.validado = material.validado === true || String(material.validado).toLowerCase() === 'true' || String(material.validado).toLowerCase() === 'si';
+    normalized.id = String(getField(material, 'id') || normalized.codigo || '').trim();
+    normalized.sourceSheet = String(getField(material, 'sourceSheet', 'nombreHoja') || '').trim();
+    normalized.sourceRow = getField(material, 'sourceRow', 'filaOriginal') || '';
+    normalized.sourceFile = String(getField(material, 'sourceFile') || '').trim();
+    normalized.rawData = material.rawData && typeof material.rawData === 'object' ? material.rawData : (material.rawData || null);
+    normalized.importWarnings = Array.isArray(material.importWarnings) ? material.importWarnings : [];
     normalized.ultimaModificacion = normalized.ultimaModificacion || new Date().toISOString();
     normalized.calidadDato = calculateDataQuality(normalized);
     return normalized;
@@ -259,17 +305,16 @@ function sanitizePhotoCode(code) {
 }
 
 function getPhotoCandidates(material) {
+    return getExplicitPhotoCandidates(material);
+}
+
+function getExplicitPhotoCandidates(material) {
     const item = normalizeMaterial(material);
     const manual = [item.fotoPrincipal, item.foto].filter(Boolean);
     const additional = Array.isArray(item.fotosAdicionales)
         ? item.fotosAdicionales
         : splitKeywords(item.fotosAdicionales);
-    const codes = Array.from(new Set([item.codigo, sanitizePhotoCode(item.codigo)].filter(Boolean)));
-    const generated = [];
-    codes.forEach(code => {
-        ['webp', 'jpg', 'png'].forEach(ext => generated.push(`assets/fotos/${code}.${ext}`));
-    });
-    return Array.from(new Set([...manual, ...additional, ...generated].filter(Boolean)));
+    return Array.from(new Set([...manual, ...additional].filter(Boolean)));
 }
 
 function getPhotoState(material) {
@@ -476,10 +521,13 @@ function getSearchableText(material) {
         m.categoria,
         m.marca,
         m.modelo,
+        m.unidadMedida,
         m.ubicacion,
         m.equipoAsociado,
+        m.sourceSheet,
         m.aliasBusqueda,
-        splitKeywords(m.aliasBusqueda).join(' ')
+        splitKeywords(m.aliasBusqueda).join(' '),
+        m.rawData && typeof m.rawData === 'object' ? Object.values(m.rawData).join(' ') : ''
     ].map(normalizeText).join(' ');
 }
 
@@ -997,6 +1045,10 @@ function openDetailModal(codigo) {
     const changeLogs = StorageAdapter.getChangeLogs();
     const lastChange = changeLogs.slice().reverse().find(l => l.codigo === codigo);
     const modDateText = lastChange ? `${lastChange.fecha} ${lastChange.hora}` : 'Nunca (Original)';
+    const hasSource = detail.sourceFile || detail.sourceSheet || detail.sourceRow;
+    const rawDataHtml = detail.rawData && typeof detail.rawData === 'object'
+        ? `<details class="raw-data-panel detail-full"><summary>Ver datos originales</summary><pre>${escapeHtml(JSON.stringify(detail.rawData, null, 2))}</pre></details>`
+        : '';
 
     const content = document.getElementById('detail-content');
     content.innerHTML = `
@@ -1019,8 +1071,13 @@ function openDetailModal(codigo) {
         <div class="detail-item"><div class="detail-label">Validado</div><div class="detail-value">${detail.validado ? 'Si' : 'No'}${detail.esCritico ? ' <span class="badge badge-danger">Critico</span>' : ''}</div></div>
         <div class="detail-item"><div class="detail-label">Ultima modificacion</div><div class="detail-value">${escapeHtml(modDateText)}</div></div>
         <div class="detail-item"><div class="detail-label">Origen costo</div><div class="detail-value">${escapeHtml(detail.origenCosto || '-')}</div></div>
+        ${hasSource ? `
+            <div class="detail-item"><div class="detail-label">Archivo origen</div><div class="detail-value">${escapeHtml(detail.sourceFile || '-')}</div></div>
+            <div class="detail-item"><div class="detail-label">Hoja / fila origen</div><div class="detail-value">${escapeHtml([detail.sourceSheet, detail.sourceRow ? 'fila ' + detail.sourceRow : ''].filter(Boolean).join(' / ') || '-')}</div></div>
+        ` : ''}
         <div class="detail-item detail-full"><div class="detail-label">Alias de busqueda</div><div class="detail-value">${escapeHtml(detail.aliasBusqueda || '-')}</div></div>
         <div class="detail-item detail-full"><div class="detail-label">Observaciones</div><div class="detail-value">${escapeHtml(detail.observaciones || '-')}</div></div>
+        ${rawDataHtml}
         <div class="detail-item detail-full">
             <div class="detail-actions">
                 <button class="btn-secondary" type="button" onclick="copyText('${escapeAttr(detail.codigo)}')">Copiar codigo</button>
@@ -1391,7 +1448,7 @@ document.getElementById('material-form').addEventListener('submit', (e) => {
         }
         const index = materials.findIndex(m => m.codigo === oldCode);
         const oldMaterial = materials[index];
-        materials[index] = materialToSave;
+        materials[index] = normalizeMaterial({ ...oldMaterial, ...materialToSave, sourceFile: oldMaterial.sourceFile, sourceSheet: oldMaterial.sourceSheet, sourceRow: oldMaterial.sourceRow, rawData: oldMaterial.rawData, encabezadosDetectados: oldMaterial.encabezadosDetectados });
         logChanges(oldCode, oldMaterial, materialToSave); // Auditoría Historial
         alert("Material actualizado correctamente.");
     } else {
@@ -1985,6 +2042,13 @@ document.getElementById('btn-export-backup').addEventListener('click', () => {
         tickets: StorageAdapter.getTickets(),
         estadosPendientes: StorageAdapter.getPendingStates(),
         configuracion: StorageAdapter.getSettings(),
+        materials: StorageAdapter.getMaterials(),
+        workbookRawMetadata: StorageAdapter.getWorkbookMetadata(),
+        workbookRaw: StorageAdapter.getWorkbookRaw(),
+        importLogs: StorageAdapter.getImportLogs(),
+        searchLogs: StorageAdapter.getSearchLogs(),
+        ticketsBackup: StorageAdapter.getTickets(),
+        changeLogs: StorageAdapter.getChangeLogs(),
         fechaExportacion: new Date().toISOString()
     };
     const dateStr = formatDate(new Date()).replace(/-/g, '') + '-' + formatTime(new Date()).replace(':', '');
@@ -2003,15 +2067,22 @@ document.getElementById('btn-restore-backup').addEventListener('click', () => {
         try {
             const data = JSON.parse(e.target.result);
             if (data.materiales) StorageAdapter.saveMaterials(data.materiales);
+            if (data.materials) StorageAdapter.saveMaterials(data.materials);
             if (data.historialConsultas) StorageAdapter.saveSearchLogs(data.historialConsultas);
+            if (data.searchLogs) StorageAdapter.saveSearchLogs(data.searchLogs);
             if (data.historialCambios) StorageAdapter.saveChangeLogs(data.historialCambios);
+            if (data.changeLogs) StorageAdapter.saveChangeLogs(data.changeLogs);
             if (data.historialCargas) StorageAdapter.saveImportLogs(data.historialCargas);
+            if (data.importLogs) StorageAdapter.saveImportLogs(data.importLogs);
             if (data.busquedasOcultas) StorageAdapter.saveDismissedSearches(data.busquedasOcultas);
             if (data.diccionarioBusqueda) StorageAdapter.saveDictionary(data.diccionarioBusqueda);
             if (data.categorias) StorageAdapter.saveCategories(data.categorias);
             if (data.tickets) StorageAdapter.saveTickets(data.tickets);
+            if (data.ticketsBackup) StorageAdapter.saveTickets(data.ticketsBackup);
             if (data.estadosPendientes) StorageAdapter.savePendingStates(data.estadosPendientes);
             if (data.configuracion) StorageAdapter.saveSettings(data.configuracion);
+            if (data.workbookRawMetadata) StorageAdapter.saveWorkbookMetadata(data.workbookRawMetadata);
+            if (data.workbookRaw) StorageAdapter.saveWorkbookRaw(data.workbookRaw);
 
             alert("Respaldo restaurado exitosamente.");
             refreshAdminViews();
@@ -2032,7 +2103,9 @@ document.getElementById('btn-clear-data').addEventListener('click', () => {
 // ============================================================================
 // MÓDULO: BASE MAESTRA
 // ============================================================================
-document.getElementById('btn-load-local-catalog').addEventListener('click', () => {
+document.getElementById('btn-load-master-excel')?.addEventListener('click', loadDefaultMasterExcel);
+
+document.getElementById('btn-load-local-catalog')?.addEventListener('click', () => {
     fetch('data/catalogo-materiales.json')
         .then(res => {
             if(!res.ok) throw new Error("File not found or CORS issue");
@@ -2044,22 +2117,67 @@ document.getElementById('btn-load-local-catalog').addEventListener('click', () =
         });
 });
 
-document.getElementById('file-master-catalog').addEventListener('change', (e) => {
+document.getElementById('file-master-catalog')?.addEventListener('change', (e) => {
     if(!e.target.files.length) return;
     const file = e.target.files[0];
+    const ext = file.name.toLowerCase().split('.').pop();
     const reader = new FileReader();
     reader.onload = (ev) => {
-        if(file.name.endsWith('.json')) {
-            try { processMasterData(JSON.parse(ev.target.result), file.name); } 
-            catch(err) { alert("Error JSON: " + err.message); }
-        } else if(file.name.endsWith('.csv')) {
-            processMasterData(parseCSV(ev.target.result), file.name);
-        } else {
-            alert("Formato no soportado. Usa CSV o JSON.");
+        try {
+            if(ext === 'xlsx' || ext === 'xls') {
+                processWorkbookArrayBuffer(ev.target.result, file.name, file.name);
+            } else if(ext === 'json') {
+                processMasterData(JSON.parse(ev.target.result), file.name);
+            } else if(ext === 'csv') {
+                processMasterData(parseCSV(ev.target.result), file.name);
+            } else {
+                alert("Formato no soportado. Usa XLSX, CSV o JSON.");
+            }
+        } catch(err) {
+            alert("Error de lectura: " + err.message);
         }
     };
-    reader.readAsText(file);
+    if (ext === 'xlsx' || ext === 'xls') reader.readAsArrayBuffer(file);
+    else reader.readAsText(file);
 });
+
+async function loadDefaultMasterExcel() {
+    const fileProtocolMsg = 'Para cargar automáticamente el Excel desde /data, abra la app con servidor local. También puede usar Seleccionar archivo.';
+    if (location.protocol === 'file:') {
+        setMasterMessage(fileProtocolMsg, 'warning');
+        alert(fileProtocolMsg);
+        return;
+    }
+    if (!ensureXlsxAvailable()) return;
+    try {
+        setMasterMessage('Cargando Excel maestro desde /data...', 'info');
+        const response = await fetch(encodeURI(DEFAULT_MASTER_EXCEL_PATH));
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const buffer = await response.arrayBuffer();
+        processWorkbookArrayBuffer(buffer, DEFAULT_MASTER_EXCEL_PATH, DEFAULT_MASTER_EXCEL_PATH);
+        setMasterMessage('Excel maestro cargado. Revise hojas, vista previa y politica antes de importar.', 'success');
+    } catch (err) {
+        const msg = `No se pudo cargar automaticamente el Excel desde /data. Use Seleccionar archivo o abra la app con servidor local. Detalle: ${err.message}`;
+        setMasterMessage(msg, 'error');
+        alert(msg);
+    }
+}
+
+function setMasterMessage(message, type = 'info') {
+    const box = document.getElementById('master-auto-message');
+    if (!box) return;
+    box.textContent = message;
+    box.className = `master-message ${type}`;
+    box.classList.remove('hidden');
+}
+
+function ensureXlsxAvailable() {
+    if (window.XLSX) return true;
+    const msg = 'No se encontro la libreria local libs/xlsx.full.min.js. Agreguela al proyecto o use CSV/JSON como fallback.';
+    setMasterMessage(msg, 'error');
+    alert(msg);
+    return false;
+}
 
 // CSV Parser robusto que mantiene ceros a la izquierda tratando todo como string
 function parseCSV(text) {
@@ -2091,6 +2209,444 @@ function parseCSV(text) {
         results.push(obj);
     }
     return results;
+}
+
+function normalizeColumnLabel(value) {
+    return normalizeText(value).replace(/[^a-z0-9]+/g, ' ').trim();
+}
+
+function compactColumnLabel(value) {
+    return normalizeText(value).replace(/[^a-z0-9]/g, '');
+}
+
+function sortColumnLetters(cols) {
+    return cols.slice().sort((a, b) => XLSX.utils.decode_col(a) - XLSX.utils.decode_col(b));
+}
+
+function getCellDisplayValue(cell) {
+    if (!cell) return '';
+    if (cell.w !== undefined && cell.w !== null) return String(cell.w).trim();
+    if (cell.v !== undefined && cell.v !== null) return String(cell.v).trim();
+    if (cell.f) return String(cell.f).trim();
+    return '';
+}
+
+function processWorkbookArrayBuffer(buffer, fileName, sourcePath = fileName) {
+    if (!ensureXlsxAvailable()) return;
+    const workbook = XLSX.read(buffer, { type: 'array', cellText: true, cellDates: false, raw: true });
+    currentImportData = parseWorkbookToImportData(workbook, fileName, sourcePath);
+    renderMasterPreview();
+}
+
+function parseWorkbookToImportData(workbook, fileName, sourcePath = fileName) {
+    const sheets = [];
+    const workbookRaw = [];
+    const items = [];
+    let totalRowsRead = 0;
+    let ignoredRows = 0;
+
+    workbook.SheetNames.forEach(sheetName => {
+        const sheetRaw = extractSheetRaw(workbook.Sheets[sheetName], sheetName);
+        const detected = detectSheetStructure(sheetRaw);
+        const sheetItems = buildMaterialsFromSheet(sheetRaw, detected, fileName);
+        const selected = shouldSelectSheetByDefault(sheetName, detected, sheetItems);
+        const errors = sheetItems.reduce((sum, item) => sum + item._errors.length, 0);
+        const warnings = sheetItems.reduce((sum, item) => sum + item._warnings.length, 0);
+
+        totalRowsRead += sheetRaw.rows.length;
+        ignoredRows += detected.ignoredRows;
+        workbookRaw.push({ sheetName, rows: sheetRaw.rows });
+        sheets.push({
+            sheetName,
+            selected,
+            rowsWithData: sheetRaw.rows.length,
+            totalRows: sheetRaw.totalRows,
+            totalColumns: sheetRaw.totalColumns,
+            candidates: sheetItems.length,
+            ignoredRows: detected.ignoredRows,
+            errors,
+            warnings,
+            headerRows: detected.headerRows,
+            dataStartRow: detected.dataStartRow,
+            mapping: detected.mapping,
+            headersByColumn: detected.headersByColumn,
+            warningsDetected: detected.warnings
+        });
+        items.push(...sheetItems);
+    });
+
+    const metadata = {
+        sourceFile: fileName,
+        sourcePath,
+        loadedAt: new Date().toISOString(),
+        sheetCount: sheets.length,
+        sheets: sheets.map(s => ({
+            sheetName: s.sheetName,
+            selected: s.selected,
+            rowsWithData: s.rowsWithData,
+            totalRows: s.totalRows,
+            totalColumns: s.totalColumns,
+            candidates: s.candidates,
+            ignoredRows: s.ignoredRows,
+            headerRows: s.headerRows,
+            dataStartRow: s.dataStartRow,
+            mapping: s.mapping,
+            headersByColumn: s.headersByColumn
+        })),
+        totalRowsRead,
+        candidateMaterials: items.length,
+        ignoredRows,
+        workbookRawStored: false,
+        workbookRawTooLarge: false
+    };
+
+    return {
+        fileName,
+        sourceType: 'xlsx',
+        sourcePath,
+        total: totalRowsRead,
+        valid: items.filter(i => i._errors.length === 0).length,
+        error: items.filter(i => i._errors.length > 0).length,
+        ignored: ignoredRows,
+        sheets,
+        items,
+        workbookRaw,
+        workbookMetadata: metadata,
+        warnings: collectWorkbookWarnings(sheets)
+    };
+}
+
+function extractSheetRaw(sheet, sheetName) {
+    const rowsByNumber = new Map();
+    let totalRows = 0;
+    let totalColumns = 0;
+    const ref = sheet && sheet['!ref'];
+    if (ref) {
+        const range = XLSX.utils.decode_range(ref);
+        totalRows = range.e.r + 1;
+        totalColumns = range.e.c + 1;
+    }
+
+    Object.keys(sheet || {}).forEach(address => {
+        if (address[0] === '!') return;
+        const cellRef = XLSX.utils.decode_cell(address);
+        const rowNumber = cellRef.r + 1;
+        const column = XLSX.utils.encode_col(cellRef.c);
+        const value = getCellDisplayValue(sheet[address]);
+        if (value === '') return;
+        if (!rowsByNumber.has(rowNumber)) rowsByNumber.set(rowNumber, { rowNumber, raw: {} });
+        rowsByNumber.get(rowNumber).raw[column] = value;
+        totalRows = Math.max(totalRows, rowNumber);
+        totalColumns = Math.max(totalColumns, cellRef.c + 1);
+    });
+
+    return {
+        sheetName,
+        totalRows,
+        totalColumns,
+        rows: Array.from(rowsByNumber.values()).sort((a, b) => a.rowNumber - b.rowNumber)
+    };
+}
+
+function collectWorkbookWarnings(sheets) {
+    const warnings = [];
+    sheets.forEach(sheet => {
+        sheet.warningsDetected.forEach(w => warnings.push(`${sheet.sheetName}: ${w}`));
+    });
+    return warnings;
+}
+
+function shouldSelectSheetByDefault(sheetName, detected, sheetItems) {
+    const upperName = normalizeText(sheetName).toUpperCase();
+    if (CONTROL_SHEETS.has(upperName)) return false;
+    if (DEFAULT_MATERIAL_SHEETS.has(sheetName.toUpperCase())) return sheetItems.length > 0;
+    return sheetItems.length >= 5 && detected.confidence >= 4;
+}
+
+function detectSheetStructure(sheetRaw) {
+    const special = detectSpecialSheetStructure(sheetRaw);
+    if (special) return special;
+
+    const headerCandidates = buildHeaderCandidates(sheetRaw);
+    const best = headerCandidates.sort((a, b) => b.score - a.score)[0];
+    const warnings = [];
+
+    if (best && best.score >= 4 && (best.mapping.codigo || best.mapping.nombre || best.mapping.descripcion)) {
+        const mapped = completeMappingByPattern(sheetRaw, best);
+        return {
+            ...mapped,
+            confidence: best.score,
+            ignoredRows: countIgnoredRows(sheetRaw, mapped),
+            warnings
+        };
+    }
+
+    const fallback = inferMappingByPattern(sheetRaw, 1);
+    warnings.push('Sin encabezados claros; se aplico deteccion por patron.');
+    return {
+        headerRows: [],
+        dataStartRow: fallback.dataStartRow,
+        headersByColumn: {},
+        mapping: fallback.mapping,
+        confidence: fallback.confidence,
+        ignoredRows: countIgnoredRows(sheetRaw, fallback),
+        warnings
+    };
+}
+
+function detectSpecialSheetStructure(sheetRaw) {
+    if (normalizeText(sheetRaw.sheetName) !== 'codigos') return null;
+    const firstPatternRow = findFirstPatternDataRow(sheetRaw.rows);
+    if (!firstPatternRow) return null;
+    return {
+        headerRows: sheetRaw.rows.filter(r => r.rowNumber < firstPatternRow).map(r => r.rowNumber).slice(0, 2),
+        dataStartRow: firstPatternRow,
+        headersByColumn: {
+            A: 'Codigo Prod.',
+            B: 'Codigo Producto',
+            C: 'UNID.',
+            D: 'Descripcion de Producto',
+            E: 'Nombre del producto',
+            F: 'Nombre de busqueda'
+        },
+        mapping: {
+            codigo: 'A',
+            codigoAlternativo: 'B',
+            unidadMedida: 'C',
+            nombre: 'D',
+            descripcion: 'E',
+            aliasBusqueda: 'F',
+            categoria: 'G'
+        },
+        confidence: 10,
+        ignoredRows: firstPatternRow - 1,
+        warnings: ['Hoja CODIGOS importada con patron A=codigo, B=codigo alternativo, C=unidad, D=nombre/descripcion.']
+    };
+}
+
+function findFirstPatternDataRow(rows) {
+    const unitPattern = /^(C\/U|UN|UND|PAR|JGO|PQT|MTS|MT|KG|LT|LTS|EA)$/i;
+    const row = rows.find(r => {
+        const a = String(r.raw.A || '').trim();
+        const b = String(r.raw.B || '').trim();
+        const c = String(r.raw.C || '').trim();
+        const d = String(r.raw.D || '').trim();
+        return /^\d{6,}$/.test(a) && b.length >= 2 && unitPattern.test(c) && d.length >= 8;
+    });
+    return row ? row.rowNumber : null;
+}
+
+function buildHeaderCandidates(sheetRaw) {
+    const candidates = [];
+    const earlyRows = sheetRaw.rows.slice(0, 12);
+    earlyRows.forEach(row => candidates.push(evaluateHeaderRows(sheetRaw, [row.rowNumber])));
+    for (let i = 0; i < earlyRows.length - 1; i++) {
+        candidates.push(evaluateHeaderRows(sheetRaw, [earlyRows[i].rowNumber, earlyRows[i + 1].rowNumber]));
+    }
+    return candidates.filter(Boolean);
+}
+
+function evaluateHeaderRows(sheetRaw, rowNumbers) {
+    const headerRows = rowNumbers.map(n => sheetRaw.rows.find(r => r.rowNumber === n)).filter(Boolean);
+    if (!headerRows.length) return null;
+    const cols = sortColumnLetters(Array.from(new Set(headerRows.flatMap(row => Object.keys(row.raw)))));
+    const headersByColumn = {};
+    cols.forEach(col => {
+        headersByColumn[col] = headerRows.map(row => row.raw[col]).filter(Boolean).join(' ').trim();
+    });
+    const mapping = mapHeadersToFields(headersByColumn);
+    const uniqueFields = new Set(Object.keys(mapping));
+    let score = uniqueFields.size;
+    if (mapping.codigo) score += 3;
+    if (mapping.codigoAlternativo) score += 1;
+    if (mapping.unidadMedida) score += 1;
+    if (mapping.nombre || mapping.descripcion) score += 3;
+    if (mapping.stock) score += 1;
+    if (mapping.costoPromedio) score += 1;
+    return {
+        headerRows: rowNumbers,
+        dataStartRow: Math.max(...rowNumbers) + 1,
+        headersByColumn,
+        mapping,
+        score
+    };
+}
+
+function mapHeadersToFields(headersByColumn) {
+    const mapping = {};
+    Object.entries(headersByColumn).forEach(([col, label]) => {
+        const field = detectHeaderField(label);
+        if (!field) return;
+        if (field === 'codigo' && mapping.codigo && !mapping.codigoAlternativo) {
+            mapping.codigoAlternativo = col;
+            return;
+        }
+        if (field === 'nombre' && mapping.nombre && !mapping.descripcion) {
+            mapping.descripcion = col;
+            return;
+        }
+        if (!mapping[field]) mapping[field] = col;
+    });
+    return mapping;
+}
+
+function detectHeaderField(label) {
+    const n = normalizeColumnLabel(label);
+    const c = compactColumnLabel(label);
+    if (!n) return null;
+    if (/(barcode|ean|upc|barra)/.test(n)) return 'codigoBarra';
+    if (/(alternativo|altern|corto|referencia|parte|part number|partnumber|nombre busqueda|search name)/.test(n)) return 'codigoAlternativo';
+    if (/(codigo prod|codigo producto|codigo|cod\b|sku|item code|itemcode|items code|stock code|material code)/.test(n) || ['cod', 'codigo', 'sku'].includes(c)) return 'codigo';
+    if (/(u\/m|um\b|unidad|unidad medida|unid|med\b)/.test(n) || ['um', 'unid'].includes(c)) return 'unidadMedida';
+    if (/(stock minimo|minimo|stock critico)/.test(n)) return 'stockMinimo';
+    if (/(stock|cantidad|existencia|cant\b|qty|disp)/.test(n)) return 'stock';
+    if (/(costo promedio|costo|precio|valor unit|v unit|valor|v unitario)/.test(n)) return 'costoPromedio';
+    if (/moneda/.test(n)) return 'moneda';
+    if (/(ubicacion|bodega|sector|estante|location)/.test(n)) return 'ubicacion';
+    if (/(categoria|familia|grupo|tipo de producto|subtipo)/.test(n)) return 'categoria';
+    if (/marca|brand/.test(n)) return 'marca';
+    if (/modelo|model/.test(n)) return 'modelo';
+    if (/equipo|maquina/.test(n)) return 'equipoAsociado';
+    if (/(observacion|observaciones|nota|comentario|obs)/.test(n)) return 'observaciones';
+    if (/(validado|revisado|activo)/.test(n)) return 'validado';
+    if (/estado|status/.test(n)) return 'estado';
+    if (/(alias|sinonimo|keyword)/.test(n)) return 'aliasBusqueda';
+    if (/(descripcion corta|nombre del producto|nombre producto|producto|material name|description|descripcion del producto|descripcion|descripci)/.test(n)) return 'nombre';
+    if (/(detalle|glosa|texto breve)/.test(n)) return 'descripcion';
+    return null;
+}
+
+function completeMappingByPattern(sheetRaw, detected) {
+    const mapping = { ...detected.mapping };
+    const pattern = inferMappingByPattern(sheetRaw, detected.dataStartRow);
+    ['codigo', 'codigoAlternativo', 'unidadMedida', 'nombre', 'descripcion'].forEach(field => {
+        if (!mapping[field] && pattern.mapping[field]) mapping[field] = pattern.mapping[field];
+    });
+    return { ...detected, mapping };
+}
+
+function inferMappingByPattern(sheetRaw, dataStartRow = 1) {
+    const rows = sheetRaw.rows.filter(r => r.rowNumber >= dataStartRow).slice(0, 200);
+    const cols = sortColumnLetters(Array.from(new Set(rows.flatMap(row => Object.keys(row.raw)))));
+    const stats = cols.map(col => {
+        const values = rows.map(row => String(row.raw[col] || '').trim()).filter(Boolean);
+        const numericCodes = values.filter(v => /^\d{6,}$/.test(v)).length;
+        const alternateCodes = values.filter(v => /^[A-Z0-9][A-Z0-9._/-]{2,32}$/i.test(v) && /[A-Z/-]/i.test(v)).length;
+        const units = values.filter(v => /^(C\/U|UN|UND|PAR|JGO|PQT|MTS|MT|KG|LT|LTS|EA|M2|M3)$/i.test(v)).length;
+        const longText = values.filter(v => v.length >= 12 && /\s/.test(v)).length;
+        return { col, values: values.length || 1, numericCodes, alternateCodes, units, longText };
+    });
+    const ratio = (count, total) => count / Math.max(1, total);
+    const mapping = {};
+    const code = stats.slice().sort((a, b) => ratio(b.numericCodes, b.values) - ratio(a.numericCodes, a.values))[0];
+    if (code && ratio(code.numericCodes, code.values) >= 0.35) mapping.codigo = code.col;
+    const alt = stats.filter(s => s.col !== mapping.codigo).sort((a, b) => ratio(b.alternateCodes, b.values) - ratio(a.alternateCodes, a.values))[0];
+    if (alt && ratio(alt.alternateCodes, alt.values) >= 0.25) mapping.codigoAlternativo = alt.col;
+    const unit = stats.filter(s => ![mapping.codigo, mapping.codigoAlternativo].includes(s.col)).sort((a, b) => ratio(b.units, b.values) - ratio(a.units, a.values))[0];
+    if (unit && ratio(unit.units, unit.values) >= 0.3) mapping.unidadMedida = unit.col;
+    const textCols = stats.filter(s => !Object.values(mapping).includes(s.col)).sort((a, b) => ratio(b.longText, b.values) - ratio(a.longText, a.values));
+    if (textCols[0] && ratio(textCols[0].longText, textCols[0].values) >= 0.2) mapping.nombre = textCols[0].col;
+    if (textCols[1] && ratio(textCols[1].longText, textCols[1].values) >= 0.2) mapping.descripcion = textCols[1].col;
+    return {
+        dataStartRow,
+        mapping,
+        confidence: Object.keys(mapping).length
+    };
+}
+
+function countIgnoredRows(sheetRaw, detected) {
+    return sheetRaw.rows.filter(row => row.rowNumber < detected.dataStartRow || !isCandidateRawRow(row, detected.mapping)).length;
+}
+
+function isCandidateRawRow(row, mapping) {
+    const code = getMappedValue(row.raw, mapping.codigo);
+    const name = getMappedValue(row.raw, mapping.nombre) || getMappedValue(row.raw, mapping.descripcion);
+    return Boolean(code || name);
+}
+
+function getMappedValue(raw, col) {
+    if (!col) return '';
+    return String(raw[col] ?? '').trim();
+}
+
+function toNumberOrBlank(value) {
+    if (value === null || value === undefined || value === '') return '';
+    const text = String(value).trim().replace(/\$/g, '').replace(/\s/g, '');
+    const normalized = text.includes(',') && !text.includes('.') ? text.replace(',', '.') : text.replace(/\.(?=\d{3}(\D|$))/g, '').replace(',', '.');
+    const number = Number(normalized);
+    return Number.isFinite(number) ? number : '';
+}
+
+function parseBooleanLike(value) {
+    const text = normalizeText(value);
+    return ['si', 's', 'true', '1', 'validado', 'activo', 'yes'].includes(text);
+}
+
+function buildMaterialsFromSheet(sheetRaw, detected, fileName) {
+    const existingCodes = new Set(StorageAdapter.getMaterials().map(m => String(m.codigo)));
+    const localCodes = new Set();
+    return sheetRaw.rows
+        .filter(row => row.rowNumber >= detected.dataStartRow)
+        .map(row => buildMaterialCandidate(row, sheetRaw.sheetName, detected, fileName))
+        .filter(Boolean)
+        .map(item => {
+            item._errors = [];
+            item._warnings = [];
+            item._isExisting = existingCodes.has(item.codigo);
+
+            if(!item.codigo) item._errors.push('Codigo vacio');
+            if(!item.nombre) item._errors.push('Nombre vacio');
+            if(item.codigo && localCodes.has(item.codigo)) item._warnings.push('Codigo duplicado en esta importacion; se omitira despues de la primera aparicion');
+            if(item.codigo) localCodes.add(item.codigo);
+            if(!item.ubicacion) item._warnings.push('Sin ubicacion');
+            if(!item.foto) item._warnings.push('Sin foto');
+            if(item.stock === '') item._warnings.push('Sin stock');
+            if(item.costoPromedio === '') item._warnings.push('Sin costo');
+            if(item._isExisting) item._warnings.push('Material ya existe');
+            return item;
+        });
+}
+
+function buildMaterialCandidate(row, sheetName, detected, fileName) {
+    if (!isCandidateRawRow(row, detected.mapping)) return null;
+    const m = detected.mapping;
+    const nombre = getMappedValue(row.raw, m.nombre) || getMappedValue(row.raw, m.descripcion);
+    const descripcion = getMappedValue(row.raw, m.descripcion) || (getMappedValue(row.raw, m.nombre) === nombre ? '' : getMappedValue(row.raw, m.nombre));
+    const codigo = getMappedValue(row.raw, m.codigo);
+    const codigoAlternativo = getMappedValue(row.raw, m.codigoAlternativo);
+    const alias = [getMappedValue(row.raw, m.aliasBusqueda), codigoAlternativo].filter(Boolean).join(', ');
+    const item = {
+        id: `${fileName}::${sheetName}::${row.rowNumber}::${codigo || codigoAlternativo || nombre}`,
+        codigo,
+        codigoAlternativo,
+        codigoBarra: getMappedValue(row.raw, m.codigoBarra),
+        nombre,
+        descripcion,
+        unidadMedida: getMappedValue(row.raw, m.unidadMedida) || 'UN',
+        categoria: getMappedValue(row.raw, m.categoria),
+        marca: getMappedValue(row.raw, m.marca),
+        modelo: getMappedValue(row.raw, m.modelo),
+        stock: toNumberOrBlank(getMappedValue(row.raw, m.stock)),
+        stockMinimo: toNumberOrBlank(getMappedValue(row.raw, m.stockMinimo)),
+        costoPromedio: toNumberOrBlank(getMappedValue(row.raw, m.costoPromedio)),
+        moneda: getMappedValue(row.raw, m.moneda) || 'CLP',
+        ubicacion: getMappedValue(row.raw, m.ubicacion),
+        estado: getMappedValue(row.raw, m.estado) || 'Activo',
+        aliasBusqueda: alias,
+        equipoAsociado: getMappedValue(row.raw, m.equipoAsociado),
+        observaciones: getMappedValue(row.raw, m.observaciones),
+        origenCosto: 'Excel',
+        estadoRevision: 'Pendiente',
+        validado: m.validado ? parseBooleanLike(getMappedValue(row.raw, m.validado)) : true,
+        esCritico: false,
+        sourceSheet: sheetName,
+        sourceRow: row.rowNumber,
+        sourceFile: fileName,
+        rawData: { ...row.raw },
+        encabezadosDetectados: { ...detected.headersByColumn },
+        importWarnings: detected.warnings || []
+    };
+    return normalizeMaterial(item);
 }
 
 function normalizeMasterRow(row) {
@@ -2136,11 +2692,81 @@ function normalizeMasterRow(row) {
     if(out.stockMinimo !== "" && !isNaN(out.stockMinimo)) out.stockMinimo = Number(out.stockMinimo);
     if(out.costoPromedio !== "" && !isNaN(out.costoPromedio)) out.costoPromedio = Number(out.costoPromedio);
 
-    return normalizeMaterial(out);
+    return normalizeMaterial({
+        ...out,
+        rawData: { ...row }
+    });
 }
 
 function processMasterData(rawData, fileName) {
-    if(!Array.isArray(rawData)) return alert("El formato no es un arreglo válido.");
+    if(!Array.isArray(rawData)) return alert('El formato no es un arreglo valido.');
+    const existingCodesNew = new Set(StorageAdapter.getMaterials().map(m => String(m.codigo)));
+    const localCodesNew = new Set();
+    const processedNew = rawData.map((row, index) => {
+        const item = normalizeMasterRow(row);
+        item.id = item.id || `${fileName}::Archivo::${index + 1}::${item.codigo || item.nombre}`;
+        item.sourceSheet = item.sourceSheet || 'Archivo';
+        item.sourceRow = item.sourceRow || index + 1;
+        item.sourceFile = item.sourceFile || fileName;
+        item._originalRow = index + 1;
+        item._errors = [];
+        item._warnings = [];
+        item._isExisting = existingCodesNew.has(item.codigo);
+
+        if(!item.codigo) item._errors.push('Codigo vacio');
+        if(!item.nombre) item._errors.push('Nombre vacio');
+        if(item.codigo && localCodesNew.has(item.codigo)) item._warnings.push('Codigo duplicado en archivo; se omitira despues de la primera aparicion');
+        if(item.codigo) localCodesNew.add(item.codigo);
+        if(!item.ubicacion) item._warnings.push('Sin ubicacion');
+        if(!item.foto) item._warnings.push('Sin foto');
+        if(item.stock === '') item._warnings.push('Sin stock');
+        if(item.costoPromedio === '') item._warnings.push('Sin costo');
+        if(item._isExisting) item._warnings.push('Material ya existe');
+        return item;
+    });
+
+    currentImportData = {
+        fileName,
+        sourceType: fileName.toLowerCase().endsWith('.csv') ? 'csv' : 'json',
+        total: rawData.length,
+        valid: processedNew.filter(i => i._errors.length === 0).length,
+        error: processedNew.filter(i => i._errors.length > 0).length,
+        ignored: 0,
+        sheets: [{
+            sheetName: 'Archivo',
+            selected: true,
+            rowsWithData: rawData.length,
+            totalRows: rawData.length,
+            totalColumns: Object.keys(rawData[0] || {}).length,
+            candidates: processedNew.length,
+            ignoredRows: 0,
+            errors: processedNew.filter(i => i._errors.length > 0).length,
+            warnings: processedNew.reduce((sum, item) => sum + item._warnings.length, 0),
+            headerRows: [],
+            dataStartRow: 1,
+            mapping: {},
+            headersByColumn: {},
+            warningsDetected: []
+        }],
+        items: processedNew,
+        workbookRaw: null,
+        workbookMetadata: {
+            sourceFile: fileName,
+            sourcePath: fileName,
+            loadedAt: new Date().toISOString(),
+            sheetCount: 1,
+            sheets: [{ sheetName: 'Archivo', selected: true, rowsWithData: rawData.length, candidates: processedNew.length }],
+            totalRowsRead: rawData.length,
+            candidateMaterials: processedNew.length,
+            ignoredRows: 0,
+            workbookRawStored: false,
+            workbookRawTooLarge: false
+        },
+        warnings: []
+    };
+
+    renderMasterPreview();
+    return;
     
     const existing = StorageAdapter.getMaterials();
     const existingCodes = new Set(existing.map(m => String(m.codigo)));
@@ -2192,6 +2818,10 @@ function processMasterData(rawData, fileName) {
 
 function renderMasterPreview() {
     document.getElementById('master-preview-section').classList.remove('hidden');
+    renderMasterSummary();
+    renderMasterSheetSelector();
+    renderMasterPreviewBody();
+    return;
     
     const d = currentImportData;
     const stats = document.getElementById('master-stats-container');
@@ -2227,6 +2857,117 @@ function renderMasterPreview() {
     });
 }
 
+function renderMasterSummary() {
+    const d = currentImportData;
+    const summary = document.getElementById('master-file-summary');
+    if (!summary || !d) return;
+    const sheetNames = (d.sheets || []).map(s => s.sheetName).join(', ');
+    summary.innerHTML = `
+        <div><strong>Archivo:</strong> ${escapeHtml(d.fileName)}</div>
+        <div><strong>Hojas detectadas:</strong> ${escapeHtml((d.sheets || []).length)}</div>
+        <div><strong>Lista de hojas:</strong> ${escapeHtml(sheetNames || 'Sin hojas')}</div>
+    `;
+}
+
+function renderMasterSheetSelector() {
+    const selector = document.getElementById('master-sheet-selector');
+    const d = currentImportData;
+    if (!selector || !d) return;
+    if (!d.sheets.length) {
+        selector.innerHTML = '<div class="empty-mini">No hay hojas para seleccionar.</div>';
+        return;
+    }
+    selector.innerHTML = `
+        <div class="sheet-selector-header">
+            <h4>Seleccion de hojas</h4>
+            <span>Marque las hojas que quiere importar al indice de busqueda.</span>
+        </div>
+        <div class="sheet-grid">
+            ${d.sheets.map(sheet => `
+                <label class="sheet-option ${sheet.selected ? 'selected' : ''}">
+                    <input type="checkbox" class="master-sheet-checkbox" value="${escapeAttr(sheet.sheetName)}" ${sheet.selected ? 'checked' : ''}>
+                    <span>
+                        <strong>${escapeHtml(sheet.sheetName)}</strong>
+                        <small>${escapeHtml(sheet.rowsWithData)} filas leidas / ${escapeHtml(sheet.candidates)} candidatos</small>
+                    </span>
+                </label>
+            `).join('')}
+        </div>
+    `;
+}
+
+function getSelectedSheetNames() {
+    if (!currentImportData) return new Set();
+    return new Set(currentImportData.sheets.filter(s => s.selected).map(s => s.sheetName));
+}
+
+function getSelectedImportItems() {
+    const selectedSheets = getSelectedSheetNames();
+    return currentImportData.items.filter(item => selectedSheets.has(item.sourceSheet || 'Archivo'));
+}
+
+function renderMasterPreviewBody() {
+    const d = currentImportData;
+    if (!d) return;
+    const selectedItems = getSelectedImportItems();
+    const validItems = selectedItems.filter(i => i._errors.length === 0);
+    const errorItems = selectedItems.filter(i => i._errors.length > 0);
+    const selectedSheets = d.sheets.filter(s => s.selected);
+    const selectedRows = selectedSheets.reduce((sum, sheet) => sum + sheet.rowsWithData, 0);
+    const ignoredRows = selectedSheets.reduce((sum, sheet) => sum + sheet.ignoredRows, 0);
+
+    const stats = document.getElementById('master-stats-container');
+    stats.innerHTML = `
+        <div class="stat-card"><div class="stat-value">${d.sheets.length}</div><div class="stat-label">Hojas detectadas</div></div>
+        <div class="stat-card"><div class="stat-value">${selectedRows}</div><div class="stat-label">Filas leidas seleccionadas</div></div>
+        <div class="stat-card"><div class="stat-value">${selectedItems.length}</div><div class="stat-label">Materiales candidatos</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--success-color)">${validItems.length}</div><div class="stat-label">Validos</div></div>
+        <div class="stat-card"><div class="stat-value" style="color:var(--warning-color)">${ignoredRows}</div><div class="stat-label">Filas ignoradas</div></div>
+        <div class="stat-card" style="${errorItems.length > 0 ? 'border-color: var(--danger-color)' : ''}"><div class="stat-value" style="color:var(--danger-color)">${errorItems.length}</div><div class="stat-label">Con errores</div></div>
+    `;
+
+    const alerts = document.getElementById('master-alerts');
+    const warnings = [
+        ...(d.warnings || []),
+        ...(d.sourceType === 'xlsx' && d.workbookRaw ? ['El Excel original queda intacto. La app guardara rawData por material importado y solo guardara workbookRaw completo si cabe en localStorage.'] : [])
+    ];
+    alerts.innerHTML = warnings.length
+        ? warnings.slice(0, 8).map(w => `<div class="recommendation-item warning">${escapeHtml(w)}</div>`).join('')
+        : '';
+
+    const tbody = document.querySelector('#master-preview-table tbody');
+    tbody.innerHTML = '';
+    selectedItems.slice(0, 150).forEach(item => {
+        const tr = document.createElement('tr');
+        if(item._errors.length > 0) tr.style.backgroundColor = 'var(--danger-light)';
+        const errsHtml = item._errors.map(e => `<span class="preview-error">${escapeHtml(e)}</span>`).join('');
+        const warnsHtml = item._warnings.map(e => `<span class="preview-warning">${escapeHtml(e)}</span>`).join('');
+        tr.innerHTML = `
+            <td>${escapeHtml(item.sourceSheet || 'Archivo')}</td>
+            <td>${escapeHtml(item.sourceRow || item._originalRow || '')}</td>
+            <td><strong>${escapeHtml(item.codigo)}</strong></td>
+            <td>${escapeHtml(item.codigoAlternativo || '')}</td>
+            <td>${escapeHtml(item.unidadMedida || '')}</td>
+            <td>${escapeHtml(item.nombre || item.descripcion || '')}</td>
+            <td>${escapeHtml(item.categoria || '')}</td>
+            <td>${item.stock !== '' ? escapeHtml(item.stock) : ''}</td>
+            <td>${item.costoPromedio !== '' ? escapeHtml(formatCurrency(item.costoPromedio)) : ''}</td>
+            <td>${item._errors.length === 0 ? '<span class="badge badge-success">OK</span>' : '<span class="badge badge-danger">Error</span>'}</td>
+            <td>${errsHtml}${warnsHtml}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+document.getElementById('master-sheet-selector')?.addEventListener('change', (e) => {
+    const checkbox = e.target.closest('.master-sheet-checkbox');
+    if (!checkbox || !currentImportData) return;
+    const sheet = currentImportData.sheets.find(s => s.sheetName === checkbox.value);
+    if (sheet) sheet.selected = checkbox.checked;
+    renderMasterSheetSelector();
+    renderMasterPreviewBody();
+});
+
 document.getElementById('btn-cancel-master-import').addEventListener('click', () => {
     document.getElementById('master-preview-section').classList.add('hidden');
     document.getElementById('file-master-catalog').value = '';
@@ -2235,6 +2976,91 @@ document.getElementById('btn-cancel-master-import').addEventListener('click', ()
 
 document.getElementById('btn-confirm-master-import').addEventListener('click', () => {
     if(!currentImportData) return;
+    const selectedItemsNew = getSelectedImportItems();
+    const selectedErrorsNew = selectedItemsNew.filter(i => i._errors.length > 0).length;
+    if(selectedItemsNew.length === 0) return alert('Seleccione al menos una hoja con materiales candidatos.');
+    if(selectedErrorsNew > 0) {
+        if(!confirm(`Hay ${selectedErrorsNew} filas con errores bloqueantes. Estas no se importaran. Continuar?`)) return;
+    }
+
+    const policyNew = document.getElementById('master-import-policy').value;
+    if(policyNew === 'replace_all') {
+        const typed = prompt('Para reemplazar toda la base actual escriba REEMPLAZAR');
+        if(typed !== 'REEMPLAZAR') return alert('Importacion cancelada. No se reemplazo la base actual.');
+    }
+
+    let nextMaterials = policyNew === 'replace_all' ? [] : StorageAdapter.getMaterials();
+    let addedNew = 0;
+    let updatedNew = 0;
+    let skippedNew = 0;
+    const validItemsNew = selectedItemsNew.filter(i => i._errors.length === 0);
+    const seenImportCodesNew = new Set();
+
+    validItemsNew.forEach(importItem => {
+        const cleanItem = { ...importItem };
+        delete cleanItem._originalRow;
+        delete cleanItem._errors;
+        delete cleanItem._warnings;
+        delete cleanItem._isExisting;
+
+        if (seenImportCodesNew.has(cleanItem.codigo)) {
+            skippedNew++;
+            return;
+        }
+        seenImportCodesNew.add(cleanItem.codigo);
+
+        const idx = nextMaterials.findIndex(m => m.codigo === cleanItem.codigo);
+        if(idx >= 0) {
+            if(policyNew === 'skip' || policyNew === 'new_only') {
+                skippedNew++;
+            } else if(policyNew === 'update') {
+                nextMaterials[idx] = cleanItem;
+                updatedNew++;
+            }
+        } else if(policyNew === 'update' || policyNew === 'skip' || policyNew === 'new_only' || policyNew === 'replace_all') {
+            nextMaterials.push(cleanItem);
+            addedNew++;
+        }
+    });
+
+    try {
+        StorageAdapter.saveMaterials(nextMaterials.map(normalizeMaterial));
+        persistWorkbookImportState(currentImportData, validItemsNew);
+    } catch (err) {
+        alert(`No se pudo guardar la importacion en localStorage: ${err.message}. Seleccione menos hojas o exporte/limpie datos antes de reintentar.`);
+        return;
+    }
+
+    const logNew = {
+        fecha: formatDate(new Date()),
+        hora: formatTime(new Date()),
+        nombreArchivo: currentImportData.fileName,
+        archivo: currentImportData.fileName,
+        hojasProcesadas: currentImportData.sheets.filter(s => s.selected).map(s => s.sheetName),
+        totalFilas: selectedItemsNew.length,
+        materialesDetectados: validItemsNew.length,
+        importados: addedNew,
+        actualizados: updatedNew,
+        omitidos: skippedNew,
+        errores: selectedErrorsNew,
+        politica: policyNew,
+        usuario: 'admin'
+    };
+    const logsNew = StorageAdapter.getImportLogs();
+    logsNew.push(logNew);
+    StorageAdapter.saveImportLogs(logsNew);
+
+    alert(`Importacion completada.\nNuevos: ${addedNew}\nActualizados: ${updatedNew}\nOmitidos: ${skippedNew}\nErrores: ${selectedErrorsNew}`);
+    if(confirm("Importacion completada con exito. Es recomendable exportar un respaldo JSON ahora mismo para no perder esta carga. Exportar ahora?")) {
+        document.getElementById('btn-export-backup').click();
+    }
+
+    document.getElementById('master-preview-section').classList.add('hidden');
+    document.getElementById('file-master-catalog').value = '';
+    currentImportData = null;
+    refreshAdminViews();
+    return;
+
     if(currentImportData.error > 0) {
         if(!confirm(`Hay ${currentImportData.error} filas con errores bloqueantes. Éstas no se importarán. ¿Continuar?`)) return;
     }
@@ -2304,6 +3130,40 @@ document.getElementById('btn-confirm-master-import').addEventListener('click', (
     refreshAdminViews();
 });
 
+function persistWorkbookImportState(importData, validItems) {
+    const metadata = {
+        ...importData.workbookMetadata,
+        importedAt: new Date().toISOString(),
+        selectedSheets: importData.sheets.filter(s => s.selected).map(s => s.sheetName),
+        importedCandidateRows: validItems.length,
+        localStorageBytesAfterImport: getLocalStorageUsageBytes()
+    };
+    if (importData.workbookRaw) {
+        const rawText = JSON.stringify(importData.workbookRaw);
+        const rawBytes = rawText.length * 2;
+        if (rawBytes <= WORKBOOK_RAW_STORAGE_LIMIT_BYTES) {
+            try {
+                StorageAdapter.saveWorkbookRaw(importData.workbookRaw);
+                metadata.workbookRawStored = true;
+                metadata.workbookRawBytes = rawBytes;
+            } catch {
+                StorageAdapter.clearWorkbookRaw();
+                metadata.workbookRawStored = false;
+                metadata.workbookRawTooLarge = true;
+                metadata.workbookRawBytes = rawBytes;
+            }
+        } else {
+            StorageAdapter.clearWorkbookRaw();
+            metadata.workbookRawStored = false;
+            metadata.workbookRawTooLarge = true;
+            metadata.workbookRawBytes = rawBytes;
+        }
+    } else {
+        StorageAdapter.clearWorkbookRaw();
+    }
+    StorageAdapter.saveWorkbookMetadata(metadata);
+}
+
 function renderMasterHistory() {
     const logs = StorageAdapter.getImportLogs();
     const tbody = document.querySelector('#master-history-table tbody');
@@ -2315,6 +3175,7 @@ function renderMasterHistory() {
             <td>${l.fecha}</td>
             <td>${l.hora}</td>
             <td>${l.nombreArchivo}</td>
+            <td>${escapeHtml(Array.isArray(l.hojasProcesadas) ? l.hojasProcesadas.join(', ') : '-')}</td>
             <td>${l.totalFilas}</td>
             <td><span class="badge badge-success">${l.importados}</span></td>
             <td><span class="badge badge-primary">${l.actualizados}</span></td>
@@ -2585,6 +3446,8 @@ function renderReports() {
 
 function buildDiagnosticsData(reportData = buildReportData()) {
     const settings = StorageAdapter.getSettings();
+    const workbookMetadata = StorageAdapter.getWorkbookMetadata();
+    const workbookRaw = StorageAdapter.getWorkbookRaw();
     const bytes = getLocalStorageUsageBytes();
     const mb = Math.round((bytes / (1024 * 1024)) * 10) / 10;
     const lastImport = StorageAdapter.getImportLogs().slice().reverse()[0] || null;
@@ -2605,6 +3468,10 @@ function buildDiagnosticsData(reportData = buildReportData()) {
     if (reportData.metrics.avgQuality > 0 && reportData.metrics.avgQuality < 60) warnings.push('Calidad promedio baja.');
     if (!lastBackup || daysSinceBackup > 7 || changesSinceBackup > 50) warnings.push('Respaldo vencido o con muchos cambios pendientes.');
     if (externalResources.length > 0) warnings.push('Hay recursos externos que podrian fallar sin internet.');
+    if (workbookMetadata?.workbookRawTooLarge) warnings.push('El Excel maestro completo es grande. Para preservar todo, mantenga el archivo .xlsx original en /data.');
+    if (workbookMetadata && !workbookMetadata.workbookRawStored) warnings.push('Se guarda metadata del Excel y rawData por material importado; workbookRaw completo no esta en localStorage.');
+    const rawDataMaterials = reportData.materials.filter(m => m.rawData && typeof m.rawData === 'object').length;
+    if (rawDataMaterials > 1000 || mb > 4) warnings.push('Se esta guardando mucho rawData. Exporte respaldo y conserve el .xlsx original.');
     const backupRecommended = !lastBackup || daysSinceBackup > 7 || changesSinceBackup > 50;
     return {
         version: 'Bodega360 HTML Local v3-reportes',
@@ -2623,6 +3490,13 @@ function buildDiagnosticsData(reportData = buildReportData()) {
         daysSinceBackup,
         externalResources,
         photoBase64Count,
+        workbookMetadata,
+        workbookRawSaved: Boolean(workbookRaw),
+        masterFile: workbookMetadata?.sourceFile || 'Sin Excel maestro cargado',
+        masterSheetsRead: workbookMetadata?.sheetCount || 0,
+        masterRowsProcessed: workbookMetadata?.totalRowsRead || 0,
+        masterMaterialsIndexed: reportData.materials.filter(m => m.sourceFile).length,
+        rawDataMaterials,
         warnings,
         backupRecommended,
         reportMetrics: reportData.metrics
@@ -2648,7 +3522,13 @@ function renderDiagnostics() {
         ['Cambios desde respaldo', data.changesSinceBackup],
         ['Dias desde respaldo', data.daysSinceBackup ?? 'Sin respaldo'],
         ['Recursos externos', data.externalResources.length],
-        ['Fotos base64 locales', data.photoBase64Count]
+        ['Fotos base64 locales', data.photoBase64Count],
+        ['Archivo maestro', data.masterFile],
+        ['Hojas leidas', data.masterSheetsRead],
+        ['Filas procesadas Excel', data.masterRowsProcessed],
+        ['Materiales indexados Excel', data.masterMaterialsIndexed],
+        ['Materiales con rawData', data.rawDataMaterials],
+        ['workbookRaw guardado', data.workbookRawSaved ? 'Si' : 'No']
     ].map(([label, value]) => `<div class="stat-card"><div class="stat-value">${escapeHtml(value)}</div><div class="stat-label">${escapeHtml(label)}</div></div>`).join('');
     document.getElementById('diagnostics-warnings').innerHTML = data.warnings.length
         ? data.warnings.map(w => `<div class="recommendation-item warning">${escapeHtml(w)}</div>`).join('')

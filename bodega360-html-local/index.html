@@ -3,71 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bodega360 - Búsqueda de Materiales</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Bodega360 - B&uacute;squeda de Materiales</title>
+    <link rel="icon" href="assets/img/master-drilling-logo.png">
+    <link rel="stylesheet" href="styles.css?v=20260605-1">
 </head>
 <body>
     <!-- Vista Principal / Búsqueda -->
     <div id="public-view" class="view active">
         <header class="main-header">
-            <div class="logo-container">
-                <img src="assets/img/master-drilling-logo.png" onerror="this.onerror=null;this.src='https://masterdrilling.com/wp-content/uploads/2023/07/Master-Drilling-horizontal-1.png';" alt="Master Drilling Logo" class="logo">
+            <div class="brand-lockup">
+                <div class="logo-container">
+                    <img src="assets/img/master-drilling-logo.png" alt="Master Drilling Logo" class="logo">
+                </div>
+                <div class="header-title">
+                    <span>Master Drilling</span>
+                    <strong>Bodega360</strong>
+                </div>
             </div>
-            <div class="header-title">Bodega360 Local</div>
-            <div style="margin-left: auto; display: flex; gap: 0.5rem; align-items: center;">
-                <button id="btn-toggle-theme" class="btn-secondary" style="min-height:36px; padding:0.4rem 0.8rem; font-size:0.8rem;">🌓 Tema</button>
-                <button id="btn-toggle-consulta" class="btn-secondary" style="min-height:36px; padding:0.4rem 0.8rem; font-size:0.8rem;">🖥️ Modo Consulta</button>
+            <div class="header-actions">
+                <button id="btn-toggle-theme" class="btn-secondary header-action-btn">Tema</button>
+                <button id="btn-toggle-consulta" class="btn-secondary header-action-btn">Modo Consulta</button>
             </div>
         </header>
 
         <main class="search-container">
-            <div class="search-box-wrapper">
-                <div class="search-box">
-                    <h2>Consulta de Materiales</h2>
-                    <div class="input-group">
-                        <label for="search-user">Nombre o RUT de quien consulta</label>
-                        <input type="text" id="search-user" placeholder="Ej: 12.345.678-9 o Juan Pérez">
+            <section class="public-shell" aria-labelledby="public-title">
+                <aside class="intro-panel">
+                    <div class="intro-brand">
+                        <img src="assets/img/master-drilling-logo.png" alt="Master Drilling Logo" class="intro-logo">
+                        <span>Herramienta interna</span>
                     </div>
-                    
-                    <div class="input-group" style="position: relative;">
-                        <label for="search-query">¿Qué buscas?</label>
-                        <input type="text" id="search-query" placeholder="Buscar por código, nombre, alias, ubicación..." autocomplete="off">
-                        <div id="search-suggestions" class="suggestions-list hidden"></div>
+                    <div class="intro-copy">
+                        <p class="eyebrow">Bodega local</p>
+                        <h1 id="public-title">Bodega360</h1>
+                        <p>Consulta interna de materiales, c&oacute;digos, ubicaci&oacute;n y costo promedio.</p>
+                    </div>
+                    <ol class="step-list">
+                        <li>
+                            <span>1</span>
+                            <strong>Ingresa tu nombre o RUT</strong>
+                        </li>
+                        <li>
+                            <span>2</span>
+                            <strong>Busca el material</strong>
+                        </li>
+                        <li>
+                            <span>3</span>
+                            <strong>Copia el c&oacute;digo o revisa el detalle</strong>
+                        </li>
+                    </ol>
+                    <div class="intro-status">
+                        <span>Consulta rapida</span>
+                        <span>Base local</span>
+                        <span>Uso PC / tablet</span>
+                    </div>
+                </aside>
+
+                <section class="search-workspace" aria-label="Formulario de busqueda">
+                    <div class="search-box-wrapper">
+                        <div class="search-box">
+                            <div class="search-box-heading">
+                                <p class="eyebrow">Consulta de bodega</p>
+                                <h2>Buscar material</h2>
+                            </div>
+                            <div class="input-group">
+                                <label for="search-user">Nombre o RUT de quien consulta</label>
+                                <input type="text" id="search-user" placeholder="Ej: 12.345.678-9 o Juan Perez">
+                            </div>
+                            
+                            <div class="input-group search-query-group">
+                                <label for="search-query">&iquest;Qu&eacute; buscas?</label>
+                                <input type="text" id="search-query" placeholder="Buscar por codigo, nombre, alias, ubicacion..." autocomplete="off">
+                                <div id="search-suggestions" class="suggestions-list hidden"></div>
+                            </div>
+
+                            <button id="btn-search" class="btn-primary">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                Buscar Material
+                            </button>
+                        </div>
+                        
+                        <div id="empty-db-warning" class="hidden text-muted text-center mt-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.5rem; display:block; margin: 0 auto 0.5rem auto;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                            No hay base de materiales cargada todav&iacute;a. Solicite a bodega cargar la base maestra.
+                        </div>
                     </div>
 
-                    <button id="btn-search" class="btn-primary">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                        Buscar Material
-                    </button>
-                </div>
-                
-                <div id="empty-db-warning" class="hidden text-muted text-center mt-4">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 0.5rem; display:block; margin: 0 auto 0.5rem auto;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-                    No hay base de materiales cargada todavía. Solicite a bodega cargar la base maestra.
-                </div>
-            </div>
+                    <div id="search-results-container" class="results-container hidden">
+                        <h3>Resultados de b&uacute;squeda</h3>
+                        <div id="search-results" class="results-grid">
+                            <!-- Los resultados se inyectan aquí mediante JS -->
+                        </div>
+                    </div>
 
-            <div id="search-results-container" class="results-container hidden">
-                <h3 style="margin-bottom: 1rem;">Resultados de Búsqueda</h3>
-                <div id="search-results" class="results-grid">
-                    <!-- Los resultados se inyectan aquí mediante JS -->
-                </div>
-            </div>
-
-            <div id="no-results-container" class="no-results-card hidden text-center" style="background: white; padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); width: 100%; max-width: 680px; margin-top: 1.5rem;">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1rem auto; color: var(--text-muted);"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
-                <h3>No se encontraron resultados</h3>
-                <p class="text-muted" id="no-results-message" style="margin-bottom: 1rem;">¿Quizás quisiste decir alguno de estos?</p>
-                <div id="levenshtein-suggestions" class="flex-row" style="justify-content: center; flex-wrap: wrap; margin-bottom: 1.5rem; gap: 0.5rem;">
-                    <!-- Sugerencias Levenshtein van aquí -->
-                </div>
-                <div style="border-top: 1px solid var(--border-color); padding-top: 1.5rem;">
-                    <p class="text-muted mb-4">¿No encuentras el material que buscas? Puedes solicitar que se cargue al sistema.</p>
-                    <button id="btn-request-alta" class="btn-primary">
-                        📝 Solicitar carga de material
-                    </button>
-                </div>
-            </div>
+                    <div id="no-results-container" class="no-results-card hidden text-center">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin: 0 auto 1rem auto; color: var(--text-muted);"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+                        <h3>No se encontraron resultados</h3>
+                        <p class="text-muted" id="no-results-message">&iquest;Quiz&aacute;s quisiste decir alguno de estos?</p>
+                        <div id="levenshtein-suggestions" class="flex-row suggestions-row">
+                            <!-- Sugerencias Levenshtein van aquí -->
+                        </div>
+                        <div class="no-results-action">
+                            <p class="text-muted mb-4">&iquest;No encuentras el material que buscas? Puedes solicitar que se cargue al sistema.</p>
+                            <button id="btn-request-alta" class="btn-primary">
+                                Solicitar carga de material
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </section>
         </main>
 
         <button id="btn-open-admin-login" class="btn-admin-trigger">
@@ -103,7 +147,7 @@
     <div id="admin-view" class="view hidden">
         <header class="admin-header">
             <div class="header-left">
-                <img src="assets/img/master-drilling-logo.png" onerror="this.onerror=null;this.src='https://masterdrilling.com/wp-content/uploads/2023/07/Master-Drilling-horizontal-1.png';" alt="Master Drilling Logo" class="logo-small">
+                <img src="assets/img/master-drilling-logo.png" alt="Master Drilling Logo" class="logo-small">
                 <span>Bodega360 - Admin</span>
             </div>
             <button id="btn-logout" class="btn-secondary">
@@ -116,15 +160,15 @@
             <nav class="admin-sidebar">
                 <button class="tab-btn active" data-target="admin-materials">Materiales</button>
                 <button class="tab-btn" data-target="admin-add-material">Agregar Material</button>
-                <button class="tab-btn" data-target="admin-inventory-mode">Modo Inventario 📱</button>
+                <button class="tab-btn" data-target="admin-inventory-mode">Modo Inventario</button>
                 <button class="tab-btn" data-target="admin-master">Base Maestra</button>
                 <button class="tab-btn" data-target="admin-dictionary">Diccionario Búsqueda</button>
                 <button class="tab-btn" data-target="admin-categories">Categorías</button>
                 <button class="tab-btn" data-target="admin-history">Historial Consultas</button>
-                <button class="tab-btn" data-target="admin-tickets">Tickets / Solicitudes 📝</button>
+                <button class="tab-btn" data-target="admin-tickets">Tickets / Solicitudes</button>
                 <button class="tab-btn" data-target="admin-pendings">Pendientes</button>
-                <button class="tab-btn" data-target="admin-reports">Reportes 📊</button>
-                <button class="tab-btn" data-target="admin-diagnostics">Diagnóstico ⚕️</button>
+                <button class="tab-btn" data-target="admin-reports">Reportes</button>
+                <button class="tab-btn" data-target="admin-diagnostics">Diagnóstico</button>
                 <button class="tab-btn" data-target="admin-data">Importar / Exportar</button>
             </nav>
 
@@ -342,14 +386,18 @@
                 <!-- Tab: Base Maestra -->
                 <section id="admin-master" class="tab-content hidden">
                     <h2>Base Maestra de Códigos</h2>
-                    <p class="text-muted mb-4">Carga un catálogo completo usando archivos CSV o JSON. Esto alimentará el buscador público.</p>
+                    <p class="text-muted mb-4">Carga catalogos CSV/JSON o el Excel maestro real multihoja. La app indexa materiales para busqueda y conserva el origen de cada fila importada.</p>
                     
                     <div class="data-actions-grid mb-4">
                         <div class="data-card info-card">
-                            <h3>1. Cargar Archivo Maestro</h3>
-                            <p>Sube un archivo .csv o .json con el catálogo.</p>
-                            <input type="file" id="file-master-catalog" accept=".json,.csv">
-                            <button id="btn-load-local-catalog" class="btn-secondary mt-4">Cargar local (data/catalogo...)</button>
+                            <h3>Importar Excel Maestro</h3>
+                            <p>Selecciona un archivo .xlsx o carga automaticamente el maestro desde la carpeta /data cuando la app este servida por HTTP local.</p>
+                            <input type="file" id="file-master-catalog" accept=".xlsx,.xls,.json,.csv">
+                            <div class="master-import-actions">
+                                <button id="btn-load-master-excel" class="btn-primary mt-4" type="button">Cargar Excel desde data</button>
+                                <button id="btn-load-local-catalog" class="btn-secondary mt-4" type="button">Cargar JSON local</button>
+                            </div>
+                            <div id="master-auto-message" class="master-message hidden"></div>
                         </div>
                         <div class="data-card">
                             <h3>Plantillas</h3>
@@ -363,6 +411,9 @@
 
                     <div id="master-preview-section" class="hidden">
                         <h3 class="mt-4 mb-4">Vista Previa de Importación</h3>
+                        <div id="master-file-summary" class="master-summary mb-4"></div>
+                        <div id="master-sheet-selector" class="sheet-selector mb-4"></div>
+                        <div id="master-alerts" class="recommendations-list"></div>
                         <div class="stats-grid" id="master-stats-container">
                             <!-- Stats inyectadas aquí -->
                         </div>
@@ -388,16 +439,17 @@
                             <table id="master-preview-table">
                                 <thead>
                                     <tr>
+                                        <th>Hoja</th>
                                         <th>Fila</th>
                                         <th>Código</th>
-                                        <th>Nombre</th>
+                                        <th>Código alternativo</th>
+                                        <th>Unidad</th>
+                                        <th>Nombre / descripción</th>
                                         <th>Categoría</th>
                                         <th>Stock</th>
                                         <th>Costo Prom.</th>
-                                        <th>Ubicación</th>
                                         <th>Estado</th>
-                                        <th>Validación</th>
-                                        <th>Detalle</th>
+                                        <th>Advertencias</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -416,6 +468,7 @@
                                         <th>Fecha</th>
                                         <th>Hora</th>
                                         <th>Archivo</th>
+                                        <th>Hojas</th>
                                         <th>Total</th>
                                         <th>Importados</th>
                                         <th>Actualizados</th>
@@ -778,6 +831,7 @@
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <script src="libs/xlsx.full.min.js?v=0.18.5"></script>
+    <script src="app.js?v=20260605-1"></script>
 </body>
 </html>

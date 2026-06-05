@@ -12,14 +12,43 @@ Para abrir la aplicación, tienes dos opciones:
 Para evitar problemas de CORS al cargar catálogos en JSON local:
 1. Abre tu terminal.
 2. Navega hasta esta carpeta (`bodega360-html-local`).
-3. Ejecuta `python -m http.server 8000` (requiere Python).
-4. Abre tu navegador y visita: `http://localhost:8000`
+3. Ejecuta `python -m http.server 8080` (requiere Python).
+4. Abre tu navegador y visita: `http://localhost:8080`
 
 Si el PC corporativo no tiene Python instalado, tambien puedes abrir `index.html` con doble clic y cargar archivos manualmente desde Base Maestra. El prototipo HTML local no requiere npm, Docker, SQL ni backend.
 
 ### Opción B: Modo Offline Estricto
 1. Haz doble clic en el archivo `index.html`.
    *Nota: Algunos navegadores bloquean la lectura automática de `data/catalogo-materiales.json` por seguridad en modo local. Deberás subirlo manualmente usando el botón "Seleccionar archivo" en la sección Base Maestra del admin.*
+
+---
+
+## Importar Excel Maestro
+
+El Excel maestro real debe conservarse en:
+
+`bodega360-html-local/data/CODIGOS HOMOLOGADOS-CL-JFredes-31.xlsx`
+
+Para cargarlo:
+
+1. Abre la app con servidor local: `python -m http.server 8080`.
+2. Entra con `admin / admin`.
+3. Ve a `Modo Admin -> Base Maestra -> Importar Excel Maestro`.
+4. Usa `Cargar Excel desde data` para leer automáticamente el archivo anterior.
+5. O usa `Seleccionar archivo` para cargar manualmente un `.xlsx`, `.xls`, `.csv` o `.json`.
+
+La carga automática usa `fetch()` contra `/data`, por eso requiere HTTP local. Si abres con `file://`, el navegador puede bloquear esa lectura y la app mostrará:
+
+`Para cargar automáticamente el Excel desde /data, abra la app con servidor local. También puede usar Seleccionar archivo.`
+
+La diferencia entre ambos modos es simple:
+
+- `Cargar Excel desde data`: lee el archivo fijo dentro de `data/` cuando la app está servida por HTTP.
+- `Seleccionar archivo`: usa el selector del navegador y funciona también en modo `file://`.
+
+La app no modifica el `.xlsx`. Lo lee, detecta hojas y columnas, crea un índice de materiales para búsqueda y conserva `sourceFile`, `sourceSheet`, `sourceRow` y `rawData` por material importado. Si el Excel completo es demasiado grande para `localStorage`, la app guarda metadata y rawData de materiales importados; conserva siempre el `.xlsx` original en `/data` como fuente completa.
+
+Si publicas esta carpeta en GitHub Pages, recuerda que todo archivo dentro de `data/` puede quedar público. No subas el Excel maestro real a un sitio público si contiene información interna, costos, proveedores u otros datos sensibles.
 
 ---
 
@@ -83,6 +112,7 @@ Cuando Bodega360 pase a servidor interno, el login debe cambiar a usuarios reale
 - Buscador con historial de consultas encontradas y sin resultado.
 - Alta manual de materiales desde admin.
 - Base Maestra por CSV/JSON.
+- Importador Excel maestro multihoja con selector de hojas, vista previa y rawData por material.
 - Subida local de foto con preview.
 - Diccionario de busqueda.
 - Categorias sugeridas.
