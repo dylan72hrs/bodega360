@@ -22,3 +22,7 @@ dist
 
 ~$*.xlsx
 bodega360-html-local/data/~$*.xlsx
+
+# Respaldos locales Bodega360
+bodega360-html-local/data/bodega360-db-master.json
+revision-bodega360-v1.diff
