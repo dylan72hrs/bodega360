@@ -1,0 +1,3471 @@
+[
+  {
+    "id": "mat::1010101310",
+    "codigo": "1010101310",
+    "codigoAlternativo": "SOLD-SA316",
+    "codigoAlternativos": [
+      "SOLD-SA316"
+    ],
+    "nombre": "SOLDADURA INDURA SUPER ALOY 3/16\" (ELECTRODO SOLTEC 29 4.8 x 350 3/16\")",
+    "descripcion": "WELDING ROD, SUPER ALOY, 3/16\"",
+    "unidadMedida": "KGS",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 31/12/25 G. DIAZ",
+    "proyectos": [
+      "CL01-04009-028",
+      "CL01-000420-203",
+      "CL01-04001-33",
+      "CL01-04012-021",
+      "CL01-04019-003",
+      "CL01-04014-006",
+      "CL01-04015-019",
+      "CL01-04017-001",
+      "CL-0801-103"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1010101310 sold-sa316 soldadura indura super aloy 3/16\" (electrodo soltec 29 4.8 x 350 3/16\") electrodo para soldar, super aloy, 3/16\" 1010101310 - electrodo para soldar, super aloy, 3/16\" welding rod, super aloy, 3/16\" kgs item cl01-04009-028 cl01-000420-203 cl01-04001-33 cl01-04012-021 cl01-04019-003 cl01-04014-006 cl01-04015-019 cl01-04017-001 cl-0801-103 ingenieria stgo-1 llegan 10 el 19/06/25, saldo 40 llegan el 26/06/25 llegan 26,5 el 15/10/25, llegan 40 el 21/10/25, saldo 53,5 cancelado entregados el 21/05/25 con picking, mateo 6,5 vc 16/10/25 + 13,5 vc 21/10/25"
+  },
+  {
+    "id": "mat::1010105600",
+    "codigo": "1010105600",
+    "codigoAlternativo": "SOLD-SA532",
+    "codigoAlternativos": [
+      "SOLD-SA532"
+    ],
+    "nombre": "SOLDADURA SUPER ALOY 5/32´´",
+    "descripcion": "WELDING ROD, SUPER ALOY, 5/32\"",
+    "unidadMedida": "KGS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 3,
+    "stockMaximo": 10,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 31/12/25 G. DIAZ",
+    "proyectos": [
+      "CL01-04007-005",
+      "CL01-04001-19",
+      "CL01-04002-10",
+      "CL01-04016-008",
+      "CL01-04015-018",
+      "CL01-05001-002-00706",
+      "CL01-04015-021",
+      "CL-0801-103",
+      "CL01-05001-014-102"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1010105600 sold-sa532 soldadura super aloy 5/32´´ electrodo para soldar, super aloy, 5/32\" 1010105600 - electrodo para soldar, super aloy, 5/32\" welding rod, super aloy, 5/32\" kgs cl01-04007-005 cl01-04001-19 cl01-04002-10 cl01-04016-008 cl01-04015-018 cl01-05001-002-00706 cl01-04015-021 cl-0801-103 cl01-05001-014-102 ingenieria llegan 96 el 14/10/25, saldo 4 entregados el 05/06/25 con picking, mateo"
+  },
+  {
+    "id": "mat::1010107250",
+    "codigo": "1010107250",
+    "codigoAlternativo": "SOPL-001",
+    "codigoAlternativos": [
+      "SOPL-001"
+    ],
+    "nombre": "SOPLETE CALENTAR CON MANGUERA",
+    "descripcion": "DETAIL TORCH, W / SPARK GAP, ST2200T, BERNZOMATIC",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 54999,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL-0700-04",
+      "CL01-04018-006"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1010107250 sopl-001 soplete calentar con manguera antorcha, con hueco de chispa, st2200t, bernzomatic 1010107250 - antorcha, con hueco de chispa, st2200t, bernzomatic detail torch, w / spark gap, st2200t, bernzomatic c/u cl-0700-04 cl01-04018-006 ingenieria entregado el 27/05/25 con picking, mateo"
+  },
+  {
+    "id": "mat::1010107860",
+    "codigo": "1010107860",
+    "codigoAlternativo": "CINT-248GR",
+    "codigoAlternativos": [
+      "CINT-248GR",
+      "CINT-"
+    ],
+    "nombre": "CINTA PARA ETIQUETAR, OF/SILVER, 24MM X 8M, TZE-S951,BROTHER",
+    "descripcion": "LABELING TAPE, OF/SILVER, 24MM X 8M, TZE-S951, BROTHER",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 8,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO",
+    "proyectos": [
+      "CL-0700-04",
+      "CL01-05001-002-004",
+      "CL01-04004-029",
+      "CL01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1010107860 cint-248gr cint- cinta para etiquetar, of/silver, 24mm x 8m, tze-s951,brother 1010107860 - cinta para etiquetar, of/silver, 24mm x 8m, tze-s951,brother labeling tape, of/silver, 24mm x 8m, tze-s951, brother c/u cl-0700-04 cl01-05001-002-004 cl01-04004-029 cl01-00550-29 cl01-04008-012 ingenieria llegan 2 el 23/01/25, llegan 5 el 12/03/25, saldo 3 3 entregadas el 17/10/24 7 entregados el 20/12/24 1 con vc del 31-07-25 + 3 vc 01/09/25"
+  },
+  {
+    "id": "mat::1010108520",
+    "codigo": "1010108520",
+    "codigoAlternativo": "CINT-KPT3433",
+    "codigoAlternativos": [
+      "CINT-KPT3433"
+    ],
+    "nombre": "CINTA KAPTON CON ADHESIVO, 3/4\" x 33 MTS.",
+    "descripcion": "KAPTON TAPE, ADHESIVE, 3/4'' x 33 METERS",
+    "unidadMedida": "RLL",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1010108520 cint-kpt3433 cinta kapton con adhesivo, 3/4\" x 33 mts. kapton tape, adhesive, 3/4'' x 33 meters rll cl01-04004-030 ingenieria"
+  },
+  {
+    "id": "mat::1012100010",
+    "codigo": "1012100010",
+    "codigoAlternativo": "GAS-002",
+    "codigoAlternativos": [
+      "GAS-002",
+      "Handigas01"
+    ],
+    "nombre": "GAS PROPANO 45 KGS",
+    "descripcion": "LP GAS, 48kg",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 10,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 70000,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00530-21",
+      "CL01-00490-21",
+      "CL01-00400-59",
+      "CL01-00540-50",
+      "CL01-00550-22",
+      "CL01-00550-21",
+      "CL01-00430-62",
+      "CL01-04002-12",
+      "CL01-04007-008",
+      "CL01-04007-016",
+      "CL01-000420-184",
+      "CL01-04007-013",
+      "CL01-000420-189",
+      "CL01-04004-023",
+      "CL-0801-063",
+      "CL01-04008-006",
+      "CL01-000420-200",
+      "CL01-04002-20",
+      "CL01-04005-010",
+      "CL01-04009-023",
+      "CL01-04016-002",
+      "CL01-04002-23",
+      "CL01-04001-33",
+      "CL01-000420-209",
+      "CL01-00530-37",
+      "CL01-04008-009",
+      "CL-0500-10-1",
+      "CL01-04012-017",
+      "CL01-05001-004-1-001",
+      "CL01-05001-003-00205",
+      "CL01-05001-003-00203",
+      "CL01-00530-38",
+      "CL-0801-103",
+      "CL01-05001-007-00103",
+      "CL01-000420-210",
+      "CL01-04019-014"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1012100010 gas-002 handigas01 gas propano 45 kgs glp, 48kg 1012100010 - glp, 48kg lp gas, 48kg c/u artículo cl01-00530-21 cl01-00490-21 cl01-00400-59 cl01-00540-50 cl01-00550-22 cl01-00550-21 cl01-00430-62 cl01-04002-12 cl01-04007-008 cl01-04007-016 cl01-000420-184 cl01-04007-013 cl01-000420-189 cl01-04004-023 cl-0801-063 cl01-04008-006 cl01-000420-200 cl01-04002-20 cl01-04005-010 cl01-04009-023 cl01-04016-002 cl01-04002-23 cl01-04001-33 cl01-000420-209 cl01-00530-37 cl01-04008-009 cl-0500-10-1 cl01-04012-017 cl01-05001-004-1-001 cl01-05001-003-00205 cl01-05001-003-00203 cl01-00530-38 cl-0801-103 cl01-05001-007-00103 cl01-000420-210 cl01-04019-014 ingenieria llegan 2 el 28/08/25, saldo 1 llega el 28/10/25 llega 1 el 28/10/25, saldo 1 llega 27/11/25 llegan 2 el 27/02/26, saldo 2 saldo 1 llega 1 el 14/02/25, saldo 1 cancelado llega 1 el 10/03/25, saldo 1 llega 1 el 13/06/25, saldo 1 llega el 01/07/25 llega 1 el 19/05/26, saldo 1 sc cancelado el 22-04-24 cancelada g, alfaro cancelada 21/08/25, seg, indicación de mateo cancelada 10/09/25, seg, indicación de mateo cancelado, pedido repetido cancelado, pedido de más proyecto cerrado cancelado"
+  },
+  {
+    "id": "mat::1012100120",
+    "codigo": "1012100120",
+    "codigoAlternativo": "GAS-003",
+    "codigoAlternativos": [
+      "GAS-003"
+    ],
+    "nombre": "GAS GRÚA HORQUILLA 15 KGS.",
+    "descripcion": "GAS, PROPANE, KG",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 8,
+    "stockMaximo": 57,
+    "pendiente": true,
+    "cantidadPendiente": 9,
+    "montoPendiente": 252000,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-000420-129",
+      "CL-0700-04",
+      "CL-0700-03"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1012100120 gas-003 gas grúa horquilla 15 kgs. gas, propano, kg 1012100120 - gas, propano, kg gas, propane, kg c/u item cl01-000420-129 cl-0700-04 cl-0700-03 ingenieria stgo-1 llegan 3 el 09/07/25, llegan 5 el 15/07/25, llegan 5 el 25/07/25, llegan 3 el 31/07/25, llegan 5 el 08/08/25, llegan 4 el 21/08/25, saldo 5 cancelado llegan 10 el 15/09/25, llegan 4 el 23/09/25, llegan 4 el 02/10/25, llegan 4 el 06/10/25, llegan 5 el 08/10/25, saldo 3 llegan el 23/10/25 llegan 4 el 23/10/25, llegan 4 el 28/10/25, llegan 4 el 30/10/25, llegan 5 el 05/11/25, llegan 4 el 11/11/25, llegan 6 el 19/11/25, saldo 3 llegan el 27/11/25 llegan 8 el 04/12/25, llegan 5 el 10/12/25, llegan 5 el 23/12/25, llegan 4 el 05-01-26, llegan 5 el 12/01/26, llegan 4 el 21/01/26, llegan 4 el 30/01/26, llegan 4 el 02/02/26, llega 1 el 16/02/26 llegan 8 el 17/02/26, llegan 4 el 19/02/26, llegan 4 el 27/02/26, llegan 4 el 05/03/26, llegan 8 el 17/03/26, llegan 4 el 28/03/26, llegan 5 el 06/04/26, saldo 3 llegan el 09/04/26 saldo 3 saldo 2 llegan 5 02/09/24 + 7 09/09/24 + 7 23/0924 + 5 27/09/24, saldo 6 llegan 6 el 11/10/24, 5 el 18/10/24, 4 el 24/10/24, 6 el 29/10/24, 4 el 07/11/24, saldo 5 llegan 6 el 25/11/24, llegan 5 el 04/12/24, llegan 5 el 09/12/24, llegan 6 el 17/12/24, llegan 5 el 10/01/25, llegan 4 el 14/01/25, llegan 4 el 23/01/25, llegan 4 el 27/01/25, llega 1 el 07/02/25 llegan 9 el 14/02/25, llegan 5 el 20/02/25, llegan 4 el 28/02/25, saldo 2 cancelado llegan 5 el 13/02/25, llegan 9 el 10/03/25, llegan 4 el 19/03/25, llegan 6 el 26/03/25, llegan 6 el 01/04/25, llegan 4 el 10/04/25, saldo 1 llegan 4 el 15/04/25, llegan 5 el 24/04/25, llegan 5 el 29/04/25, llegan 4 el 05/05/25, llegan 6 el 09/05/25, llegan 5 el 19/05/25, saldo 1 llega el 22/05/25 llegan 4 el 22/05/25, llegan 5 el 10/06/25, llegan 9 el 03/06/25, llegan 4 el 13/06/25, llegan 5 el 25/06/25, saldo 3 llegan el 09/07/25 llegan 6 el 21/04/26, llegan 4 el 28/04/26, llegan 9 el 08/05/26, llegan 4 el 13/05/26, llegan 4 el 19/05/26, llegan 4 el 25/05/26, saldo 9 sc 6 entregados 18/07/24 4 entregados 28/08/24+5 entregados 03/09/24 3 entregados el 09/09/24 y 6 entregados el 23/09/24 7 entregados el 07/10/24 6 entregados el 22/10/24 + 4 entregados el 29/10/24 5 entregados el 11/12/24 8 entregados el 07/11/24 7 entregados el 25/11/24 1 entregado el 18/12/24, 5 entregados el 13/01/25, 4 entregados el 15/01/25, 4 entregados el 27/01/25, saldo 1 entregado el 03/02/25 9 entregados el 04/03/25 + 1 entregado el 10/03/25 5 entregados el 25/03/25 + 6 entregados el 01/04/25 5 entregados el 08/04/25 con vc + 9 entregados el 24/04/25 con vc 10 entregados el 07/05/25 con vc 7 emitidos en vc del 26/05/25 + 8 en vc del 11/06/25 5 emitidos el 30/06/25 + 5 con vc del 29/07/25 5 con vc del 25/08/25 + 4 vc 04/09/25 + 6 vc 16/09/25 4 vc 16/09/25 + 4 vc 24/09/25 + 2 vc 06/10/25 2 vc 06/10/25 + 4 vc 09/10/25 + 4 vc 14/10/25 7 vc 23/10/25 + 3 vc 05/11/25 9 vc 11/05/26 + 1 vc 19/05/26 11 con vc, 4 cancelados 6 vc 22/04/26 + 4 vc 28/04/26 3 vc 19/05/26"
+  },
+  {
+    "id": "mat::1014115080",
+    "codigo": "1014115080",
+    "codigoAlternativo": "VIDR-N10",
+    "codigoAlternativos": [
+      "VIDR-N10"
+    ],
+    "nombre": "VIDRIO NEGRO Nº10 PARA MÁSCARA SOLDAR",
+    "descripcion": "WELDING MASK, GLASS, BLACK, N°10",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 12/11/25 G. DIAZ",
+    "proyectos": [
+      "CL-0700-04"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1014115080 vidr-n10 vidrio negro nº10 para máscara soldar máscara de soldadura, vidrio, negro, n°10 welding mask, glass, black, n°10 c/u cl-0700-04 ingenieria llegan 40 el 15/10/25, saldo 10"
+  },
+  {
+    "id": "mat::1014115280",
+    "codigo": "1014115280",
+    "codigoAlternativo": "PIOL-1/8X300",
+    "codigoAlternativos": [
+      "PIOL-1/8X300"
+    ],
+    "nombre": "PIOLA DE SEGURIDAD, 1/8'' x 300 MM",
+    "descripcion": "SAFETY LANYARD, 1/8'' x 300 MM",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 30,
+    "montoPendiente": 133500,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00400-59",
+      "CL01-00530-29",
+      "CL01-04010-001",
+      "CL01-04013-001",
+      "CL01-04016-001",
+      "CL-0801-089",
+      "CL01-04017-001",
+      "CL01-04018-001",
+      "CL01-05001-007-00103",
+      "cl01-00550-29",
+      "CL01-05001-003-00202",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1014115280 piol-1/8x300 piola de seguridad, 1/8'' x 300 mm cordón de seguridad, 1/8'' x 300 mm 1014115280 - cordón de seguridad, 1/8'' x 300 mm safety lanyard, 1/8'' x 300 mm c/u cl01-00400-59 cl01-00530-29 cl01-04010-001 cl01-04013-001 cl01-04016-001 cl-0801-089 cl01-04017-001 cl01-04018-001 cl01-05001-007-00103 cl01-00550-29 cl01-05001-003-00202 cl01-04008-012 ingenieria stgo-1 entregados el 21/04/25 con correo, m, guerrero envio a rancagua el 19/05/25, gd 5305 10 con vc del 24/07/25 + 20 con vc del 18/08/25"
+  },
+  {
+    "id": "mat::1015100900",
+    "codigo": "1015100900",
+    "codigoAlternativo": "RUEDA-6020680",
+    "codigoAlternativos": [
+      "RUEDA-6020680"
+    ],
+    "nombre": "RUEDA TRASLAPADA 60 X 20 X 6 MM GR.80",
+    "descripcion": "BRUSH, POLISHER, W/SHAFT, GRAIN 80, 60 X 20 X 6 MM",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 4,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 18/11/25, G. DÍAZ",
+    "proyectos": [
+      "CL01-04005-003",
+      "CL01-04009-028",
+      "CL01-04012-014"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1015100900 rueda-6020680 rueda traslapada 60 x 20 x 6 mm gr.80 escobilla, pulidor, c/vastago, grano 80, 60 x 20 x 6 mm 1015100900 - escobilla, pulidor, c/vastago, grano 80, 60 x 20 x 6 mm brush, polisher, w/shaft, grain 80, 60 x 20 x 6 mm c/u item cl01-04005-003 cl01-04009-028 cl01-04012-014 ingenieria llegan 40 el 02/09/25, llegan 15 el 30/09/25, saldo 45 llegan 10 el 22/04/26, saldo 50 llega el 29/04/26 30 entregados el 28/05/25 con picking, mateo + 4 entregadas con vc 03/07/25, mateo + 6 vc 02/09/25"
+  },
+  {
+    "id": "mat::1016101340",
+    "codigo": "1016101340",
+    "codigoAlternativo": "ACEI-040",
+    "codigoAlternativos": [
+      "ACEI-040"
+    ],
+    "nombre": "ACEITE PENETRANTE WD-40",
+    "descripcion": "WD-40, AEROSOL",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 7,
+    "stockMaximo": 39,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 04/06/26 x G. DÍAZ",
+    "proyectos": [
+      "CL01-00490-21",
+      "CL01-04005-001",
+      "CL01-04004-001",
+      "CL01-00550-22",
+      "CL01-00560-20",
+      "CL01-04002-01",
+      "CL01-000420-164",
+      "CL01-04007-005",
+      "CL01-04009-001",
+      "CL01-04001-19",
+      "CL01-04002-11",
+      "CL01-00530-31",
+      "CL-0700-04",
+      "CL01-04009-007",
+      "CL01-000420-188",
+      "CL01-04005-008",
+      "CL01-000420-200",
+      "CL01-000420-177",
+      "CL01-04011-003",
+      "CL01-05001-002-005",
+      "CL01-04002-20",
+      "CL01-04015-001",
+      "CL01-05002-003-001",
+      "CL01-04016-001",
+      "CL01-04004-026",
+      "CL01-04009-022",
+      "CL01-000420-202",
+      "CL01-04009-028",
+      "CL01-04014-001",
+      "CL01-04006-011",
+      "CL01-04001-32",
+      "CL01-04012-014",
+      "CL01-04008-008",
+      "CL01-04012-009",
+      "CL01-04019-001",
+      "CL01-04016-016",
+      "CL01-04016-017",
+      "CL01-05001-014-102",
+      "CL01-04018-001",
+      "CL01-04017-001",
+      "CL01-04021-001"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1016101340 acei-040 aceite penetrante wd-40 pintura, aerosol, wd-40 1016101340 - pintura, aerosol, wd-40 wd-40, aerosol c/u item cl01-00490-21 cl01-04005-001 cl01-04004-001 cl01-00550-22 cl01-00560-20 cl01-04002-01 cl01-000420-164 cl01-04007-005 cl01-04009-001 cl01-04001-19 cl01-04002-11 cl01-00530-31 cl-0700-04 cl01-04009-007 cl01-000420-188 cl01-04005-008 cl01-000420-200 cl01-000420-177 cl01-04011-003 cl01-05001-002-005 cl01-04002-20 cl01-04015-001 cl01-05002-003-001 cl01-04016-001 cl01-04004-026 cl01-04009-022 cl01-000420-202 cl01-04009-028 cl01-04014-001 cl01-04006-011 cl01-04001-32 cl01-04012-014 cl01-04008-008 cl01-04012-009 cl01-04019-001 cl01-04016-016 cl01-04016-017 cl01-05001-014-102 cl01-04018-001 cl01-04017-001 cl01-04021-001 ingenieria stgo-1 llegan 33 el 10/04/25, saldo 7 llegan 11 el 13/05/26, saldo 1 sc enviados el 10/04/25 a cenizas, gd 5140 entregados el 14/04/25 con correo, m, guerrero entregados el 15/05/25 con picking, m, guerrero entregados el 28/05/25 con picking, m, guerrero entregados el 12/06/25 con picking, dyllan entregados el 23/06/25 con picking, dyllan 3 con vc del 16/07/25 + 3 con vc del 07/08/25"
+  },
+  {
+    "id": "mat::1016101710",
+    "codigo": "1016101710",
+    "codigoAlternativo": "BARN-180",
+    "codigoAlternativos": [
+      "BARN-180"
+    ],
+    "nombre": "BARNIZ ENAMEL 180, S/HORNO, CLASS TERM. H 180°C (TINETA x 20 LTS)",
+    "descripcion": "ENAMEL VARNISH 180°, CLASS H, OVEN DRY, 20 LTS TINET",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04002-15",
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1016101710 barn-180 barniz enamel 180, s/horno, class term. h 180°c (tineta x 20 lts) enamel varnish 180°, class h, oven dry, 20 lts tinet 1016101710 - enamel varnish 180°, class h, oven dry, 20 lts tinet c/u cl01-04002-15 cl01-04004-030 ingenieria"
+  },
+  {
+    "id": "mat::1019103350",
+    "codigo": "1019103350",
+    "codigoAlternativo": "RUEDA-6020660",
+    "codigoAlternativos": [
+      "RUEDA-6020660"
+    ],
+    "nombre": "RUEDA TRASLAPADA 60X20X6 MM GR.60 12000RPM",
+    "descripcion": "BRUSH, POLISHER, W/SHAFT, GRAIN 60, 6\" X 1.1/2\" X 1\"",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADO 31/12/25 G. DÍAZ",
+    "proyectos": [
+      "CL01-000420-177",
+      "CL01-04006-011",
+      "CL01-05001-004-1-001"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1019103350 rueda-6020660 rueda traslapada 60x20x6 mm gr.60 12000rpm escobilla, pulidor, c/vastago, grano 60, 6\" x 1,1/2\" x 1\" 1019103350 - escobilla, pulidor, c/vastago, grano 60, 6\" x 1.1/2\" x 1\" brush, polisher, w/shaft, grain 60, 6\" x 1.1/2\" x 1\" c/u item cl01-000420-177 cl01-04006-011 cl01-05001-004-1-001 ingenieria llegan 6 el 22/04/26, saldo 54 llega el 29/04/26 cancelado 11/03/25, código incorrecto 4 vc 05/11/25 + 11 vc 04/03/26"
+  },
+  {
+    "id": "mat::1019104240",
+    "codigo": "1019104240",
+    "codigoAlternativo": "VALV-100",
+    "codigoAlternativos": [
+      "VALV-100"
+    ],
+    "nombre": "LLAVE DE BOLA 1\"",
+    "descripcion": "VALVE, BALL, 1\"",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 8,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 4400,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04001-17",
+      "CL-0700-04",
+      "CL01-04009-006",
+      "CL01-00530-34",
+      "CL01-04015-003",
+      "CL01-04015-001",
+      "CL01-04016-003",
+      "CL01-5300-001",
+      "CL01-00490-27",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1019104240 valv-100 llave de bola 1\" valvula, bola, 1\" 1019104240 - valvula, bola, 1\" valve, ball, 1\" c/u cl01-04001-17 cl-0700-04 cl01-04009-006 cl01-00530-34 cl01-04015-003 cl01-04015-001 cl01-04016-003 cl01-5300-001 cl01-00490-27 cl01-00550-29 cl01-04008-012 ingenieria stgo-1 nuevos contratos 5 entregados el 08/04/25 con vc + 10 el 17/04/25, saldo 27/06/25 2 entregados el 25/04/25 con correo, m, guerrero entregados el 22/05/25 con picking, c, ortíz"
+  },
+  {
+    "id": "mat::1029102130",
+    "codigo": "1029102130",
+    "codigoAlternativo": "PIOL-1/8X500",
+    "codigoAlternativos": [
+      "PIOL-1/8X500"
+    ],
+    "nombre": "PIOLA DE SEGURIDAD 1/8\" x 500 MM",
+    "descripcion": "SAFETY CABLE, HYDRAULIC, 1/8\" X 450mm",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 6,
+    "stockMaximo": 36,
+    "pendiente": true,
+    "cantidadPendiente": 26,
+    "montoPendiente": 75969.26000000001,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-00490-25",
+      "‪‪‪CL01-000420-139",
+      "CL01-04007-001",
+      "CL01-000420-140",
+      "CL-0801-051",
+      "CL01-00430-60",
+      "CL-0700-12",
+      "CL01-000420-168",
+      "CL01-00400-59",
+      "CL01-00530-29",
+      "CL01-5300-002",
+      "CL01-5300-001",
+      "CL01-04010-001",
+      "CL01-05001-002-004",
+      "CL-0801-086",
+      "CL01-04015-001",
+      "CL01-04002-20",
+      "CL01-04016-001",
+      "CL01-04006-006",
+      "CL01-04004-029",
+      "CL01-05001-007-00101",
+      "CL-0500-04,1",
+      "CL01-04017-001",
+      "CL01-05001-004-1-001",
+      "CL01-05001-003-00205",
+      "cl01-00550-29",
+      "CL01-05001-007-00103",
+      "CL01-04008-012",
+      "CL01-04020-001",
+      "CL01-04021-001",
+      "CL01-04011-008"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1029102130 piol-1/8x500 piola de seguridad 1/8\" x 500 mm piola de seguridad 1/8\" x 600 mm antichicote 1029102130 - piola de seguridad 1/8\" x 600 mm antichicote safety cable, hydraulic, 1/8\" x 450mm c/u cl01-00490-25 ‪‪‪cl01-000420-139 cl01-04007-001 cl01-000420-140 cl-0801-051 cl01-00430-60 cl-0700-12 cl01-000420-168 cl01-00400-59 cl01-00530-29 cl01-5300-002 cl01-5300-001 cl01-04010-001 cl01-05001-002-004 cl-0801-086 cl01-04015-001 cl01-04002-20 cl01-04016-001 cl01-04006-006 cl01-04004-029 cl01-05001-007-00101 cl-0500-04,1 cl01-04017-001 cl01-05001-004-1-001 cl01-05001-003-00205 cl01-00550-29 cl01-05001-007-00103 cl01-04008-012 cl01-04020-001 cl01-04021-001 cl01-04011-008 ingenieria stgo-1 entregadas a juan abarca con email 18/02/25 entregadas el 12/06/25 con picking, j, parra 25 entregados el 22/05/25 con picking, c, ortíz + 60 entregadas el 12/06/25 con picking, jl, parra entregados el 06/06/25 con picking, m, guerrero 5 con vc del 25/07/25 + 45 con vc del 18/08/25 15 vc 03/11/25 + 10 vc 18/11/25"
+  },
+  {
+    "id": "mat::1112100430",
+    "codigo": "1112100430",
+    "codigoAlternativo": "CUT-15-234",
+    "codigoAlternativos": [
+      "CUT-15-234",
+      "Corte-15-234"
+    ],
+    "nombre": "BLOQUEO DE CUBIERTA (PEQUEÑA), CORTADORES, CUT-15-234",
+    "descripcion": "COVER LOCKING BLOCK (SMALL) , CUTTERS, CUT-15-234",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 8,
+    "stockMaximo": 27.020954720123786,
+    "pendiente": true,
+    "cantidadPendiente": 56,
+    "montoPendiente": 365481,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-000420-164",
+      "CL01-04007-005",
+      "CL01-04001-19",
+      "CL01-04002-11",
+      "CL01-00530-31",
+      "CL01-04009-007",
+      "CL01-000420-182",
+      "CL01-000420-188",
+      "CL01-04005-008",
+      "CL01-04011-003",
+      "CL01-04004-026",
+      "CL01-04009-022",
+      "CL01-04009-029",
+      "CL01-04006-011",
+      "CL01-04001-32",
+      "CL01-04008-008",
+      "CL01-04012-009",
+      "CL01-04009-033",
+      "CL01-04016-012",
+      "CL01-04015-014",
+      "CL01-05001-001-1-003",
+      "CL01-04016-016",
+      "CL01-05001-001-1-008",
+      "CL01-05001-002-00602",
+      "CL01-04016-017",
+      "CL01-04015-031",
+      "CL01-04017-004",
+      "CL01-04009-038",
+      "CL01-04016-022",
+      "CL01-000420-218",
+      "CL01-04019-013",
+      "CL01-04014-015"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1112100430 cut-15-234 corte-15-234 bloqueo de cubierta (pequeña), cortadores, cut-15-234 cover locking block (small) , cutters, cut-15-234 1112100430 - bloqueo de cubierta (pequeña), cortadores, cut-15-234 c/u artículo cl01-000420-164 cl01-04007-005 cl01-04001-19 cl01-04002-11 cl01-00530-31 cl01-04009-007 cl01-000420-182 cl01-000420-188 cl01-04005-008 cl01-04011-003 cl01-04004-026 cl01-04009-022 cl01-04009-029 cl01-04006-011 cl01-04001-32 cl01-04008-008 cl01-04012-009 cl01-04009-033 cl01-04016-012 cl01-04015-014 cl01-05001-001-1-003 cl01-04016-016 cl01-05001-001-1-008 cl01-05001-002-00602 cl01-04016-017 cl01-04015-031 cl01-04017-004 cl01-04009-038 cl01-04016-022 cl01-000420-218 cl01-04019-013 cl01-04014-015 ingenieria urgente f/mdcn20250405-1 01/04/25 f. mdcn20260318 13/03/26 7 entregados el 30/05/25 con picking, d, romero + 3 entregadas 19/08/25 con picking, dyllan entregadas 19/08/25 picking, dyllan entregadas 04/08/25 y 08/08/25 picking, dyllan 14 picking 06/10/25 18 picking 15/10/25 entregados picking 14/11/25, dyllan 5 vc 24/12/25 + 13 vc 14/04/26 7 vc 14/04/26, saldo cancelado, faena terminada 15 vc 13/05/26"
+  },
+  {
+    "id": "mat::1112100580",
+    "codigo": "1112100580",
+    "codigoAlternativo": "CUT-18C",
+    "codigoAlternativos": [
+      "CUT-18C",
+      "Cut18C"
+    ],
+    "nombre": "BIG YELLOW O´RING (9.5 X 210)",
+    "descripcion": "O-RING, Ø9.5 X 210 (ID), 76.90 H-23",
+    "unidadMedida": "ea",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 11,
+    "montoPendiente": 42101.1,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-05001-002-00602",
+      "CL01-04016-017",
+      "CL01-04016-022",
+      "CL01-000420-218",
+      "CL01-04014-015"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1112100580 cut-18c cut18c big yellow o´ring (9.5 x 210) o-ring, ø9.5 x 210 (id), 76.90 h-23 o-ring, ø9,5 x 210 (id), 76,90 h-23 1112100580 - o-ring, ø9.5 x 210 (id), 76.90 h-23 ea artículo cl01-05001-002-00602 cl01-04016-017 cl01-04016-022 cl01-000420-218 cl01-04014-015 ingenieria f.ci20260203zc 03/02/26"
+  },
+  {
+    "id": "mat::1112100610",
+    "codigo": "1112100610",
+    "codigoAlternativo": "CUT-21A",
+    "codigoAlternativos": [
+      "CUT-21A",
+      "Cut21A"
+    ],
+    "nombre": "PRESSURE PLUG, 1/4\" NPT X 3/4\" NPT",
+    "descripcion": "PRESSURE PLUG, 1/4\" NPT X 3/4\" NPT",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 12,
+    "pendiente": true,
+    "cantidadPendiente": 45,
+    "montoPendiente": 4408.75,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-000420-164",
+      "CL01-04007-005",
+      "CL01-04001-19",
+      "CL01-04002-11",
+      "CL01-00530-31",
+      "CL01-04009-007",
+      "CL01-000420-182",
+      "CL01-000420-188",
+      "CL01-04005-008",
+      "CL01-04011-003",
+      "CL01-04004-026",
+      "CL01-04009-022",
+      "CL01-000420-202",
+      "CL01-04009-029",
+      "CL01-04006-011",
+      "CL01-04001-32",
+      "CL01-04008-008",
+      "CL01-04012-009",
+      "CL01-04009-033",
+      "CL01-04016-012",
+      "CL01-04015-014",
+      "CL01-05001-001-1-003",
+      "CL01-04016-016",
+      "CL01-05001-001-1-008",
+      "CL01-05001-002-00602",
+      "CL01-04016-017",
+      "CL01-04016-022",
+      "CL01-000420-218",
+      "CL01-04019-013",
+      "CL01-04014-015"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1112100610 cut-21a cut21a pressure plug, 1/4\" npt x 3/4\" npt tapon, presion, 1/4\" npt x3/4\" 1112100610 - tapon, presion, 1/4\" npt x3/4\" c/u artículo cl01-000420-164 cl01-04007-005 cl01-04001-19 cl01-04002-11 cl01-00530-31 cl01-04009-007 cl01-000420-182 cl01-000420-188 cl01-04005-008 cl01-04011-003 cl01-04004-026 cl01-04009-022 cl01-000420-202 cl01-04009-029 cl01-04006-011 cl01-04001-32 cl01-04008-008 cl01-04012-009 cl01-04009-033 cl01-04016-012 cl01-04015-014 cl01-05001-001-1-003 cl01-04016-016 cl01-05001-001-1-008 cl01-05001-002-00602 cl01-04016-017 cl01-04016-022 cl01-000420-218 cl01-04019-013 cl01-04014-015 ingenieria f/mdcn20250530 23/05/25 14 entregados el 16/05/25 con thcking, m, guerrero 12 vc 25/06/25 + 23 picking 07/10/25 vc 28/11/25 entregados el 30/05/25 con picking, d, romero entregados el 12/06/25 con picking, dyllan 14 picking 07/10/25 vc 28/11/25 10 picking 07/10/25 26 picking 07/10/25 20 picking 07/10/25 18 picking 15/10/25 entregados picking 14/11/25, dyllan"
+  },
+  {
+    "id": "mat::1112101400",
+    "codigo": "1112101400",
+    "codigoAlternativo": "CUT-15-203",
+    "codigoAlternativos": [
+      "CUT-15-203",
+      "Corte-15-203"
+    ],
+    "nombre": "ESPACIADOR DE RODAMIENTO, TRB-S, CORTADORES, CUT-15-203 (LUNETA)",
+    "descripcion": "BEARING SPACER, TRB-S, CUTTERS, CUT-15-203",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 11,
+    "montoPendiente": 380955.19,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-04006-011",
+      "CL01-04001-32",
+      "CL01-04016-016"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1112101400 cut-15-203 corte-15-203 espaciador de rodamiento, trb-s, cortadores, cut-15-203 (luneta) bearing spacer, trb-s, cutters, cut-15-203 espaciador de rodamiento, trb-s, cortadores, cut-15-203 1112101400 - espaciador de rodamiento, trb-s, cortadores, cut-15-203 c/u artículo cl01-04006-011 cl01-04001-32 cl01-04016-016 ingenieria f. mdcn20260318 13/03/26 entregados el 12/06/25 con picking, dyllan entregados el 23/06/25 con picking, dyllan 7 vc 15/10/25"
+  },
+  {
+    "id": "mat::1112103360",
+    "codigo": "1112103360",
+    "codigoAlternativo": "CUT-15-042",
+    "codigoAlternativos": [
+      "CUT-15-042"
+    ],
+    "nombre": "CUTTER, 5N, TRBC-RF, CUTTERS, CUT-15-042-M20-P, G15/T15",
+    "descripcion": "CUTTER, 5N, TRBC-RF, CUTTERS, CUT-15-042-M20-P, G15/T15",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "ELIMINADA",
+    "proyectos": [],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1112103360 cut-15-042 cutter, 5n, trbc-rf, cutters, cut-15-042-m20-p, g15/t15 c/u f/mdcn20250902 25/08/25"
+  },
+  {
+    "id": "mat::1112103370",
+    "codigo": "1112103370",
+    "codigoAlternativo": "CUT-15-041",
+    "codigoAlternativos": [
+      "CUT-15-041"
+    ],
+    "nombre": "CUTTER, 5G, TRBC-RF, CUTTERS, CUT-15-041-N20-P, G15/T15",
+    "descripcion": "CUTTER, 5G, TRBC-RF, CUTTERS, CUT-15-041-N20-P, G15/T15",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "ELIMINADA",
+    "proyectos": [],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1112103370 cut-15-041 cutter, 5g, trbc-rf, cutters, cut-15-041-n20-p, g15/t15 c/u f/mdcn20250902 25/08/25"
+  },
+  {
+    "id": "mat::1112103790",
+    "codigo": "1112103790",
+    "codigoAlternativo": "CUT-15-521",
+    "codigoAlternativos": [
+      "CUT-15-521"
+    ],
+    "nombre": "SHAFT SPACER, CUTTERS, CUT-15-521",
+    "descripcion": "SHAFT SPACER, CUTTERS, CUT-15-521",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 16,
+    "montoPendiente": 237044,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-05001-002-005",
+      "CL01-05001-002-00708"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1112103790 cut-15-521 shaft spacer, cutters, cut-15-521 1112103790 - shaft spacer, cutters, cut-15-521 c/u cl01-05001-002-005 cl01-05001-002-00708 ingenieria f/mdcn20250706-2 09/07/25 8 entregados el 31/03/25, j, silva picking 19/12/25, f, cemiler"
+  },
+  {
+    "id": "mat::1120100050",
+    "codigo": "1120100050",
+    "codigoAlternativo": "DHE-07-300",
+    "codigoAlternativos": [
+      "DHE-07-300"
+    ],
+    "nombre": "PORTACORTADOR, 35,5°, LATERAL, DHE-07-300",
+    "descripcion": "SADDLE, 35°, SADDLES, DHE-07-300",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": 0,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-000420-143",
+      "CL01-000420-163",
+      "CL01-00420-01",
+      "CL01-04009-009",
+      "CL01-000420-177",
+      "CL01-000420-190",
+      "CL-0801-090",
+      "CL01-04009-023",
+      "CL01-000420-203",
+      "CL01-04012-014",
+      "CL01-04015-021",
+      "CL01-04019-005",
+      "CL01-05001-014-102",
+      "CL01-04011-005",
+      "REAMERS"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX",
+      "INSUMOS REAMERS"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1120100050 dhe-07-300 portacortador, 35,5°, lateral, dhe-07-300 saddle, 35°, saddles, dhe-07-300 portacortador, 35°, portacortadores, dhe-07-300 portacortador, 35,5°, portacortadores, dhe-07-300 portacortador, 35.5°, portacortadores, dhe-07-300 1120100050 - portacortador, 35.5°, portacortadores, dhe-07-300 1120100050 - portacortador, 35°, portacortadores, dhe-07-300 saddle gauge dhe-07-300 35,5° c/u item cl01-000420-143 cl01-000420-163 cl01-00420-01 cl01-04009-009 cl01-000420-177 cl01-000420-190 cl-0801-090 cl01-04009-023 cl01-000420-203 cl01-04012-014 cl01-04015-021 cl01-04019-005 cl01-05001-014-102 cl01-04011-005 reamers ingenieria stgo-1 urgente llegan 2 el 24/12/24, f/mdcn20241106 02/11/24, llegan 4, f/mdcn20241106-1 02/11/24 f/mdcn20241106-1 02/11/24 llegan 10 f/k0220 10/12/24 el 13/05/25, saldo 2 f/k0219 28/11/24 f/mdcn20250706-2 09/07/25 x 9, saldo 1 cancelado 31/12/25 f/2872 16/06/25 f/mdcn20251131 14/11/25 f.mdcn20251030-1 16/10/25 x 7 + f.mdcn20251131 14/11/25 x 1 f/2928 15/09/25 f.mdcn20260115 06/01/26 x 9 f.mdcn20251131 14/11/25 x 1 en ws-import 2 entregados el 14/10/24 2 entregados el 16/12/24, 2 entregados con picking el 11/03/25, j, silva entregados con picking el 11/03/25, j, silva enviados a rancagua con picking el 26/12/24 gd 4853 entregado con picking el 31/07/25, j, silva entregados con picking el 14/05/25, m, guerrero 4 picking 10/11/25 j, silva 2 picking 10/11/25 j, silva picking 10/11/25, j, silva 2 vc 25/02/26 + 2 vc 13/04/26"
+  },
+  {
+    "id": "mat::1213103180",
+    "codigo": "1213103180",
+    "codigoAlternativo": "CABL-1.0RO",
+    "codigoAlternativos": [
+      "CABL-1.0RO"
+    ],
+    "nombre": "CABLE, H05V-K, 1.0 MM2, ROJO (100MTS)",
+    "descripcion": "CABLE, H05V-K BLUE, 1.0 MM2 RED",
+    "unidadMedida": "RLL",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO G. DIAZ 23/02/26",
+    "proyectos": [
+      "CL01-05001-002-004",
+      "CL01-04004-029",
+      "CL01-00550-29",
+      "CL01-05001-003-00202"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1213103180 cabl-1.0ro cable, h05v-k, 1.0 mm2, rojo (100mts) cable, h05v-k, azul, 1,0 mm2, blanco cable, h05v-k, 1,0 mm2, rojo 1213103180 - cable, h05v-k, azul, 1.0 mm2, blanco cable, h05v-k blue, 1.0 mm2 red rll cl01-05001-002-004 cl01-04004-029 cl01-00550-29 cl01-05001-003-00202 ingenieria llegan 5 el 08/09/25, saldo 1 llegan 4 el 19/12/25, saldo 1"
+  },
+  {
+    "id": "mat::1213103200",
+    "codigo": "1213103200",
+    "codigoAlternativo": "CABL-1.0AZ",
+    "codigoAlternativos": [
+      "CABL-1.0AZ"
+    ],
+    "nombre": "CABLE, H05V-K, 1.0 MM2, AZUL (100 MTS)",
+    "descripcion": "CABLE, H05V-K, BLUE, 1.0 MM2, BLUE",
+    "unidadMedida": "RLL",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 7,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO G. DIAZ 23/02/26",
+    "proyectos": [
+      "CL01-04003-05",
+      "CL01-05001-002-004",
+      "CL01-04016-001",
+      "CL01-04004-029",
+      "CL01-00550-29",
+      "CL01-05001-003-00202",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1213103200 cabl-1.0az cable, h05v-k, 1.0 mm2, azul (100 mts) cable, h05v-k, blue, 1.0 mm2, azul (100 mts) cable, h05v-k, azul, 1,0 mm2, azul 1213103200 - cable, h05v-k, azul, 1.0 mm2, azul cable, h05v-k, blue, 1.0 mm2, blue rll cl01-04003-05 cl01-05001-002-004 cl01-04016-001 cl01-04004-029 cl01-00550-29 cl01-05001-003-00202 cl01-04008-012 ingenieria stgo-1 sc 22693 envio a arqueros el 15/05/25, gd 5289 1 vc 31/07/25 + 2 vc 08/09/25"
+  },
+  {
+    "id": "mat::1213103760",
+    "codigo": "1213103760",
+    "codigoAlternativo": "CABL-1.0NA",
+    "codigoAlternativos": [
+      "CABL-1.0NA"
+    ],
+    "nombre": "CABLE, H05V-K, 1.0 MM2, NARANJO (100 MTS)",
+    "descripcion": "CABLE, H05V-K, 1.0 MM2, NARANJA, 100 MTS",
+    "unidadMedida": "RLL",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO G. DIAZ 23/02/26",
+    "proyectos": [
+      "CL-0801-082",
+      "CL01-05001-002-004",
+      "CL01-04004-029",
+      "CL01-00550-29",
+      "CL01-05001-003-00202"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1213103760 cabl-1.0na cable, h05v-k, 1.0 mm2, naranjo (100 mts) cable, h05v-k, 1,0 mm2, naranja, 100 mts 1213103760 - cable, h05v-k, 1.0 mm2, naranja, 100 mts cable, h05v-k, 1.0 mm2, naranja, 100 mts rll cl-0801-082 cl01-05001-002-004 cl01-04004-029 cl01-00550-29 cl01-05001-003-00202 ingenieria llegan 2 el 19/12/25, saldo 1 1 vc 31/07/25 + 2 vc 08/09/25"
+  },
+  {
+    "id": "mat::1214101540",
+    "codigo": "1214101540",
+    "codigoAlternativo": "BASE-02-104808",
+    "codigoAlternativos": [
+      "BASE-02-104808"
+    ],
+    "nombre": "BASE PORTA TARJETA CONTROL VICKERS, N/P 02-104808",
+    "descripcion": "CONTROL CARD HOLDER, PROPORTIONAL VALVE, 02-104808, VICKERS",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "REC. PARCIAL",
+    "proyectos": [],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1214101540 base-02-104808 base porta tarjeta control vickers, n/p 02-104808 control card holder, proportional valve, 02-104808, vickers 1214101540 - soporte tarjeta control, válvula proporc, 02-104808, vickers c/u urgente f/k0239 19/02/26 x 1"
+  },
+  {
+    "id": "mat::1214102180",
+    "codigo": "1214102180",
+    "codigoAlternativo": "AMPL-R901439036",
+    "codigoAlternativos": [
+      "AMPL-R901439036"
+    ],
+    "nombre": "AMPLIFIER, PROP VALVE, VT-MSPA1-2X/F5/000/000, R901439036",
+    "descripcion": "AMPLIFIER, PROP VALVE, VT-MSPA1-2X/F5/000/000, R901439036",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1214102180 ampl-r901439036 amplifier, prop valve, vt-mspa1-2x/f5/000/000, r901439036 1214102180 - amplifier, prop valve, vt-mspa1-2x/f5/000/000, r901439036 c/u f/dh250730070 12/12/25"
+  },
+  {
+    "id": "mat::1219100040",
+    "codigo": "1219100040",
+    "codigoAlternativo": "DIST-501113",
+    "codigoAlternativos": [
+      "DIST-501113"
+    ],
+    "nombre": "SENSOR DE DISTANCIA, LÁSER, DT50-P1113, 1044369, SICK",
+    "descripcion": "DISTANCE SENSOR, LASER, DT50-P1113, 1044369, SICK",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-05001-002-004",
+      "CL01-04012-001"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219100040 dist-501113 sensor de distancia, láser, dt50-p1113, 1044369, sick distance sensor, laser, dt50-p1113, 1044369, sick 1219100040 - sensor de distancia, láser, dt50-p1113, 1044369, sick c/u cl01-05001-002-004 cl01-04012-001 ingenieria stgo-1 f/mdcn20250405-1 01/04/25 f/0223 14/02/25 f/mdb 007/2025 13/05/25"
+  },
+  {
+    "id": "mat::1219100290",
+    "codigo": "1219100290",
+    "codigoAlternativo": "BARN-001",
+    "codigoAlternativos": [
+      "BARN-001"
+    ],
+    "nombre": "BARNÍZ ROJO SELLANTE 3M 1036 (SPRAY)",
+    "descripcion": "VARNISH, BC-346, DOLPHS",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 10,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 11/03/25 G. DIAZ",
+    "proyectos": [
+      "CL01-04002-10",
+      "CL01-04002-15",
+      "CL01-00530-28",
+      "CL01-04004-030",
+      "CL01-04008-011",
+      "CL01-000420-215"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219100290 barn-001 barníz rojo sellante 3m 1036 (spray) varnish, bc-346, dolphs (barníz sellante 3m) 1219100290 - varnish, bc-346, dolphs (barníz sellante 3m) varnish, bc-346, dolphs c/u item cl01-04002-10 cl01-04002-15 cl01-00530-28 cl01-04004-030 cl01-04008-011 cl01-000420-215 ingenieria saldo 11 llegan 10 el 10/01/25, saldo 26 espera liberacion aduana 1 entregado el 02/12/24"
+  },
+  {
+    "id": "mat::1219105150",
+    "codigo": "1219105150",
+    "codigoAlternativo": "CUÑA-26500",
+    "codigoAlternativos": [
+      "CUÑA-26500"
+    ],
+    "nombre": "CUÑA RECTA Y SEPARADOR ZYTEL 2 MM x 6 MM x 500 MM x 50 UN.",
+    "descripcion": "WEDGE & SPACER, STRAIGHT, 2MM X 6MM X 500MM X 50 UNITS,ZYTEL",
+    "unidadMedida": "PQT",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219105150 cuña-26500 cuña recta y separador zytel 2 mm x 6 mm x 500 mm x 50 un. wedge & spacer, straight, 2mm x 6mm x 500mm x 50 units,zytel 1219105150 - wedge & spacer, straight, 2mm x 6mm x 500mm x 50 units,zytel pqt cl01-04004-030 ingenieria cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1219105230",
+    "codigo": "1219105230",
+    "codigoAlternativo": "CABL-2570180",
+    "codigoAlternativos": [
+      "CABL-2570180"
+    ],
+    "nombre": "CABLE ROYAFLEX ROJO, 2.5 KV, 7.0MM, CLASE H, 180°C",
+    "descripcion": "ROYAFLEX RED, 2.5 KV, 7.0MM CLASS H 180° C",
+    "unidadMedida": "MTS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1219105230 cabl-2570180 cable royaflex rojo, 2.5 kv, 7.0mm, clase h, 180°c royasil cable, 2,5 kv, 7,0mm clase h 180° royaflex red, 2.5 kv, 7.0mm class h 180° c mts cl01-04004-030 ingenieria cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1219105250",
+    "codigo": "1219105250",
+    "codigoAlternativo": "CABL-2550180",
+    "codigoAlternativos": [
+      "CABL-2550180"
+    ],
+    "nombre": "CABLE ROYAFLEX ROJO, 2.5 KV, 5.0MM, CLASE H, 180°C",
+    "descripcion": "ROYAFLEX RED, 2.5 KV, 5.0MM CLASS H 180° C",
+    "unidadMedida": "MTS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1219105250 cabl-2550180 cable royaflex rojo, 2.5 kv, 5.0mm, clase h, 180°c royasil cable, 2,5 kv, 5,0mm clase h 180° royaflex red, 2.5 kv, 5.0mm class h 180° c mts cl01-04004-030 ingenieria cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1219105260",
+    "codigo": "1219105260",
+    "codigoAlternativo": "CABL-2540180",
+    "codigoAlternativos": [
+      "CABL-2540180"
+    ],
+    "nombre": "CABLE ROYAFLEX ROJO, 2.5 KV, 4.0MM, CLASE H, 180°C",
+    "descripcion": "ROYAFLEX RED, 2.5 KV, 4.0MM CLASS H 180° C",
+    "unidadMedida": "MTS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1219105260 cabl-2540180 cable royaflex rojo, 2.5 kv, 4.0mm, clase h, 180°c royasil cable, 2,5 kv, 4,0mm clase h 180° royaflex red, 2.5 kv, 4.0mm class h 180° c mts cl01-04004-030 ingenieria cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1219105270",
+    "codigo": "1219105270",
+    "codigoAlternativo": "CABL-2530180",
+    "codigoAlternativos": [
+      "CABL-2530180"
+    ],
+    "nombre": "CABLE ROYAFLEX ROJO, 2.5 KV, 3.0MM, CLASE H, 180°C",
+    "descripcion": "ROYAFLEX RED, 2.5 KV, 3.0MM CLASE H 180° C",
+    "unidadMedida": "MTS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1219105270 cabl-2530180 cable royaflex rojo, 2.5 kv, 3.0mm, clase h, 180°c royasil cable, 2,5 kv, 3,0mm clase h 180° royaflex red, 2.5 kv, 3.0mm clase h 180° c mts cl01-04004-030 ingenieria cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1219105290",
+    "codigo": "1219105290",
+    "codigoAlternativo": "CABL-2580180",
+    "codigoAlternativos": [
+      "CABL-2580180"
+    ],
+    "nombre": "CABLE ROYAFLEX ROJO, 2.5 KV, 8.0MM, CLASE H, 180°C",
+    "descripcion": "ROYAFLEX RED, 2.5 KV, 8.0MM CLASS H 180° C",
+    "unidadMedida": "MTS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-00530-28",
+      "CL01-00530-36",
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219105290 cabl-2580180 cable royaflex rojo, 2.5 kv, 8.0mm, clase h, 180°c royasil cable, 2,5 kv, 8,0mm clase h 180° 1219105290 - royasil cable, 2.5 kv, 8.0mm clase h 180° royaflex red, 2.5 kv, 8.0mm class h 180° c mts cl01-00530-28 cl01-00530-36 cl01-04004-030 ingenieria entregado el 06/05/25 con correo, j, abarca cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1219105350",
+    "codigo": "1219105350",
+    "codigoAlternativo": "TUFQ-020180",
+    "codigoAlternativos": [
+      "TUFQ-020180"
+    ],
+    "nombre": "TUFQUIN TFT, 0.20 MM CLASS H 180° C",
+    "descripcion": "TUFQUIN TFT, 0.20 MM CLASS H 180° C",
+    "unidadMedida": "KGS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04003-05"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219105350 tufq-020180 tufquin tft, 0.20 mm class h 180° c tufquin tft, 0,20 mm clase h 180° c 1219105350 - tufquin tft, 0.20 mm clase h 180° c kgs cl01-04003-05 ingenieria"
+  },
+  {
+    "id": "mat::1219105370",
+    "codigo": "1219105370",
+    "codigoAlternativo": "TUFQ-045180",
+    "codigoAlternativos": [
+      "TUFQ-045180"
+    ],
+    "nombre": "TUFQUIN TFT, 0.45 MM CLASS H 180° C",
+    "descripcion": "TUFQUIN TFT, 0.45 MM CLASS H 180° C",
+    "unidadMedida": "KGS",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-00530-28",
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219105370 tufq-045180 tufquin tft, 0.45 mm class h 180° c tufquin tft, 0,45 mm class h 180° c 1219105370 - tufquin tft, 0.45 mm class h 180° c kgs cl01-00530-28 cl01-04004-030 ingenieria"
+  },
+  {
+    "id": "mat::1219105380",
+    "codigo": "1219105380",
+    "codigoAlternativo": "TUFQ-035180",
+    "codigoAlternativos": [
+      "TUFQ-035180"
+    ],
+    "nombre": "TUFQUIN TFT, 0.35 MM CLASS H 180° C",
+    "descripcion": "TUFQUIN TFT, 0.35 MM CLASS H 180° C",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-00530-28"
+    ],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1219105380 tufq-035180 tufquin tft, 0.35 mm class h 180° c tufquin tft, 0,35 mm class h 180° c 1219105380 - tufquin tft, 0.35 mm class h 180° c c/u cl01-00530-28"
+  },
+  {
+    "id": "mat::1219105390",
+    "codigo": "1219105390",
+    "codigoAlternativo": "TUFQ-030180",
+    "codigoAlternativos": [
+      "TUFQ-030180"
+    ],
+    "nombre": "TUFQUIN TFT, 0.30 MM CLASS H 180° C",
+    "descripcion": "TUFQUIN TFT, 0.30 MM CLASS H 180° C",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04004-030"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1219105390 tufq-030180 tufquin tft, 0.30 mm class h 180° c tufquin tft, 0,30 mm class h 180° c c/u cl01-04004-030 ingenieria cancelado, m, zárate"
+  },
+  {
+    "id": "mat::1220100080",
+    "codigo": "1220100080",
+    "codigoAlternativo": "ECONT-010-CN",
+    "codigoAlternativos": [
+      "ECONT-010-CN"
+    ],
+    "nombre": "VACUUM CONTACTOR HVJ5-1.14/400 (COIL 110V)",
+    "descripcion": "CONTACTOR, VACUUM, AC, 110 V COIL",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 3,
+    "montoPendiente": 371145,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04015-001",
+      "CL01-04016-001"
+    ],
+    "localidades": [
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1220100080 econt-010-cn vacuum contactor hvj5-1.14/400 (coil 110v) contactor, vacuum, ac, 110 v coil contactor, vacío, ac, bobina 110 v 1220100080 - contactor, vacío, ac, bobina 110 v c/u item cl01-04015-001 cl01-04016-001 stgo-1 f.mc2508037 10/02/26 cancelado el 08/04/25 x cuenta gasto no correcta enviados el 07/04/25 a cenizas, gd 5131 envio a arqueros el 15/05/25, gd 5289 cacnelado x orden m, zárate"
+  },
+  {
+    "id": "mat::1223100160",
+    "codigo": "1223100160",
+    "codigoAlternativo": "PREN-63",
+    "codigoAlternativos": [
+      "PREN-63"
+    ],
+    "nombre": "PRENSA CABLE METALICA, ROSCA CORTA, MS-M63 X 1,5 PLUS, CON TUERCA (53112080)",
+    "descripcion": "CABLE GLAND, HEX METAL, W/NUT, SM-M-M63",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 3,
+    "stockMaximo": 17,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADO x CAMBIO MODELO",
+    "proyectos": [
+      "CL01-00580-21",
+      "CL01-00430-51",
+      "CL01-04004-001",
+      "CL01-00550-15",
+      "CL01-04002-10",
+      "CL01-05001-002-001",
+      "CL01-04004-027",
+      "CL01-04002-21",
+      "CL01-04011-001",
+      "CL01-04012-001",
+      "CL01-04005-007",
+      "CL01-04004-029",
+      "CL01-05001-007-00101",
+      "CL01-04004-030",
+      "CL01-00550-29",
+      "CL01-04008-011",
+      "CL01-04008-012",
+      "CL01-000420-215",
+      "CL01-04015-023",
+      "CL01-04004-037",
+      "CL01-000420-212"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1223100160 pren-63 prensa cable metalica, rosca corta, ms-m63 x 1,5 plus, con tuerca (53112080) prensa cable metalica, rosca corta, ms-m63 plus, con tuerca cable gland, hex metal, w/nut, sm-m-m63 1223100160 - cable gland, hex metal, w/nut, sm-m-m63 c/u cl01-00580-21 cl01-00430-51 cl01-04004-001 cl01-00550-15 cl01-04002-10 cl01-05001-002-001 cl01-04004-027 cl01-04002-21 cl01-04011-001 cl01-04012-001 cl01-04005-007 cl01-04004-029 cl01-05001-007-00101 cl01-04004-030 cl01-00550-29 cl01-04008-011 cl01-04008-012 cl01-000420-215 cl01-04015-023 cl01-04004-037 cl01-000420-212 ingenieria stgo-1 saldo 5 (marzo) llegan 3 el 31/03/25, saldo 7 oc 34336 3 entregadas el 21/10/24 + 3 con vc del 15/02/25"
+  },
+  {
+    "id": "mat::1248100440",
+    "codigo": "1248100440",
+    "codigoAlternativo": "PANT-15",
+    "codigoAlternativos": [
+      "PANT-15"
+    ],
+    "nombre": "PANTALLA TÁCTIL,15\", BWSP15FC-1-15 PCAP,J1900,BRANDWAGON",
+    "descripcion": "TOUCH PANEL-PC,15'',BWSP15FC-1-15 PCAP,J1900, BRANDWAGON",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL-0801-082"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1248100440 pant-15 pantalla táctil,15\", bwsp15fc-1-15 pcap,j1900,brandwagon touch panel-pc,15'',bwsp15fc-1-15 pcap,j1900, brandwagon 1248100440 - pantalla táctil,15\", bwsp15fc-1-15 pcap,j1900,brandwagon c/u cl-0801-082 ingenieria urgente oc queda abierta, espera r. diaz cierre en ax f.k0243 04/05/26"
+  },
+  {
+    "id": "mat::1310111110",
+    "codigo": "1310111110",
+    "codigoAlternativo": "FLAN-12JI12",
+    "codigoAlternativos": [
+      "FLAN-12JI12"
+    ],
+    "nombre": "FLANGE, 12 JIC 12 CON BRIDAS",
+    "descripcion": "FITTING, FLANGE, 12'' JIC, INDAU 250",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 4,
+    "pendiente": true,
+    "cantidadPendiente": 2,
+    "montoPendiente": 39800,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04015-004",
+      "CL01-5300-001",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1310111110 flan-12ji12 flange, 12 jic 12 con bridas fitting, flange, 12'' jic, indau 250 1310111110 - fitting, flange, 12'' jic, indau 250 c/u cl01-04015-004 cl01-5300-001 cl01-00550-29 cl01-04008-012 ingenieria entregados el 22/05/25 con picking, c, ortíz"
+  },
+  {
+    "id": "mat::1311100070",
+    "codigo": "1311100070",
+    "codigoAlternativo": "INDI-002",
+    "codigoAlternativos": [
+      "INDI-002"
+    ],
+    "nombre": "INDICADOR SATURACIÓN 2\", 0-60PSI CONEX. 1/8\" NPT",
+    "descripcion": "VACUUM GAUGE, COLOUR CODED",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 6,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 25737.5,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-5300-001",
+      "CL-0801-087",
+      "CL01-04002-21",
+      "CL01-04014-001",
+      "CL01-04004-029",
+      "CL01-04012-019",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1311100070 indi-002 indicador saturación 2\", 0-60psi conex. 1/8\" npt indicador saturación 2´´ 0-60psi conex.1/8´´ npt medidor de vacío, codificado por color 1311100070 - medidor de vacío, codificado por color vacuum gauge, colour coded c/u cl01-5300-001 cl-0801-087 cl01-04002-21 cl01-04014-001 cl01-04004-029 cl01-04012-019 cl01-00550-29 cl01-04008-012 ingenieria stgo-1 entregados el 28/03/25 con picking, m, guerrero envio a peñón el 23/04/25, gd 5197 entregados el 06/06/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1311100810",
+    "codigo": "1311100810",
+    "codigoAlternativo": "MANO-5800-P",
+    "codigoAlternativos": [
+      "MANO-5800-P"
+    ],
+    "nombre": "MANÓMETRO 0-400 BAR, 0-40 MPA, 0-5800 PSI, ESFERA 2 1/2\", CONEX. 1/4\" NPT POSTERIOR WIKA / WINTERS",
+    "descripcion": "PRESSURE GAUGE, 0-5000 PSI, REAR CONNECTION, 1/4\", FLANGE",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 3,
+    "stockMaximo": 14,
+    "pendiente": true,
+    "cantidadPendiente": 4,
+    "montoPendiente": 79112,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00490-25",
+      "‪‪‪CL01-000420-139",
+      "CL-0801-051",
+      "CL01-00430-60",
+      "CL01-5300-001",
+      "CL-0801-087",
+      "CL01-04002-21",
+      "CL01-04004-029",
+      "CL01-05001-006-1-002",
+      "CL01-00550-29",
+      "CL01-04008-012",
+      "CL01-04015-024"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1311100810 mano-5800-p manómetro 0-400 bar, 0-40 mpa, 0-5800 psi, esfera 2 1/2\", conex. 1/4\" npt posterior wika / winters manómetro 0-400 bar, 0-40 mpa, 0-5800 psi, esfera 2 1/2\", conex. 1/4\" npt post. wika / winters manometro, 0-5000 psi, conexión posterior, 1/4\", brida 1311100810 - manometro, 0-5000 psi, conexión posterior, 1/4\", brida pressure gauge, 0-5000 psi, rear connection, 1/4\", flange c/u cl01-00490-25 ‪‪‪cl01-000420-139 cl-0801-051 cl01-00430-60 cl01-5300-001 cl-0801-087 cl01-04002-21 cl01-04004-029 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 cl01-04015-024 ingenieria entregados el 28/03/25 con picking, m, guerrero 4 entregados el 06/06/25 con picking, m, guerrero + 1 entegado el 14/07/25 con vc, mateo 2 vc 26/11/25 + 2 vc 04/12/25"
+  },
+  {
+    "id": "mat::1314100120",
+    "codigo": "1314100120",
+    "codigoAlternativo": "FLAN-AI-21/2",
+    "codigoAlternativos": [
+      "FLAN-AI-21/2"
+    ],
+    "nombre": "FLANGE (VISEL) AC.INOX. MANÓMETRO 2 1/2´´",
+    "descripcion": "FLANGE, ST. STEEL, GAUGE 2 1/2\"",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 4,
+    "pendiente": true,
+    "cantidadPendiente": 4,
+    "montoPendiente": 26914.28,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04004-029",
+      "cl01-00550-29",
+      "CL01-04008-012",
+      "CL01-04013-005"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1314100120 flan-ai-21/2 flange (visel) ac.inox. manómetro 2 1/2´´ brida, acero inox,, manometro 2 1/2\" brida, acero inox., manometro 2 1/2\" 1314100120 - brida, acero inox., manometro 2 1/2\" flange, st. steel, gauge 2 1/2\" c/u item cl01-04004-029 cl01-00550-29 cl01-04008-012 cl01-04013-005 ingenieria 3 vc 12/01/26 + 1 vc 28/01/26"
+  },
+  {
+    "id": "mat::1315100670",
+    "codigo": "1315100670",
+    "codigoAlternativo": "HYD-056N",
+    "codigoAlternativos": [
+      "HYD-056N",
+      "Hyd113C"
+    ],
+    "nombre": "COMPENSATOR KIT, V15,23,38,42 A4, 5E00027",
+    "descripcion": "COMPENSATOR, V15 YEOSHE PUMP, 15AA-C250",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04010-001"
+    ],
+    "localidades": [
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1315100670 hyd-056n hyd113c compensator kit, v15,23,38,42 a4, 5e00027 compensator kit, v15 yeoshe pump, 15aa-c250, 5e00027 compensador, bomba v15 yeoshe, 15aa-c250 1315100670 - compensador, bomba v15 yeoshe, 15aa-c250 compensator, v15 yeoshe pump, 15aa-c250 c/u artículo cl01-04010-001 stgo-1 f.iv-20260312 25/11/25"
+  },
+  {
+    "id": "mat::1315100680",
+    "codigo": "1315100680",
+    "codigoAlternativo": "HYD-056J",
+    "codigoAlternativos": [
+      "HYD-056J",
+      "Hyd113D",
+      "HYD-056O"
+    ],
+    "nombre": "SPLINE SET (13T) FOR V15/V18 SPLINE WITH TEETH",
+    "descripcion": "SHAFT, V15 YEOSHE PUMP",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04010-001",
+      "CL-0700-04"
+    ],
+    "localidades": [
+      "STGO-1",
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1315100680 hyd-056j hyd113d hyd-056o spline set (13t) for v15/v18 spline with teeth key shaft set, 15aa-b02 for v15, 5e00142 shaft, v15 yeoshe pump key shaft, 15aa-b02 5e00142 eje, v15 bomba yeoshe 1315100680 - eje, v15 bomba yeoshe shaft, v15 yeoshe pump c/u artículo cl01-04010-001 cl-0700-04 stgo-1 ingenieria f.iv-20260312 25/11/25"
+  },
+  {
+    "id": "mat::1315101570",
+    "codigo": "1315101570",
+    "codigoAlternativo": "BOMB-501",
+    "codigoAlternativos": [
+      "BOMB-501"
+    ],
+    "nombre": "BOMBA MANUAL TRASVASIJE ROTATIVA 1GNB-25/3R/PRO:GROZ (5080320) /BOMEX 25 TRUPPER",
+    "descripcion": "PUMP, MANUAL, P / OIL TRANSFER",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 9,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 39868,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "‪‪‪CL01-000420-139",
+      "CL01-04007-001",
+      "CL01-5300-001",
+      "CL01-00530-34",
+      "CL01-04015-001",
+      "CL01-04016-001",
+      "CL01-04002-21",
+      "CL01-04004-029",
+      "CL-0700-04",
+      "CL01-05001-006-1-002",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1315101570 bomb-501 bomba manual trasvasije rotativa 1gnb-25/3r/pro:groz (5080320) /bomex 25 trupper bomba, manual, p/trasvase de aceite 1315101570 - bomba, manual, p/trasvase de aceite pump, manual, p / oil transfer c/u item ‪‪‪cl01-000420-139 cl01-04007-001 cl01-5300-001 cl01-00530-34 cl01-04015-001 cl01-04016-001 cl01-04002-21 cl01-04004-029 cl-0700-04 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 ingenieria stgo-1 nuevos contratos entregados el 06/06/25 con picking, m, guerrero entregado 25/04/25 en pizarra, mateo"
+  },
+  {
+    "id": "mat::1315101970",
+    "codigo": "1315101970",
+    "codigoAlternativo": "HYD-056L",
+    "codigoAlternativos": [
+      "HYD-056L"
+    ],
+    "nombre": "FLOW ADJ. SCREW, 15A-23, 4A406001",
+    "descripcion": "FLOW ADJUSTABLE SCREW, 15A-23, YEOSHE",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04010-001",
+      "CL01-04017-001"
+    ],
+    "localidades": [
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1315101970 hyd-056l flow adj. screw, 15a-23, 4a406001 flow adjustable screw, 15a-23, yeoshe tornillo ajuste de flujo, 15a-23, yeoshe 1315101970 - tornillo ajuste de flujo, 15a-23, yeoshe c/u cl01-04010-001 cl01-04017-001 stgo-1 f.iv-20260312 25/11/25"
+  },
+  {
+    "id": "mat::1315103420",
+    "codigo": "1315103420",
+    "codigoAlternativo": "BOMB-PV016",
+    "codigoAlternativos": [
+      "BOMB-PV016"
+    ],
+    "nombre": "BOMBA PISTÓN AXIAL, PV016-A06LN1A0N , YEOSHE",
+    "descripcion": "AXIAL PISTON PUMP, PV016-A06LN1A0N , YEOSHE",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 4,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-00430-62",
+      "CL01-5300-001",
+      "CL-0801-087",
+      "CL01-04004-029",
+      "CL01-05001-007-00101",
+      "CL01-00550-29"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1315103420 bomb-pv016 bomba pistón axial, pv016-a06ln1a0n , yeoshe axial piston pump, pv016-a06ln1a0n , yeoshe 1315103420 - bomba pistón axial, pv016-a06ln1a0n , yeoshe c/u cl01-00430-62 cl01-5300-001 cl-0801-087 cl01-04004-029 cl01-05001-007-00101 cl01-00550-29 ingenieria f/iv-20240814 14/08/24 se reemplaza con oc 36469 ya llegó a chile f/iv-20250610 10/06/25 entregados el 28/03/25 con picking, m, guerrero entregados el 22/05/25 con picking, c, ortíz"
+  },
+  {
+    "id": "mat::1318100010",
+    "codigo": "1318100010",
+    "codigoAlternativo": "HYD-005A-CN",
+    "codigoAlternativos": [
+      "HYD-005A-CN"
+    ],
+    "nombre": "VALVE BODY, ML-3A2-A04-A01, 6EB003A2A04A001 (BLOCK VÁLVULA ALIVIO 60-S)",
+    "descripcion": "PRESSURE RELIEF VALVE BODY, 60S, DANFOSS",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 7.642857142857142,
+    "pendiente": true,
+    "cantidadPendiente": 2,
+    "montoPendiente": 61493.4,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-5300-001",
+      "CL01-00530-34",
+      "CL-0801-087",
+      "CL01-04002-21",
+      "CL01-04015-005",
+      "CL01-05001-006-1-002",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1318100010 hyd-005a-cn valve body, ml-3a2-a04-a01, 6eb003a2a04a001 (block válvula alivio 60-s) pressure relief valve body, 60s, danfoss cuerpo de válvula de alivio de presión, 60s 1318100010 - cuerpo de válvula de alivio de presión, 60s c/u item cl01-5300-001 cl01-00530-34 cl-0801-087 cl01-04002-21 cl01-04015-005 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 ingenieria entregados el 28/03/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1318100020",
+    "codigo": "1318100020",
+    "codigoAlternativo": "HYD-006A-CN",
+    "codigoAlternativos": [
+      "HYD-006A-CN"
+    ],
+    "nombre": "HYDRAULIC CARTRIDGE VALVE, RP3A20CK, 7BARP003A20014 (CARTUCHO DE VÁLVULA DE ALIVIO DE PRESIÓN, 60S)",
+    "descripcion": "PRESSURE RELIEF VALVE CARTRIDGE, 60S, DANFOSS",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 7.642857142857142,
+    "pendiente": true,
+    "cantidadPendiente": 4,
+    "montoPendiente": 261869.42,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-5300-001",
+      "CL01-00530-34",
+      "CL-0801-087",
+      "CL01-04002-21",
+      "CL01-04004-029",
+      "CL01-04012-019",
+      "CL01-05001-007-00101",
+      "CL01-05001-006-1-002",
+      "cl01-00550-29",
+      "CL01-04008-012",
+      "CL01-04011-008"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1318100020 hyd-006a-cn hydraulic cartridge valve, rp3a20ck, 7barp003a20014 (cartucho de válvula de alivio de presión, 60s) pressure relief valve cartridge, 60s, danfoss cartucho de válvula de alivio de presión, 60s 1318100020 - cartucho de válvula de alivio de presión, 60s c/u item cl01-5300-001 cl01-00530-34 cl-0801-087 cl01-04002-21 cl01-04004-029 cl01-04012-019 cl01-05001-007-00101 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 cl01-04011-008 ingenieria entregados el 28/03/25 con picking, m, guerrero entregados el 06/06/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1318100740",
+    "codigo": "1318100740",
+    "codigoAlternativo": "VALV-005",
+    "codigoAlternativos": [
+      "VALV-005"
+    ],
+    "nombre": "VÁLVULA CONTROL FLUJO 1/2´´ UNIDIR. NPT F800S, PARKER",
+    "descripcion": "FLOW CONTROL VALVE, 1/2\" NPT, F800S",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 78616.75,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-5300-001",
+      "CL01-04004-029",
+      "CL01-05001-006-1-002",
+      "CL-0500-04,1",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1318100740 valv-005 válvula control flujo 1/2´´ unidir. npt f800s, parker válvula de control de flujo, 1/2\" npt, f800s 1318100740 - válvula de control de flujo, 1/2\" npt, f800s flow control valve, 1/2\" npt, f800s c/u item cl01-5300-001 cl01-04004-029 cl01-05001-006-1-002 cl-0500-04,1 cl01-00550-29 cl01-04008-012 ingenieria entregados el 22/05/25 con picking, c, ortíz entregados el 06/06/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1318100780",
+    "codigo": "1318100780",
+    "codigoAlternativo": "HYD-034A",
+    "codigoAlternativos": [
+      "HYD-034A"
+    ],
+    "nombre": "VÁLVULA CHECK, CONTROL DE FLUJO, 1\" NPT, PARKER C1600S",
+    "descripcion": "FLOW CONTROL VALVE, 1\" NPT, PARKER",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 0,
+    "stockMaximo": 0,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 12/11/25 G. DIAZ",
+    "proyectos": [
+      "CL01-00490-27",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1318100780 hyd-034a válvula check, control de flujo, 1\" npt, parker c1600s válvula de control de flujo, 1\" npt, parker 1318100780 - válvula de control de flujo, 1\" npt, parker flow control valve, 1\" npt, parker c/u item cl01-00490-27 cl01-04008-012 ingenieria llegan 2 el 23/09/25, saldo 1 2 con vc del 29/07/25 + 1 vc 24/09/25"
+  },
+  {
+    "id": "mat::1318102300",
+    "codigo": "1318102300",
+    "codigoAlternativo": "VALV-DG4V36CMUB860",
+    "codigoAlternativos": [
+      "VALV-DG4V36CMUB860"
+    ],
+    "nombre": "VÁLVULA CONTROL DIRECCIONAL SOLENOIDE OP, DG4V-3-6C-MU-B8-60,VICKERS",
+    "descripcion": "DIRECT CONTROL VALVE, SOLENOID OP, DG4V-3-6C-MU-B6-60, VICKERS",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 6,
+    "montoPendiente": 0,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1318102300 valv-dg4v36cmub860 válvula control direccional solenoide op, dg4v-3-6c-mu-b8-60,vickers direct control valve, solenoid op, dg4v-3-6c-mu-b8-60, vickers válv control direc, solenoide op, dg4v-3-6c-mu-a6-60,vickers direct control valve, solenoid op, dg4v-3-6c-mu-b6-60, vickers c/u cl01-04008-012 ingenieria"
+  },
+  {
+    "id": "mat::1318102450",
+    "codigo": "1318102450",
+    "codigoAlternativo": "FLUJ-116",
+    "codigoAlternativos": [
+      "FLUJ-116",
+      "UG367"
+    ],
+    "nombre": "OIL FLUIDMETER Z-6014 EZ VIEW 1/2\" FNPT, FEMALE 1-16GPM",
+    "descripcion": "FLOW METER, HEDLAND H626-116",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 5.507936507936508,
+    "pendiente": true,
+    "cantidadPendiente": 2,
+    "montoPendiente": 663895.34,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-5300-001",
+      "CL01-04004-029",
+      "CL01-00490-27",
+      "cl01-00550-29",
+      "CL01-04019-001",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1318102450 fluj-116 ug367 oil fluidmeter z-6014 ez view 1/2\" fnpt, female 1-16gpm flow meter, hedland h626-116 flow meter, hedland, h626-116 1318102450 - flow meter, hedland, h626-116 c/u artículo cl01-5300-001 cl01-04004-029 cl01-00490-27 cl01-00550-29 cl01-04019-001 cl01-04008-012 ingenieria stgo-1 urgente f/41868 21/11/25 f.42272 13/01/26 entregados el 22/05/25 con picking, c, ortíz entregados el 06/06/25 con picking, m, guerrero 1 con vc del 24/07/25 + 2 vc 02/12/25 1 vc 12/01/26 + 1 vc 05/02/26"
+  },
+  {
+    "id": "mat::1321100480",
+    "codigo": "1321100480",
+    "codigoAlternativo": "ACOP-100",
+    "codigoAlternativos": [
+      "ACOP-100"
+    ],
+    "nombre": "ACOPLE RÁPIDO HIDRÁULICO 1\" CARA PLANA",
+    "descripcion": "COUPLING, CAMLOCK, 1\", ERM END",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 14,
+    "pendiente": true,
+    "cantidadPendiente": 4,
+    "montoPendiente": 120063.44,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00590-13",
+      "CL01-00550-14",
+      "‪‪‪CL01-000420-139",
+      "CL01-00400-61",
+      "CL01-04010-001",
+      "CL01-5300-001",
+      "CL01-00530-34",
+      "CL-0801-086",
+      "CL01-04002-21",
+      "CL01-04014-001",
+      "CL01-04004-029",
+      "CL01-04006-006",
+      "CL01-04012-019",
+      "CL01-04012-017",
+      "CL01-05001-006-1-002",
+      "CL01-05001-004-1-001",
+      "cl01-00550-29",
+      "CL01-04020-001",
+      "CL01-04008-012",
+      "CL01-04017-001",
+      "CL01-04012-025"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1321100480 acop-100 acople rápido hidráulico 1\" cara plana coupling, camlock, 1\", erm end acople rapido hidráulico 1\" cara plana 1321100480 - acople rapido hidráulico 1\" cara plana c/u cl01-00590-13 cl01-00550-14 ‪‪‪cl01-000420-139 cl01-00400-61 cl01-04010-001 cl01-5300-001 cl01-00530-34 cl-0801-086 cl01-04002-21 cl01-04014-001 cl01-04004-029 cl01-04006-006 cl01-04012-019 cl01-04012-017 cl01-05001-006-1-002 cl01-05001-004-1-001 cl01-00550-29 cl01-04020-001 cl01-04008-012 cl01-04017-001 cl01-04012-025 ingenieria stgo-1 f/mdcn20240923-1 29/06/24 f/dh250730073 18/08/25 sc 22471 entregados el 22/05/25 con picking, c, ortíz envio a peñón el 28/05/25, gd 5338 2 entregados el 06/06/25 con picking, m, guerrero + 2 entregados el 14/07/25 con vc, mateo entregados el 19/06/25 con picking, césar entregados el 25/04/25 con correo, mateo entregados picking 18/11/25, cristian"
+  },
+  {
+    "id": "mat::1321100610",
+    "codigo": "1321100610",
+    "codigoAlternativo": "ACOP-038",
+    "codigoAlternativos": [
+      "ACOP-038"
+    ],
+    "nombre": "ACOPLE RÁPIDO 3/8´´ HIDRÁULICO CARA PLANA",
+    "descripcion": "HYDRAULIC COUPLING, QUICK DISCONNECT, 3/8\" NPT",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 3,
+    "stockMaximo": 16,
+    "pendiente": true,
+    "cantidadPendiente": 10,
+    "montoPendiente": 402082.8,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00550-14",
+      "CL01-00490-25",
+      "‪‪‪CL01-000420-139",
+      "CL01-00400-61",
+      "CL01-5300-001",
+      "CL01-00530-34",
+      "CL-0801-086",
+      "CL-0801-087",
+      "CL01-04002-21",
+      "CL01-04014-001",
+      "CL01-04004-029",
+      "CL01-04006-006",
+      "CL01-04012-019",
+      "CL01-05001-006-1-002",
+      "CL01-05001-004-1-001",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1321100610 acop-038 acople rápido 3/8´´ hidráulico cara plana 1321100610 - acople rápido 3/8´´ hidráulico cara plana hydraulic coupling, quick disconnect, 3/8\" npt c/u cl01-00550-14 cl01-00490-25 ‪‪‪cl01-000420-139 cl01-00400-61 cl01-5300-001 cl01-00530-34 cl-0801-086 cl-0801-087 cl01-04002-21 cl01-04014-001 cl01-04004-029 cl01-04006-006 cl01-04012-019 cl01-05001-006-1-002 cl01-05001-004-1-001 cl01-00550-29 cl01-04008-012 ingenieria stgo-1 nuevos contratos entregados el 28/03/25 con picking, m, guerrero envio a peñón el 28/05/25, gd 5338 entregados el 06/06/25 con picking, m, guerrero 11 entregados el 25/04/25 con correo, mateo 3 vc 18/11/25 + 7 picking 18/11/25, c, ortíz"
+  },
+  {
+    "id": "mat::1322100510",
+    "codigo": "1322100510",
+    "codigoAlternativo": "S250-63/40X440-SB-FC-1",
+    "codigoAlternativos": [
+      "S250-63/40X440-SB-FC-1"
+    ],
+    "nombre": "CILINDRO, HYTEC, S250-63/40 X 440-SB-FC-1",
+    "descripcion": "CYLINDER, HYTEC, S250-63/40 X 440-SB-FC-1",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "URGENTE",
+    "proyectos": [],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1322100510 s250-63/40x440-sb-fc-1 cilindro, hytec, s250-63/40 x 440-sb-fc-1 cylinder, hytec, s250-63/40 x 440-sb-fc-1 c/u f/1251 04/12/24"
+  },
+  {
+    "id": "mat::1323100010",
+    "codigo": "1323100010",
+    "codigoAlternativo": "FILT-7304",
+    "codigoAlternativos": [
+      "FILT-7304",
+      "Hyd027B",
+      "HYD-027M"
+    ],
+    "nombre": "FILTRO HID. HF-7304 FLEETGUARD, LINEA RETORNO (o PT551-10)",
+    "descripcion": "FILTER, HYDRAULIC, RETURN LINE, BB25",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 8,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 80174.68,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "‪‪‪CL01-000420-139",
+      "CL01-00430-60",
+      "CL01-5300-001",
+      "CL-0801-087",
+      "CL01-04002-21",
+      "CL01-04012-019",
+      "CL01-05001-006-1-002",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1323100010 filt-7304 hyd027b hyd-027m filtro hid. hf-7304 fleetguard, linea retorno (o pt551-10) filtro hid. hf-7304 fleetguard bb-25 (hf-7304 ó pt551-10) filtro, hidráulico, linea retorno, bb25 1323100010 - filtro, hidráulico, linea retorno, bb25 filter, hydraulic, return line, bb25 c/u artículo ‪‪‪cl01-000420-139 cl01-00430-60 cl01-5300-001 cl-0801-087 cl01-04002-21 cl01-04012-019 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 ingenieria entregados el 28/03/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1323100020",
+    "codigo": "1323100020",
+    "codigoAlternativo": "RESP-12NPT",
+    "codigoAlternativos": [
+      "RESP-12NPT"
+    ],
+    "nombre": "RESPIRADERO 1/2\" NPT o BSP",
+    "descripcion": "BREATHER, ½” NPT",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 9448,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00540-50",
+      "CL01-00530-34",
+      "CL01-04015-003",
+      "CL01-04002-21",
+      "CL-0801-091",
+      "CL01-000420-206",
+      "CL01-04012-017",
+      "CL01-05001-006-1-002",
+      "cl01-00550-29",
+      "CL01-04008-012"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1323100020 resp-12npt respiradero 1/2\" npt o bsp respiradero 1/2\" npt respiradero, ½\" npt 1323100020 - respiradero, ½\" npt breather, ½” npt c/u cl01-00540-50 cl01-00530-34 cl01-04015-003 cl01-04002-21 cl-0801-091 cl01-000420-206 cl01-04012-017 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 ingenieria entregados el 11/06/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1323100700",
+    "codigo": "1323100700",
+    "codigoAlternativo": "FILT-11464",
+    "codigoAlternativos": [
+      "FILT-11464"
+    ],
+    "nombre": "FILTRO MAGNÉTICO 1 1/4\" 64 LTS.",
+    "descripcion": "FILTER, MAGNETIC, 1 1/4\", 64 LT.",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 6,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 104785,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-5300-001",
+      "CL01-04009-006",
+      "CL01-04008-001",
+      "CL01-04015-003",
+      "CL01-04016-003",
+      "CL01-04004-029",
+      "CL01-05001-002-00702",
+      "CL01-00490-27",
+      "CL01-05001-006-1-002",
+      "cl01-00550-29",
+      "CL01-04008-012",
+      "CL01-04015-024"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1323100700 filt-11464 filtro magnético 1 1/4\" 64 lts. filtro magnético 1 1/4´´ 64 lts. filtro magnetico, 1 1/4\", 64 lt, 1323100700 - filtro magnetico, 1 1/4\", 64 lt. filter, magnetic, 1 1/4\", 64 lt. c/u cl01-5300-001 cl01-04009-006 cl01-04008-001 cl01-04015-003 cl01-04016-003 cl01-04004-029 cl01-05001-002-00702 cl01-00490-27 cl01-05001-006-1-002 cl01-00550-29 cl01-04008-012 cl01-04015-024 ingenieria stgo-1 1 entregados el 25/04/25 con correo, m, guerrero entregados el 06/06/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1510100610",
+    "codigo": "1510100610",
+    "codigoAlternativo": "BEAR-564041",
+    "codigoAlternativos": [
+      "BEAR-564041",
+      564041
+    ],
+    "nombre": "RODAMIENTO, RODILLO CONICO, 564041C - 52R REMOVIBLE",
+    "descripcion": "BEARING, TAPER ROLLER, 564041 - 52R REMOVABLE",
+    "unidadMedida": "C/U",
+    "categoria": "Artículo",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "URGENTE",
+    "proyectos": [
+      "CL01-00550-26",
+      "CL01-04002-23",
+      "CL01-05001-003-00203",
+      "CL01-05001-007-00103"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1510100610 bear-564041 564041 rodamiento, rodillo conico, 564041c - 52r removible bearing, taper roller, 564041 - 52r removable bearing, taper roller, 564041c - 52r removable rodamiento, rodillo conico, 564041 - 52r removable 1510100610 - rodamiento, rodillo conico, 564041 - 52r removable c/u artículo cl01-00550-26 cl01-04002-23 cl01-05001-003-00203 cl01-05001-007-00103 ingenieria f/87a5104725a 11/06/25 entregado picking 16/12/25 m, guerrero"
+  },
+  {
+    "id": "mat::1513100320",
+    "codigo": "1513100320",
+    "codigoAlternativo": "PERNO-3/4X120-CN",
+    "codigoAlternativos": [
+      "PERNO-3/4X120-CN"
+    ],
+    "nombre": "PERNO OJO 3/4 X 1.20 MTS.CON TUERCA",
+    "descripcion": "EYEBOLT, 3/4\"X 1.20 M, C / NUT HEX",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 12,
+    "stockMaximo": 84,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "SALDO CANCELADO 28/02/25 N. LAGOS",
+    "proyectos": [
+      "CL01-04004-001",
+      "CL01-04005-001",
+      "CL01-00530-01",
+      "CL01-04006-001",
+      "CL01-04001-01",
+      "CL01-04002-01",
+      "CL01-00420-01",
+      "CL01-04008-001",
+      "CL01-04009-001",
+      "CL01-04010-001",
+      "CL01-00580-01",
+      "CL01-04012-001",
+      "CL01-04015-001",
+      "CL01-04011-001",
+      "CL01-04013-001",
+      "CL01-04016-001",
+      "CL01-04017-001",
+      "CL01-04018-001",
+      "CL01-04019-001",
+      "CL01-04020-001",
+      "CL01-04021-001",
+      "CL01-04014-001"
+    ],
+    "localidades": [
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1513100320 perno-3/4x120-cn perno ojo 3/4 x 1.20 mts.con tuerca eyebolt, 3/4\"x 1.20 m, c / nut hex perno ojo, 3/4\" x 1,20 m, c/tuerca hex, 1513100320 - perno ojo, 3/4\" x 1,20 m, c/tuerca hex. c/u cl01-04004-001 cl01-04005-001 cl01-00530-01 cl01-04006-001 cl01-04001-01 cl01-04002-01 cl01-00420-01 cl01-04008-001 cl01-04009-001 cl01-04010-001 cl01-00580-01 cl01-04012-001 cl01-04015-001 cl01-04011-001 cl01-04013-001 cl01-04016-001 cl01-04017-001 cl01-04018-001 cl01-04019-001 cl01-04020-001 cl01-04021-001 cl01-04014-001 stgo-1 llegan 40 el 30/05/25, llegan 60 el 03/06/25, llegan 100 el 09-06-25, llegan 60 el 26/06/25, llegan 60 el 27/06/25, llegan 60 el 15/07/25, llegan 60 el 21/07/25, 60 saldo llega el 24/07/25 llegan 60 el 29/07/25, llegan 60 el 11/08/25, llegan 130 el 22/08/25, llegan 120 el 05/09/25, llegan 60 el 16/09/25, llegan 60 el 22/09/25, saldo 110 llega el 14/10/25 saldo 60 saldo 120 saldo 200 llegan 200 el 12/11/24, llegan 400 el 25/11/24, saldo 100 llegan 60 el 14/01/25, llegan 120 el 22/01/25, llegan 120 el 27/01/25, llegan 60 el 20/02/25, llegan 180 el 28/02/25, llegan 120 el 04/03/25, saldo 40 llega el 18/03/25 llegan 120 el 04/04/25, llegan 60 el 10/04/25, llegan 40 el 25/04/25, llegan 80 el 02/05/25, llegan 60 el 08/05/25, llegan 60 el 09/05/25, llegan 60 el 27/05/25, saldo 20 llega el 30/05/25 f/mdcn20250706-2 09/07/25 x 2500 llegan 13/10/25, saldo 2000 f/mdcn20250902 25/08/25 llegan 13/11/25 oc 60 enviados a rancagua el 14/11/24 enviados a teniente con picking el 22/11/24 envio a rancagua con picking el 10/03/25, gd 5028 envío a cenizas el 17/03/25 con picking, gd 5055 20 emitidos el 08/04/25 + 70 emitidos el 09/04/25 20 envio a rancagua con vc el 09/04/25, gd 5137 + 40 envio a rancagua el 25/04/25, gd 5208 envio a rancagua el 30/05/25, gd 5353 envío a arqueros el 08/05/25 con picking, gd 5250 60 envío a rancagua el 12/05/25 con picking, gd 5272 + 15 envio el 11/06/25, 15 envío 16/06/25 envio a rancagua el 09/06/25, gd 5383 envio a cenizas el 29/05/25 y 04/06/25 con picking, gd 5347, 5365 32 envio a rancagua el 24/06/25, gd 5438 + 18 envio el 04/07/25 envio 22 a rancagua el 04/07/25 envio a rancagua el 16/06/25 con picking, gd 5403 30 en vc del 23/07/25 + 40 en vc del 31/07/25 + 20 vc 02/09/25 30 vc del 31/07/25 + 30 vc 08/09/25 envio peñon 14/08/25 gd 5639 envio rancagua gd 6048 22/12/25"
+  },
+  {
+    "id": "mat::1515100080",
+    "codigo": "1515100080",
+    "codigoAlternativo": "52R-03-058",
+    "codigoAlternativos": [
+      "52R-03-058"
+    ],
+    "nombre": "CUBIERTA DE CARCASA, 1RA REDUCCIÓN, 52R-03-058",
+    "descripcion": "HOUSING COVER, 1ST RED, 52R-03-058",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 2,
+    "montoPendiente": 1774643,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00400-59",
+      "CL01-04004-018",
+      "CL-0801-091",
+      "CL01-05001-007-00103",
+      "CL01-00530-38",
+      "CL01-04015-026",
+      "CL01-04010-006"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1515100080 52r-03-058 cubierta de carcasa, 1ra reducción, 52r-03-058 housing cover, 1st red, 52r-03-058 1515100080 - cubierta de carcasa, 1ra reducción, 52r-03-058 c/u cl01-00400-59 cl01-04004-018 cl-0801-091 cl01-05001-007-00103 cl01-00530-38 cl01-04015-026 cl01-04010-006 ingenieria f/mdcn20241010-2 10/10/24 f/k0217 12/07/24 entregados el 11/06/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1517100890",
+    "codigo": "1517100890",
+    "codigoAlternativo": "52R-08-138",
+    "codigoAlternativos": [
+      "52R-08-138"
+    ],
+    "nombre": "HEAD FRAME - MAIN PLATE, COLUMNS AND HEAD FRAME, 52R-08-138",
+    "descripcion": "HEAD FRAME - MAIN PLATE, COLUMNS AND HEAD FRAME, 52R-08-138",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04006-006"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1517100890 52r-08-138 head frame - main plate, columns and head frame, 52r-08-138 c/u cl01-04006-006 ingenieria f/mdcn20250303-1 06/02/25 f/mdcn20251131 14/11/25 entregados el 22/05/25 con picking, m, guerrero"
+  },
+  {
+    "id": "mat::1518100270",
+    "codigo": "1518100270",
+    "codigoAlternativo": "52R-03-051",
+    "codigoAlternativos": [
+      "52R-03-051"
+    ],
+    "nombre": "MOTOR SPLINE PINION 52-R 52R-03-051",
+    "descripcion": "MOTOR SPLINE, 1ST RED, 52R-03-051",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 5,
+    "stockMaximo": 10.121001062840417,
+    "pendiente": true,
+    "cantidadPendiente": 4,
+    "montoPendiente": 876020,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04002-15",
+      "CL01-04001-21",
+      "CL01-04012-016",
+      "CL01-04008-011",
+      "CL01-04011-004",
+      "CL01-04004-037"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1518100270 52r-03-051 motor spline pinion 52-r 52r-03-051 motor spline, 1st red, 52r-03-051 ranurado de motor, 1ra reducción, 52r-03-051 1518100270 - ranurado de motor, 1ra reducción, 52r-03-051 c/u item cl01-04002-15 cl01-04001-21 cl01-04012-016 cl01-04008-011 cl01-04011-004 cl01-04004-037 ingenieria f/fsd-169 21/11/24 entregado correo 02/12/25 j, abarca"
+  },
+  {
+    "id": "mat::1518100280",
+    "codigo": "1518100280",
+    "codigoAlternativo": "52R-03-052",
+    "codigoAlternativos": [
+      "52R-03-052"
+    ],
+    "nombre": "ACOPLAMIENTO RANURADO DE ENTRADA, 1RA REDUCCIÓN, 52R-03-052",
+    "descripcion": "INPUT SPLINE COUPLING, 1ST RED, 52R-03-052",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 6,
+    "stockMaximo": 9.54119768935722,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "URGENTE",
+    "proyectos": [
+      "CL01-05001-003-001",
+      "CL01-04006-010",
+      "CL01-05001-007-00103",
+      "CL01-00530-38"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1518100280 52r-03-052 acoplamiento ranurado de entrada, 1ra reducción, 52r-03-052 input spline coupling, 1st red, 52r-03-052 1518100280 - acoplamiento ranurado de entrada, 1ra reducción, 52r-03-052 c/u item cl01-05001-003-001 cl01-04006-010 cl01-05001-007-00103 cl01-00530-38 ingenieria sin fecha eta - proceso cotización flete entregados el 05/05/25 con correo, mateo"
+  },
+  {
+    "id": "mat::1518100290",
+    "codigo": "1518100290",
+    "codigoAlternativo": "52R-03-053",
+    "codigoAlternativos": [
+      "52R-03-053"
+    ],
+    "nombre": "ENGRANAJE CENTRAL, 1RA REDUCCIÓN, 52R-03-053",
+    "descripcion": "SUN GEAR, 1ST RED, 52R-03-053",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 833226,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-00550-26",
+      "CL01-05001-003-001",
+      "CL01-04002-22",
+      "CL01-04005-011",
+      "CL-0801-091",
+      "CL01-05001-003-00201",
+      "CL01-05001-003-00203",
+      "CL01-04015-026",
+      "CL01-000420-210"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1518100290 52r-03-053 engranaje central, 1ra reducción, 52r-03-053 sun gear, 1st red, 52r-03-053 1518100290 - engranaje central, 1ra reducción, 52r-03-053 c/u item cl01-00550-26 cl01-05001-003-001 cl01-04002-22 cl01-04005-011 cl-0801-091 cl01-05001-003-00201 cl01-05001-003-00203 cl01-04015-026 cl01-000420-210 ingenieria f/fsd-175 06-02-2025 f/fsd-180 14/03/25 f/fsd-211 24/09/25 f/a3530 28/0/26 f/mdx 001/2026 11/05/26 entregados el 10/06/25 con picking, m, guerrero entregados el 11/06/25 con picking, m, guerrero entregado 06/11/25, mateo"
+  },
+  {
+    "id": "mat::1518100400",
+    "codigo": "1518100400",
+    "codigoAlternativo": "71R-03-054",
+    "codigoAlternativos": [
+      "71R-03-054"
+    ],
+    "nombre": "ENGRANAJE CENTRAL, 1RA REDUCCIÓN, 71R-03-054",
+    "descripcion": "SUN GEAR, 1ST RED, 71R-03-054",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 690615,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL-0801-091",
+      "CL01-000420-210"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1518100400 71r-03-054 engranaje central, 1ra reducción, 71r-03-054 sun gear, 1st red, 71r-03-054 1518100400 - engranaje central, 1ra reducción, 71r-03-054 c/u item cl-0801-091 cl01-000420-210 ingenieria f.fsd-231 14/01/26 entregado a c, perdomo 04/06/25"
+  },
+  {
+    "id": "mat::1518100430",
+    "codigo": "1518100430",
+    "codigoAlternativo": "71R-03-100",
+    "codigoAlternativos": [
+      "71R-03-100"
+    ],
+    "nombre": "ACOPLAMIENTO RANURADO DE ENTRADA, 1RA REDUCCIÓN, 71R-03-100",
+    "descripcion": "INPUT SPLINE COUPLING, 1ST RED, 71R-03-100",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": 4,
+    "stockMinimo": 1,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 3,
+    "montoPendiente": 1934411.13,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04002-22",
+      "CL01-04005-011",
+      "CL-0801-091",
+      "CL01-00530-37",
+      "CL01-05001-003-00203",
+      "CL01-04008-014",
+      "CL01-04015-026",
+      "CL01-04019-007",
+      "CL01-000420-210",
+      "Mali"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX",
+      "REPTOS. MALI"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1518100430 71r-03-100 acoplamiento ranurado de entrada, 1ra reducción, 71r-03-100 input spline coupling, 1st red, 71r-03-100 1518100430 - acoplamiento ranurado de entrada, 1ra reducción, 71r-03-100 c/u item cl01-04002-22 cl01-04005-011 cl-0801-091 cl01-00530-37 cl01-05001-003-00203 cl01-04008-014 cl01-04015-026 cl01-04019-007 cl01-000420-210 mali ingenieria f/k0217 12/07/24 f/fsd-169 21/11/24 f/fsd-214 28/10/25 entregados el 10/06/25 con picking, m, guerrero entregados el 11/06/25 con picking, m, guerrero m, guerrero con picking 16/02/26 c, perdomo con picking 16/02/26 entregado picking 27/01/26 mateo"
+  },
+  {
+    "id": "mat::1518100520",
+    "codigo": "1518100520",
+    "codigoAlternativo": "71R-05-053",
+    "codigoAlternativos": [
+      "71R-05-053"
+    ],
+    "nombre": "ENGRANAJE CENTRAL, 3RA REDUCCIÓN, 71R-05-053",
+    "descripcion": "SUN GEAR, 3RD RED, 71R-05-053",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": 2,
+    "stockMinimo": 1,
+    "stockMaximo": 3,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 846252,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-05001-003-00201",
+      "CL01-05001-003-00203",
+      "CL01-05001-007-00103",
+      "CL01-00530-38",
+      "CL01-04010-006",
+      "Mali"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX",
+      "REPTOS. MALI"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1518100520 71r-05-053 engranaje central, 3ra reducción, 71r-05-053 sun gear, 3rd red, 71r-05-053 1518100520 - engranaje central, 3ra reducción, 71r-05-053 c/u item cl01-05001-003-00201 cl01-05001-003-00203 cl01-05001-007-00103 cl01-00530-38 cl01-04010-006 mali ingenieria f/fsd-169 21/11/24"
+  },
+  {
+    "id": "mat::1519100970",
+    "codigo": "1519100970",
+    "codigoAlternativo": "52R-05-055",
+    "codigoAlternativos": [
+      "52R-05-055"
+    ],
+    "nombre": "HUB PLANETARIO, 3RA REDUCCIÓN, 52R-05-055",
+    "descripcion": "PLANETARY HUB, 3RD RED, 52R-05-055",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 1534589,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-05001-003-001",
+      "CL01-05001-003-00203",
+      "CL01-05001-007-00103",
+      "CL01-00530-38"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1519100970 52r-05-055 hub planetario, 3ra reducción, 52r-05-055 planetary hub, 3rd red, 52r-05-055 1519100970 - hub planetario, 3ra reducción, 52r-05-055 c/u item cl01-05001-003-001 cl01-05001-003-00203 cl01-05001-007-00103 cl01-00530-38 ingenieria f/fsd-193 27/06/25"
+  },
+  {
+    "id": "mat::1519101330",
+    "codigo": "1519101330",
+    "codigoAlternativo": "71R-01-233",
+    "codigoAlternativos": [
+      "71R-01-233"
+    ],
+    "nombre": "PLACA DE DESGASTE FRONTAL, ESTRUCTURA PRINCIPAL, 71R-01-233",
+    "descripcion": "FRONT WEAR PLATE, MAIN FRAME, 71R-01-233",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "REC. PARCIAL",
+    "proyectos": [],
+    "localidades": [],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1519101330 71r-01-233 placa de desgaste frontal, estructura principal, 71r-01-233 front wear plate, main frame, 71r-01-233 c/u llegan 2 f/k0220 10/12/24 el 13/05/25, saldo 2"
+  },
+  {
+    "id": "mat::1519101550",
+    "codigo": "1519101550",
+    "codigoAlternativo": "71R-06-060",
+    "codigoAlternativos": [
+      "71R-06-060"
+    ],
+    "nombre": "ROTARY SLEEVE, 4TH RED, 71R-06-060",
+    "descripcion": "ROTARY SLEEVE, 4TH RED, 71R-06-060",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 4.635678209757976,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 821964,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-04007-008",
+      "CL01-04001-01",
+      "CL01-04012-017",
+      "CL01-04016-003",
+      "CL01-04015-026",
+      "CL01-04007-018",
+      "CL01-000420-210"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1519101550 71r-06-060 rotary sleeve, 4th red, 71r-06-060 rotary sleeve, 4ta reducción, 71r-06-060 1519101550 - rotary sleeve, 4ta reducción, 71r-06-060 c/u cl01-04007-008 cl01-04001-01 cl01-04012-017 cl01-04016-003 cl01-04015-026 cl01-04007-018 cl01-000420-210 ingenieria stgo-1 f/mdcn20241010-2 10/10/24 llega 1 el 02/05/25 con f/mdcn20250405 del 01/04/25 + 1 f/mdcn20250405-1 f/2827 28-04-25 f/2848 22/05/25 envío a peñón con picking el 26/02/25 gd 4998 entregado con picking el 31/07/25, c, ortiz"
+  },
+  {
+    "id": "mat::1519103760",
+    "codigo": "1519103760",
+    "codigoAlternativo": "52R-02-051",
+    "codigoAlternativos": [
+      "52R-02-051"
+    ],
+    "nombre": "ABRAZADERA DE COLUMNA, CHUCK, 52R-02-051",
+    "descripcion": "COLUMN CLAMP, CHUCK, 52R-02-051",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL01-04012-014"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1519103760 52r-02-051 abrazadera de columna, chuck, 52r-02-051 column clamp, chuck, 52r-02-051 c/u cl01-04012-014 ingenieria f/mdcn20250303-1 06/02/25 f/mdcn20251131 14/11/25 entregadas el 18/06/25 con picking, mateo"
+  },
+  {
+    "id": "mat::1523111730",
+    "codigo": "1523111730",
+    "codigoAlternativo": "ORIN-3589",
+    "codigoAlternativos": [
+      "ORIN-3589"
+    ],
+    "nombre": "O-RING, Ø3.5 x 89 mm (ID)",
+    "descripcion": "O-RING, Ø3.5 x 89 mm (ID)",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 2,
+    "pendiente": true,
+    "cantidadPendiente": 30,
+    "montoPendiente": 82641.59999999999,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-05002-003-001",
+      "CL01-05001-002-00708"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1523111730 orin-3589 o-ring, ø3.5 x 89 mm (id) o-ring, ø3,5 x 89 mm (id) 1523111730 - o-ring, ø3.5 x 89 mm (id) c/u cl01-05002-003-001 cl01-05001-002-00708 ingenieria f.ci20260203zc 03/02/26 entregados el 14/04/25 con correo, m, guerrero 18 vc 24/12/25"
+  },
+  {
+    "id": "mat::1524102290",
+    "codigo": "1524102290",
+    "codigoAlternativo": "52R-08-150",
+    "codigoAlternativos": [
+      "52R-08-150"
+    ],
+    "nombre": "BARRA SOPORTE LLAVE 2, COLUMNA & HEAD FRAME, 52R-08-150",
+    "descripcion": "SPANNER 2 BRACKET BAR, COLUMN & HEAD FRAME, 52R-08-150",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 3,
+    "stockMaximo": 6.9741756660150225,
+    "pendiente": true,
+    "cantidadPendiente": 3,
+    "montoPendiente": 231336,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-00530-29",
+      "CL01-04004-001",
+      "CL01-04002-20",
+      "CL01-04006-006",
+      "CL-0500-10-1",
+      "CL-0500-04,1",
+      "CL01-05001-003-00205"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1524102290 52r-08-150 barra soporte llave 2, columna & head frame, 52r-08-150 spanner 2 bracket bar, column & head frame, 52r-08-150 1524102290 - barra soporte llave 2, columna & head frame, 52r-08-150 c/u cl01-00530-29 cl01-04004-001 cl01-04002-20 cl01-04006-006 cl-0500-10-1 cl-0500-04,1 cl01-05001-003-00205 ingenieria stgo-1 f/mdcn20240923-1 29/06/24 f/mdcn20241010-2 10/10/24 f/mdcn20250405-1 01/04/25 f.mdcn20260115 06/01/26 1 vc 18/11/25 + 1 vc 17/03/26"
+  },
+  {
+    "id": "mat::1526104030",
+    "codigo": "1526104030",
+    "codigoAlternativo": "DADO-IA1934",
+    "codigoAlternativos": [
+      "DADO-IA1934"
+    ],
+    "nombre": "DADO IMPACTO ALLEN 19 MM (3/4\"), CUADRANTE 3/4\"",
+    "descripcion": "SOCKET, IMPACT, 19 MM, DRIVER 3/4\"",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL-0700-04"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC CHILE",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1526104030 dado-ia1934 dado impacto allen 19 mm (3/4\"), cuadrante 3/4\" socket, impact, 19 mm, driver 3/4\" dado, impacto, 19 mm, encastre 3/4\" c/u cl-0700-04 ingenieria"
+  },
+  {
+    "id": "mat::1526115420",
+    "codigo": "1526115420",
+    "codigoAlternativo": "DADOV-22MM",
+    "codigoAlternativos": [
+      "DADOV-22MM"
+    ],
+    "nombre": "DADO IMPACTO HEX, 16M22V, CUADRANTE 1\", 22 MM",
+    "descripcion": "HEX BIT SOCKET, 16M22V, 1'' SQ. DR. X 22 MM",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 5,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL-0700-04",
+      "cl-0700-04",
+      "CL01-04012-001"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1526115420 dadov-22mm dado impacto hex, 16m22v, cuadrante 1\", 22 mm hex bit socket, 16m22v, 1'' sq. dr. x 22 mm hex bit socket, 16m22v, 1'' sq, dr, x 22 mm 1526115420 - hex bit socket, 16m22v, 1'' sq. dr. x 22 mm c/u cl-0700-04 cl01-04012-001 ingenieria stgo-1 envío a rancagua el 26/03/25 con picking, gd 5088 cancelado jcf 18/08/25, cambio código"
+  },
+  {
+    "id": "mat::1526115430",
+    "codigo": "1526115430",
+    "codigoAlternativo": "DADOV-19MM",
+    "codigoAlternativos": [
+      "DADOV-19MM"
+    ],
+    "nombre": "DADO IMPACTO HEX, 16M19V, CUADRANTE 1\", 19 MM",
+    "descripcion": "HEX BIT SOCKET, 16M19V, 1'' SQ. DR. X 3/4'' 19 MM",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 2,
+    "stockMaximo": 4,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL-0700-04",
+      "cl-0700-04",
+      "CL01-04006-006"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1526115430 dadov-19mm dado impacto hex, 16m19v, cuadrante 1\", 19 mm hex bit socket, 16m19v, 1'' sq. dr. x 3/4'' 19 mm hex bit socket, 16m19v, 1'' sq, dr, x 3/4'' 19 mm 1526115430 - hex bit socket, 16m19v, 1'' sq. dr. x 3/4'' 19 mm c/u cl-0700-04 cl01-04006-006 ingenieria urgente entregados el 04/03/25 con correo, j, abarca 1 con vc del 27/08/25, 1 cancelado 09/09/25, indica c, hernández"
+  },
+  {
+    "id": "mat::1526115450",
+    "codigo": "1526115450",
+    "codigoAlternativo": "DADOV-17MM",
+    "codigoAlternativos": [
+      "DADOV-17MM",
+      "DADOV-27MM"
+    ],
+    "nombre": "DADO IMPACTO HEX, 16M17V, CUADRANTE 1\", 17 MM",
+    "descripcion": "HEX BIT SOCKET, 16M17V, 1'' SQ. DR. X 17 MM",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 1,
+    "stockMaximo": 4,
+    "pendiente": true,
+    "cantidadPendiente": 0,
+    "montoPendiente": 0,
+    "estadoEntrega": "CANCELADA",
+    "proyectos": [
+      "CL-0700-04",
+      "CL01-04012-001",
+      "CL01-04014-001"
+    ],
+    "localidades": [
+      "INGENIERIA",
+      "STGO-1"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1526115450 dadov-17mm dadov-27mm dado impacto hex, 16m17v, cuadrante 1\", 17 mm hex bit socket, 16m27v, 1'' sq. dr. x 1-1/16'' 27 mm 1-1/16' hex bit socket, 16m27v, 1'' sq, dr, x 1-1/16'' 27 mm 1-1/16' 1526115450 - hex bit socket, 16m27v, 1'' sq. dr. x 1-1/16'' 27 mm 1-1/16' hex bit socket, 16m17v, 1'' sq. dr. x 17 mm c/u cl-0700-04 cl01-04012-001 cl01-04014-001 ingenieria stgo-1 urgente envío a rancagua el 26/03/25 con picking, gd 5088 1 con vc del 14/08/25 + 1 cancelado jcf 18/08/25, cambio código cancelado"
+  },
+  {
+    "id": "mat::1526118460",
+    "codigo": "1526118460",
+    "codigoAlternativo": "DADOH1-19MM",
+    "codigoAlternativos": [
+      "DADOH1-19MM"
+    ],
+    "nombre": "DADO IMPACTO HEX, 1612H 1\" SQ. DR. X 3/4\" 19MM",
+    "descripcion": "HEX BIT SOCKET, 1612H 1\" SQ. DR. X 3/4\" 19MM",
+    "unidadMedida": "C/U",
+    "categoria": "",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": null,
+    "stockMaximo": null,
+    "pendiente": true,
+    "cantidadPendiente": 1,
+    "montoPendiente": 110872,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL-0700-04",
+      "CL-0801-091"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA"
+    ],
+    "calidadDato": 85,
+    "searchableText": "1526118460 dadoh1-19mm dado impacto hex, 1612h 1\" sq. dr. x 3/4\" 19mm hex bit socket, 1612h 1\" sq. dr. x 3/4\" 19mm hex bit socket, 1612h 1\" sq, dr, x 3/4\" 19mm c/u cl-0700-04 cl-0801-091 ingenieria f. inv/2025/1628 29/12/25 entregados 25/08/25 picking, mateo 2 vc 29/10/25 + 2 vc 23/03/26 proyecto cerrado"
+  },
+  {
+    "id": "mat::1550100300",
+    "codigo": "1550100300",
+    "codigoAlternativo": "INSE-604",
+    "codigoAlternativos": [
+      "INSE-604"
+    ],
+    "nombre": "INSERTO 64V604 PIN 12 7/8´´ 4ST EXTERNAL",
+    "descripcion": "INSERTO 64V604 PIN 12 7/8´´ 4ST EXTERNAL",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 5,
+    "stockMaximo": 11.485204885534117,
+    "pendiente": true,
+    "cantidadPendiente": 30,
+    "montoPendiente": 1525976,
+    "estadoEntrega": "Parcial",
+    "proyectos": [
+      "CL01-000420-165",
+      "CL01-000420-166",
+      "CL01-04009-008",
+      "CL01-000420-183",
+      "CL01-000420-184",
+      "CL01-000420-187",
+      "CL01-04016-008",
+      "CL01-04012-012",
+      "CL01-05001-002-00703",
+      "CL-0802-01"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1550100300 inse-604 inserto 64v604 pin 12 7/8´´ 4st external insert, thread, ext, 12 7/8\" 4 start, masins61v604, iscar inserto, rosca, ext, 12 7/8\" 4 entradas, masins61v604, iscar 1550100300 - inserto, rosca, ext, 12 7/8\" 4 entradas, masins61v604, iscar c/u item cl01-000420-165 cl01-000420-166 cl01-04009-008 cl01-000420-183 cl01-000420-184 cl01-000420-187 cl01-04016-008 cl01-04012-012 cl01-05001-002-00703 cl-0802-01 ingenieria oc queda abierta, espera r. diaz cierre en ax f/0230 03/06/25 f. mdcn20260318 13/03/26 entregados el 24/06/25 con picking, c, cofré 10 vc 23/10/25"
+  },
+  {
+    "id": "mat::1550100330",
+    "codigo": "1550100330",
+    "codigoAlternativo": "INSE-605",
+    "codigoAlternativos": [
+      "INSE-605"
+    ],
+    "nombre": "INSERTO 64V605 BOX 12 7/8´´ 4ST INTERNAL",
+    "descripcion": "INSERTO 64V605 BOX 12 7/8´´ 4ST INTERNAL",
+    "unidadMedida": "C/U",
+    "categoria": "Item",
+    "estado": "Activo",
+    "stockActualDetectado": null,
+    "stockMinimo": 5,
+    "stockMaximo": 14.291643231732738,
+    "pendiente": true,
+    "cantidadPendiente": 20,
+    "montoPendiente": 944980,
+    "estadoEntrega": "Pendiente",
+    "proyectos": [
+      "CL01-000420-170",
+      "CL01-00580-43",
+      "CL01-000420-184",
+      "CL01-000420-186",
+      "CL01-04009-012",
+      "CL01-04009-015",
+      "CL01-000420-194",
+      "CL01-04016-008",
+      "CL01-05001-002-00703",
+      "CL-0802-01"
+    ],
+    "localidades": [
+      "INGENIERIA"
+    ],
+    "sourceSheets": [
+      "CODIGOS",
+      "CONTROL SC EXTRANJERO",
+      "S-A PEND ENTREGA",
+      "MIN-MAX"
+    ],
+    "calidadDato": 100,
+    "searchableText": "1550100330 inse-605 inserto 64v605 box 12 7/8´´ 4st internal insert, thread, int, 12 7/8\" 4 start, masins64v605, iscar inserto, rosca, int, 12 7/8\" 4 entradas, masins64v605, iscar 1550100330 - inserto, rosca, int, 12 7/8\" 4 entradas, masins64v605, iscar c/u item cl01-000420-170 cl01-00580-43 cl01-000420-184 cl01-000420-186 cl01-04009-012 cl01-04009-015 cl01-000420-194 cl01-04016-008 cl01-05001-002-00703 cl-0802-01 ingenieria f/k0221 20/12/24 oc queda abierta, espera r. diaz cierre en ax f. mdcn20260318 13/03/26 x 10"
+  }
+]

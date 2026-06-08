@@ -1,0 +1,58 @@
+[
+  {
+    "componente": "BOMBA AGUA 37KW FLYGT",
+    "ubicacion": "TENIENTE-INDAU",
+    "observaciones": "",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 2
+  },
+  {
+    "componente": "BOMBA AGUA 90KW CHINA",
+    "ubicacion": "BODEGA",
+    "observaciones": "",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 3
+  },
+  {
+    "componente": "BOMBA AGUA POZO PROFUNDO (MISIL)",
+    "ubicacion": "BODEGA",
+    "observaciones": "",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 4
+  },
+  {
+    "componente": "TABLERO BOMBA 37KW INDUELECTRO",
+    "ubicacion": "TENIENTE-INDAU",
+    "observaciones": "EN BODEGA, RETORNA DE RD3 LENA TENIENTE 07/05/26 GD 6645",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 5
+  },
+  {
+    "componente": "TABLERO BOMBA 90KW",
+    "ubicacion": "BODEGA",
+    "observaciones": "",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 6
+  },
+  {
+    "componente": "LLAVE TORQUE CHINA",
+    "ubicacion": "BODEGA",
+    "observaciones": "",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 7
+  },
+  {
+    "componente": "CAMARA POZO N°1",
+    "ubicacion": "BMR CINABRIO",
+    "observaciones": "EN BODEGA, RETORNA DE 71RQ BMR CINABRIO 14/05/26 GD 6682",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 8
+  },
+  {
+    "componente": "CAMARA POZO N°2",
+    "ubicacion": "PEÑON-RD3/250",
+    "observaciones": "",
+    "sourceSheet": "ACTIVOS",
+    "sourceRow": 9
+  }
+]

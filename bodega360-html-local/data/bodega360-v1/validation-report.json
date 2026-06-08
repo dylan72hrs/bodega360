@@ -1,0 +1,327 @@
+{
+  "generatedAt": "2026-06-08T13:06:20",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "sourceSizeBytes": 2403139,
+  "summary": {
+    "sheetsDetected": 18,
+    "rawRowsWithData": 17701,
+    "rawCellsWithData": 258434,
+    "materialsNormalized": 4547,
+    "stockRecords": 229,
+    "purchaseRecords": 3318,
+    "pendingRecords": 7720,
+    "costRecords": 1146,
+    "projectReferences": 7720,
+    "assetRecords": 8,
+    "toolRecords": 41,
+    "eppRecords": 5,
+    "duplicateCodesInCodigos": 42
+  },
+  "sheets": [
+    {
+      "sheetName": "CODIGOS",
+      "sheetSlug": "codigos",
+      "rowsWithData": 3903,
+      "cellsWithData": 26203,
+      "maxRowDetected": 3903,
+      "maxColumnDetected": 15,
+      "rawFile": "data/raw-sheets/codigos.json"
+    },
+    {
+      "sheetName": "CONTROL SC CHILE",
+      "sheetSlug": "control-sc-chile",
+      "rowsWithData": 2545,
+      "cellsWithData": 38262,
+      "maxRowDetected": 2571,
+      "maxColumnDetected": 20,
+      "rawFile": "data/raw-sheets/control-sc-chile.json"
+    },
+    {
+      "sheetName": "CONTROL SC EXTRANJERO",
+      "sheetSlug": "control-sc-extranjero",
+      "rowsWithData": 781,
+      "cellsWithData": 10237,
+      "maxRowDetected": 816,
+      "maxColumnDetected": 14,
+      "rawFile": "data/raw-sheets/control-sc-extranjero.json"
+    },
+    {
+      "sheetName": "S-A PEND ENTREGA ",
+      "sheetSlug": "s-a-pend-entrega",
+      "rowsWithData": 7728,
+      "cellsWithData": 117203,
+      "maxRowDetected": 7729,
+      "maxColumnDetected": 17,
+      "rawFile": "data/raw-sheets/s-a-pend-entrega.json"
+    },
+    {
+      "sheetName": "ACTIVOS",
+      "sheetSlug": "activos",
+      "rowsWithData": 9,
+      "cellsWithData": 20,
+      "maxRowDetected": 9,
+      "maxColumnDetected": 3,
+      "rawFile": "data/raw-sheets/activos.json"
+    },
+    {
+      "sheetName": "CODIGOS KONEC",
+      "sheetSlug": "codigos-konec",
+      "rowsWithData": 53,
+      "cellsWithData": 518,
+      "maxRowDetected": 53,
+      "maxColumnDetected": 12,
+      "rawFile": "data/raw-sheets/codigos-konec.json"
+    },
+    {
+      "sheetName": "MIN-MAX",
+      "sheetSlug": "min-max",
+      "rowsWithData": 2374,
+      "cellsWithData": 64475,
+      "maxRowDetected": 2375,
+      "maxColumnDetected": 90,
+      "rawFile": "data/raw-sheets/min-max.json"
+    },
+    {
+      "sheetName": "Hoja2",
+      "sheetSlug": "hoja2",
+      "rowsWithData": 48,
+      "cellsWithData": 48,
+      "maxRowDetected": 115,
+      "maxColumnDetected": 7,
+      "rawFile": "data/raw-sheets/hoja2.json"
+    },
+    {
+      "sheetName": "Hoja4",
+      "sheetSlug": "hoja4",
+      "rowsWithData": 45,
+      "cellsWithData": 129,
+      "maxRowDetected": 45,
+      "maxColumnDetected": 3,
+      "rawFile": "data/raw-sheets/hoja4.json"
+    },
+    {
+      "sheetName": "Hoja5",
+      "sheetSlug": "hoja5",
+      "rowsWithData": 0,
+      "cellsWithData": 0,
+      "maxRowDetected": 0,
+      "maxColumnDetected": 0,
+      "rawFile": "data/raw-sheets/hoja5.json"
+    },
+    {
+      "sheetName": "Hoja6",
+      "sheetSlug": "hoja6",
+      "rowsWithData": 0,
+      "cellsWithData": 0,
+      "maxRowDetected": 0,
+      "maxColumnDetected": 0,
+      "rawFile": "data/raw-sheets/hoja6.json"
+    },
+    {
+      "sheetName": "Hoja7",
+      "sheetSlug": "hoja7",
+      "rowsWithData": 7,
+      "cellsWithData": 25,
+      "maxRowDetected": 7,
+      "maxColumnDetected": 4,
+      "rawFile": "data/raw-sheets/hoja7.json"
+    },
+    {
+      "sheetName": "INSUMOS REAMERS",
+      "sheetSlug": "insumos-reamers",
+      "rowsWithData": 48,
+      "cellsWithData": 404,
+      "maxRowDetected": 48,
+      "maxColumnDetected": 12,
+      "rawFile": "data/raw-sheets/insumos-reamers.json"
+    },
+    {
+      "sheetName": "TRICONOS",
+      "sheetSlug": "triconos",
+      "rowsWithData": 14,
+      "cellsWithData": 93,
+      "maxRowDetected": 16,
+      "maxColumnDetected": 8,
+      "rawFile": "data/raw-sheets/triconos.json"
+    },
+    {
+      "sheetName": "REPTOS. MALI",
+      "sheetSlug": "reptos-mali",
+      "rowsWithData": 74,
+      "cellsWithData": 363,
+      "maxRowDetected": 1710,
+      "maxColumnDetected": 7,
+      "rawFile": "data/raw-sheets/reptos-mali.json"
+    },
+    {
+      "sheetName": "Hoja1",
+      "sheetSlug": "hoja1",
+      "rowsWithData": 0,
+      "cellsWithData": 0,
+      "maxRowDetected": 0,
+      "maxColumnDetected": 0,
+      "rawFile": "data/raw-sheets/hoja1.json"
+    },
+    {
+      "sheetName": "MATERIALES SIN CONSUMO",
+      "sheetSlug": "materiales-sin-consumo",
+      "rowsWithData": 45,
+      "cellsWithData": 292,
+      "maxRowDetected": 45,
+      "maxColumnDetected": 7,
+      "rawFile": "data/raw-sheets/materiales-sin-consumo.json"
+    },
+    {
+      "sheetName": "REPUESTOS A PERU",
+      "sheetSlug": "repuestos-a-peru",
+      "rowsWithData": 27,
+      "cellsWithData": 162,
+      "maxRowDetected": 30,
+      "maxColumnDetected": 10,
+      "rawFile": "data/raw-sheets/repuestos-a-peru.json"
+    }
+  ],
+  "warnings": [
+    "El archivo JSON conserva datos crudos por hoja y datos normalizados. Si un dato no se detectó con confianza, queda null o vacío; no se inventan valores.",
+    "CONTROL SC EXTRANJERO no trae moneda explícita; se marcó como NO_DETECTADA.",
+    "MIN-MAX se interpreta como consumo/umbrales min-max, no como stock actual.",
+    "stock.actual es stock detectado desde fuentes parciales (KONEC, MALI, PERU, TRICONOS, INSUMOS, MATERIALES SIN CONSUMO); no debe tratarse como inventario global hasta validarlo con AX/ERP.",
+    "Las hojas vacías o sin estructura material se conservan en raw-sheets, pero no generan materiales normalizados."
+  ],
+  "duplicateCodesInCodigos": {
+    "1010100490": [
+      11,
+      12
+    ],
+    "1010105640": [
+      92
+    ],
+    "1014100290": [
+      168
+    ],
+    "1015101720": [
+      240
+    ],
+    "1015104030": [
+      265
+    ],
+    "1017100180": [
+      307
+    ],
+    "1019100020": [
+      362
+    ],
+    "1022100050": [
+      406
+    ],
+    "1022102410": [
+      611
+    ],
+    "1029100280": [
+      699,
+      700,
+      701,
+      702
+    ],
+    "1029100330": [
+      704,
+      705,
+      706,
+      707
+    ],
+    "1029100360": [
+      711
+    ],
+    "1029100420": [
+      716
+    ],
+    "1029100430": [
+      718
+    ],
+    "1029100440": [
+      720,
+      721
+    ],
+    "1119100060": [
+      910
+    ],
+    "1210100160": [
+      964
+    ],
+    "1212100040": [
+      1030
+    ],
+    "1232100280": [
+      1418
+    ],
+    "1239100040": [
+      1518
+    ],
+    "1248100010": [
+      1557
+    ],
+    "1310106110": [
+      1625
+    ],
+    "1315100680": [
+      1737
+    ],
+    "1315101410": [
+      1753
+    ],
+    "1315103470": [
+      1782
+    ],
+    "1324101150": [
+      2028
+    ],
+    "1329100280": [
+      2085
+    ],
+    "1512103360": [
+      2332
+    ],
+    "1519101590": [
+      2658
+    ],
+    "1523103950": [
+      2964
+    ],
+    "1523104210": [
+      2971
+    ],
+    "1523104420": [
+      2973
+    ],
+    "1523104550": [
+      2980
+    ],
+    "1524103560": [
+      3078
+    ],
+    "1525100710": [
+      3106
+    ],
+    "1526115450": [
+      3364
+    ],
+    "1537101320": [
+      3429
+    ],
+    "1545100260": [
+      3462
+    ],
+    "1546101010": [
+      3475
+    ],
+    "1546101230": [
+      3492
+    ],
+    "1550100510": [
+      3585
+    ],
+    "1550100970": [
+      3601
+    ]
+  }
+}

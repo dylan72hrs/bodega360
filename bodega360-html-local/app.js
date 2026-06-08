@@ -284,8 +284,13 @@ const StorageAdapter = {
 
     getMaterials() { return this._cache.materials; },
 
+    setRuntimeMaterials(data) {
+        this._cache.materials = Array.isArray(data) ? data : [];
+    },
+
     saveMaterials(data) {
         this._cache.materials = data;
+        syncActiveDatabaseFromMaterials(data);
         if (this._idbAvailable) {
             const snap = data.slice();
             this._enqueueWrite(() => this._writeStoreAtomic('materials', snap));
@@ -306,6 +311,7 @@ const StorageAdapter = {
                 this._cache.materials.push(item);
             }
         });
+        syncActiveDatabaseFromMaterials(this._cache.materials);
         if (this._idbAvailable) {
             const snap = items.map(i => ({ ...i }));
             this._enqueueWrite(() => this._putStoreAtomic('materials', snap));
@@ -540,7 +546,13 @@ let currentPendingTerm = null;
 let currentTicketContext = null;
 let currentInventoryCode = null;
 let inventoryPhotoDraft = null;
-const DEFAULT_MASTER_EXCEL_PATH = 'data/CODIGOS HOMOLOGADOS-CL-JFredes-31.xlsx';
+let activeDatabase = null;
+const BODEGA360_V1_PATHS = Object.freeze({
+    base: 'data/bodega360-v1',
+    manifest: 'data/bodega360-v1/manifest.json',
+    searchIndex: 'data/bodega360-v1/index/search-index.json',
+    materials: 'data/bodega360-v1/normalized/materiales.json'
+});
 const WORKBOOK_RAW_STORAGE_LIMIT_BYTES = 2.5 * 1024 * 1024;
 const DEFAULT_MATERIAL_SHEETS = new Set([
     'CODIGOS',
@@ -566,11 +578,337 @@ const CONTROL_SHEETS = new Set([
 ]);
 
 // ============================================================================
+// BASE ACTIVA: LOCAL CONFIRMADA -> BODEGA360 V1 -> FALLBACK LEGADO
+// ============================================================================
+function hasReportedValue(value) {
+    return value !== undefined && value !== null && value !== '';
+}
+
+function firstReportedValue(...values) {
+    return values.find(hasReportedValue) ?? '';
+}
+
+function uniqueReportedValues(values) {
+    return Array.from(new Set(
+        values
+            .flat(Infinity)
+            .filter(hasReportedValue)
+            .map(value => String(value).trim())
+            .filter(Boolean)
+    ));
+}
+
+function numberOrEmpty(value) {
+    if (!hasReportedValue(value)) return '';
+    const number = Number(value);
+    return Number.isFinite(number) ? number : '';
+}
+
+function summarizeValues(values, limit = 3) {
+    const unique = uniqueReportedValues(values);
+    if (unique.length <= limit) return unique.join(', ');
+    return `${unique.slice(0, limit).join(', ')} (+${unique.length - limit})`;
+}
+
+async function fetchBodega360Json(path, label) {
+    const response = await fetch(path, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`${label}: HTTP ${response.status}`);
+    return response.json();
+}
+
+async function loadBodega360Manifest() {
+    const manifest = await fetchBodega360Json(BODEGA360_V1_PATHS.manifest, 'manifest.json');
+    if (!manifest || manifest.schema !== 'bodega360-json-modelo-v1') {
+        throw new Error('manifest.json no corresponde al modelo bodega360-v1');
+    }
+    if (manifest.status && manifest.status !== 'OK') {
+        throw new Error(`manifest.json informa estado ${manifest.status}`);
+    }
+    return manifest;
+}
+
+async function loadBodega360SearchIndex() {
+    const searchIndex = await fetchBodega360Json(BODEGA360_V1_PATHS.searchIndex, 'search-index.json');
+    if (!Array.isArray(searchIndex) || searchIndex.length === 0) {
+        throw new Error('search-index.json no contiene registros');
+    }
+    return searchIndex;
+}
+
+async function loadBodega360Materials() {
+    const materials = await fetchBodega360Json(BODEGA360_V1_PATHS.materials, 'materiales.json');
+    if (!Array.isArray(materials) || materials.length === 0) {
+        throw new Error('materiales.json no contiene registros');
+    }
+    return materials;
+}
+
+function normalizeMaterialForCurrentUI(material, searchEntry = null) {
+    const source = material || {};
+    const indexEntry = searchEntry || {};
+    const isBodega360V1 = source.stock && typeof source.stock === 'object'
+        && source.compras && typeof source.compras === 'object';
+
+    if (!isBodega360V1) return normalizeMaterial(source);
+
+    const stock = source.stock || {};
+    const purchases = source.compras || {};
+    const costs = source.costos || {};
+    const records = Array.isArray(purchases.registros) ? purchases.registros : [];
+    const purchaseRecords = records.filter(record => record.tipo === 'compra');
+    const pendingRecords = records.filter(record => record.tipo === 'pendiente_entrega');
+    const activePending = pendingRecords.find(record =>
+        Number(record.pendiente || 0) > 0
+        || /pendiente|parcial/i.test(String(record.estadoEntrega || ''))
+    ) || null;
+    const primaryPurchase = purchaseRecords.slice().reverse().find(record =>
+        hasReportedValue(record.oc)
+        || hasReportedValue(record.proveedor)
+        || hasReportedValue(record.valorTotal)
+    ) || null;
+    const origins = Array.isArray(source.origenes) ? source.origenes : [];
+    const primaryOrigin = origins[0] || {};
+    const sourceSheets = uniqueReportedValues([
+        source.sourceSheets || [],
+        origins.map(origin => origin.sheet),
+        records.map(record => record.sourceSheet)
+    ]);
+    const alternativeCodes = uniqueReportedValues([
+        source.codigoAlternativo,
+        source.codigoAlternativos || [],
+        indexEntry.codigoAlternativo,
+        indexEntry.codigoAlternativos || []
+    ]);
+    const projects = uniqueReportedValues([
+        source.proyectos || [],
+        indexEntry.proyectos || [],
+        pendingRecords.map(record => record.proyecto)
+    ]);
+    const locations = uniqueReportedValues([
+        source.localidades || [],
+        indexEntry.localidades || [],
+        pendingRecords.map(record => record.localidad),
+        (stock.ubicaciones || []).map(location => [
+            location.ubicacion,
+            location.localidad,
+            location.proyecto
+        ])
+    ]);
+    const orderNumbers = uniqueReportedValues(purchaseRecords.map(record => record.oc));
+    const suppliers = uniqueReportedValues(purchaseRecords.map(record => record.proveedor));
+    const purchaseRequests = uniqueReportedValues(purchaseRecords.map(record => record.sc));
+    const observations = uniqueReportedValues(source.observaciones || []);
+    const aliases = uniqueReportedValues([
+        alternativeCodes,
+        source.nombresAlternativos || [],
+        source.descripcionesAlternativas || []
+    ]);
+    const pendingAmount = numberOrEmpty(firstReportedValue(
+        activePending?.pendiente,
+        purchases.cantidadPendiente,
+        indexEntry.cantidadPendiente
+    ));
+    const pendingMoney = purchases.pendiente === true || indexEntry.pendiente === true
+        ? numberOrEmpty(firstReportedValue(
+            activePending?.valorPendiente,
+            purchases.montoPendiente,
+            indexEntry.montoPendiente
+        ))
+        : '';
+    const purchaseMoney = numberOrEmpty(primaryPurchase?.valorTotal);
+    const reportedMoney = pendingMoney !== '' ? pendingMoney : purchaseMoney;
+    const reportedCurrency = reportedMoney !== ''
+        ? firstReportedValue(activePending?.moneda, primaryPurchase?.moneda, purchases.moneda)
+        : '';
+    const searchText = uniqueReportedValues([
+        source.searchableText,
+        indexEntry.searchableText,
+        alternativeCodes,
+        aliases,
+        projects,
+        locations,
+        orderNumbers,
+        suppliers,
+        purchaseRequests,
+        records.flatMap(record => Object.values(record))
+    ]).join(' ');
+
+    return normalizeMaterial({
+        ...source,
+        _dataSource: 'bodega360-v1',
+        _preserveMissingFields: true,
+        codigo: firstReportedValue(source.codigo, indexEntry.codigo),
+        codigoAlternativo: firstReportedValue(source.codigoAlternativo, indexEntry.codigoAlternativo),
+        codigoAlternativos: alternativeCodes,
+        nombre: firstReportedValue(source.nombre, indexEntry.nombre),
+        descripcion: firstReportedValue(source.descripcion, indexEntry.descripcion),
+        unidadMedida: firstReportedValue(source.unidadMedida, indexEntry.unidadMedida),
+        categoria: firstReportedValue(source.categoria, indexEntry.categoria),
+        estado: firstReportedValue(source.estado, indexEntry.estado),
+        stock: numberOrEmpty(firstReportedValue(stock.actual, indexEntry.stockActualDetectado)),
+        stockMinimo: numberOrEmpty(firstReportedValue(stock.minimo, indexEntry.stockMinimo)),
+        stockMaximo: numberOrEmpty(firstReportedValue(stock.maximo, indexEntry.stockMaximo)),
+        ubicacion: summarizeValues((stock.ubicaciones || []).map(location =>
+            firstReportedValue(location.ubicacion, location.localidad, location.proyecto)
+        )),
+        proyecto: summarizeValues(projects),
+        proyectos: projects,
+        localidad: summarizeValues(locations),
+        localidades: locations,
+        pendienteInformado: Object.prototype.hasOwnProperty.call(purchases, 'pendiente'),
+        tienePendiente: purchases.pendiente === true || indexEntry.pendiente === true,
+        pendiente: pendingAmount,
+        cantidadPendiente: pendingAmount,
+        entregaParcial: /parcial/i.test(String(firstReportedValue(
+            activePending?.estadoEntrega,
+            purchases.estadoEntrega,
+            indexEntry.estadoEntrega
+        ))),
+        estadoEntrega: firstReportedValue(
+            activePending?.estadoEntrega,
+            purchases.estadoEntrega,
+            indexEntry.estadoEntrega
+        ),
+        pedido: activePending ? firstReportedValue(activePending.pedido) : '',
+        entrega: activePending ? firstReportedValue(activePending.entrega) : '',
+        oc: primaryPurchase ? firstReportedValue(primaryPurchase.oc) : '',
+        ordenesCompra: orderNumbers,
+        proveedor: primaryPurchase ? firstReportedValue(primaryPurchase.proveedor) : '',
+        proveedores: suppliers,
+        sc: primaryPurchase ? firstReportedValue(primaryPurchase.sc) : '',
+        solicitudesCompra: purchaseRequests,
+        monto: reportedMoney,
+        montoPendiente: pendingMoney,
+        valorTotal: purchaseMoney,
+        moneda: reportedCurrency,
+        costoPromedio: numberOrEmpty(costs.costoPromedio),
+        monedaCosto: hasReportedValue(costs.costoPromedio) ? firstReportedValue(costs.moneda) : '',
+        origenCosto: hasReportedValue(costs.costoPromedio) ? firstReportedValue(costs.origenCosto) : '',
+        sourceFile: '',
+        sourceSheet: firstReportedValue(primaryOrigin.sheet, sourceSheets[0]),
+        sourceRow: firstReportedValue(primaryOrigin.row),
+        sourceSheets,
+        sourceOrigins: origins,
+        recordType: firstReportedValue(primaryOrigin.recordType),
+        aliasBusqueda: aliases.join(', '),
+        searchableText: searchText,
+        observaciones: observations.join(' | '),
+        observacionesLista: observations,
+        importWarnings: Array.isArray(source.importWarnings) ? source.importWarnings : [],
+        calidadDato: firstReportedValue(source.calidadDato, indexEntry.calidadDato),
+        validadoInformado: Object.prototype.hasOwnProperty.call(source, 'validado'),
+        ultimaModificacion: ''
+    });
+}
+
+function createRuntimeDatabase(source, materials, searchIndex = null, manifest = null, error = null) {
+    const searchEntryMap = new Map(
+        (Array.isArray(searchIndex) ? searchIndex : [])
+            .map(entry => [String(entry.codigo), entry])
+    );
+    const normalizedMaterials = materials.map(item =>
+        normalizeMaterialForCurrentUI(item, searchEntryMap.get(String(item.codigo)))
+    );
+    const materialMap = new Map(normalizedMaterials.map(item => [String(item.codigo), item]));
+    const normalizedSearchIndex = Array.isArray(searchIndex) && searchIndex.length
+        ? searchIndex.map(entry =>
+            materialMap.get(String(entry.codigo)) || normalizeMaterialForCurrentUI(entry)
+        )
+        : normalizedMaterials;
+
+    return {
+        source,
+        manifest,
+        materials: normalizedMaterials,
+        searchIndex: normalizedSearchIndex,
+        materialMap,
+        error
+    };
+}
+
+async function loadBodega360V1Database() {
+    const manifest = await loadBodega360Manifest();
+    const [searchIndex, materials] = await Promise.all([
+        loadBodega360SearchIndex(),
+        loadBodega360Materials()
+    ]);
+    const expectedCount = Number(manifest.stats?.materialsNormalized || 0);
+    if (expectedCount && materials.length !== expectedCount) {
+        console.warn(`Bodega360 v1: manifest informa ${expectedCount} materiales, pero materiales.json contiene ${materials.length}.`);
+    }
+    return createRuntimeDatabase('bodega360-v1', materials, searchIndex, manifest);
+}
+
+function isLocalDatabaseConfirmed() {
+    const settings = StorageAdapter.getSettings();
+    if (settings.activeDatabase?.confirmed === true) return true;
+    if (StorageAdapter.getWorkbookMetadata()?.importedAt) return true;
+    return StorageAdapter.getImportLogs().length > 0;
+}
+
+function markLocalDatabaseConfirmed(source, metadata = {}) {
+    const settings = StorageAdapter.getSettings();
+    settings.activeDatabase = {
+        confirmed: true,
+        source,
+        confirmedAt: new Date().toISOString(),
+        materialCount: StorageAdapter.getMaterials().length,
+        ...metadata
+    };
+    StorageAdapter.saveSettings(settings);
+}
+
+function syncActiveDatabaseFromMaterials(materials) {
+    if (!Array.isArray(materials)) return;
+    activeDatabase = createRuntimeDatabase('local-runtime', materials);
+}
+
+async function getActiveDatabase() {
+    if (activeDatabase) return activeDatabase;
+
+    const localMaterials = StorageAdapter.getMaterials();
+    if (localMaterials.length > 0 && isLocalDatabaseConfirmed()) {
+        activeDatabase = createRuntimeDatabase('local-confirmed', localMaterials);
+        return activeDatabase;
+    }
+
+    try {
+        activeDatabase = await loadBodega360V1Database();
+        StorageAdapter.setRuntimeMaterials(activeDatabase.materials);
+        return activeDatabase;
+    } catch (error) {
+        console.warn('No se pudo cargar data/bodega360-v1; se mantiene la base local anterior:', error.message);
+        activeDatabase = createRuntimeDatabase('legacy-fallback', localMaterials, null, null, error.message);
+        StorageAdapter.setRuntimeMaterials(activeDatabase.materials);
+        return activeDatabase;
+    }
+}
+
+// ============================================================================
 // FUNCIONES UTILITARIAS Y DE SIMILITUD
 // ============================================================================
 function formatCurrency(amount) {
     if (amount === null || amount === undefined || amount === "") return "-";
     return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(amount);
+}
+
+function formatMoney(amount, currency = '') {
+    if (!hasReportedValue(amount)) return '';
+    const numericAmount = Number(amount);
+    if (!Number.isFinite(numericAmount)) return String(amount);
+    const normalizedCurrency = String(currency || '').trim().toUpperCase();
+    if (/^[A-Z]{3}$/.test(normalizedCurrency)) {
+        try {
+            return new Intl.NumberFormat('es-CL', {
+                style: 'currency',
+                currency: normalizedCurrency
+            }).format(numericAmount);
+        } catch {
+            // Continues with a plain formatted amount.
+        }
+    }
+    const formatted = new Intl.NumberFormat('es-CL').format(numericAmount);
+    return normalizedCurrency ? `${formatted} ${normalizedCurrency}` : formatted;
 }
 
 function formatDate(date) { return date.toISOString().split('T')[0]; }
@@ -623,7 +961,7 @@ function splitKeywords(value) {
 
 function normalizeMaterial(material) {
     const normalized = { ...material };
-    for (const k of ['codigo','codigoAlternativo','codigoBarra','nombre','descripcion','categoria','marca','modelo','unidadMedida','ubicacion','equipoAsociado','aliasBusqueda','fechaCostoPromedio','origenCosto','estadoRevision','id','sourceSheet','sourceFile','moneda','estado','proyecto','localidad','pedido','entrega','oc','fecha','fechaAprobacion','fechaEntrega','ultimoConsumo','observaciones','notas','recordType','sa','linea']) {
+    for (const k of ['codigo','codigoAlternativo','codigoBarra','nombre','descripcion','categoria','marca','modelo','unidadMedida','ubicacion','equipoAsociado','aliasBusqueda','searchableText','fechaCostoPromedio','origenCosto','estadoRevision','id','sourceSheet','sourceFile','moneda','monedaCosto','estado','proyecto','localidad','pedido','entrega','oc','proveedor','sc','estadoEntrega','fecha','fechaAprobacion','fechaEntrega','ultimoConsumo','observaciones','notas','recordType','sa','linea']) {
         const val = getField(material, k);
         normalized[k] = val !== undefined && val !== null ? String(val).trim() : '';
     }
@@ -632,24 +970,36 @@ function normalizeMaterial(material) {
     normalized.fotosAdicionales = Array.isArray(material.fotosAdicionales)
         ? material.fotosAdicionales
         : splitKeywords(getField(material, 'fotosAdicionales', 'fotos', 'imagenes'));
-    for (const k of ['stock','stockMinimo','cantidad','valorUnitario','valorTotal','costoPromedio','pendiente']) {
+    for (const k of ['stock','stockMinimo','stockMaximo','cantidad','cantidadPendiente','valorUnitario','valorTotal','monto','montoPendiente','costoPromedio','pendiente']) {
         const val = getField(material, k);
         normalized[k] = val === '' || val === null || val === undefined ? '' : Number(val);
     }
     normalized.recordType = canonicalRecordType(normalized);
-    normalized.origenCosto = normalized.origenCosto || 'Manual';
-    normalized.unidadMedida = normalized.unidadMedida || 'UN';
-    normalized.estado = normalized.estado || 'Activo';
-    normalized.estadoRevision = normalized.estadoRevision || 'Pendiente';
+    if (!material._preserveMissingFields) {
+        normalized.origenCosto = normalized.origenCosto || 'Manual';
+        normalized.unidadMedida = normalized.unidadMedida || 'UN';
+        normalized.estado = normalized.estado || 'Activo';
+        normalized.estadoRevision = normalized.estadoRevision || 'Pendiente';
+    }
     normalized.esCritico = material.esCritico === true || String(material.esCritico).toLowerCase() === 'true' || String(material.esCritico).toLowerCase() === 'si';
     normalized.validado = material.validado === true || String(material.validado).toLowerCase() === 'true' || String(material.validado).toLowerCase() === 'si';
+    normalized.validadoInformado = Object.prototype.hasOwnProperty.call(material, 'validadoInformado')
+        ? material.validadoInformado === true
+        : Object.prototype.hasOwnProperty.call(material, 'validado');
+    normalized.pendienteInformado = material.pendienteInformado === true;
+    normalized.tienePendiente = material.tienePendiente === true;
+    normalized.entregaParcial = material.entregaParcial === true;
     normalized.id = normalized.id || normalized.codigo || '';
     normalized.sourceRow = getField(material, 'sourceRow', 'filaOriginal');
     normalized.sourceRow = normalized.sourceRow !== undefined && normalized.sourceRow !== null ? String(normalized.sourceRow).trim() : '';
     normalized.rawData = material.rawData && typeof material.rawData === 'object' ? material.rawData : (material.rawData || null);
     normalized.importWarnings = Array.isArray(material.importWarnings) ? material.importWarnings : [];
-    normalized.ultimaModificacion = normalized.ultimaModificacion || new Date().toISOString();
-    normalized.calidadDato = calculateDataQuality(normalized);
+    normalized.ultimaModificacion = normalized.ultimaModificacion
+        || (material._preserveMissingFields ? '' : new Date().toISOString());
+    const reportedQuality = Number(material.calidadDato);
+    normalized.calidadDato = Number.isFinite(reportedQuality)
+        ? reportedQuality
+        : calculateDataQuality(normalized);
     return normalized;
 }
 
@@ -935,19 +1285,22 @@ function checkEmptyDBWarning() {
 function getSearchableText(material) {
     const m = normalizeMaterial(material);
     return [
-        m.codigo, m.codigoAlternativo, m.codigoBarra,
+        m.codigo, m.codigoAlternativo, m.codigoAlternativos || [], m.codigoBarra,
         m.nombre, m.descripcion,
         m.categoria, m.marca, m.modelo, m.unidadMedida,
         m.ubicacion, m.equipoAsociado,
         m.sourceSheet, m.recordType,
         m.aliasBusqueda, splitKeywords(m.aliasBusqueda).join(' '),
-        m.proyecto, m.localidad, m.estado,
+        m.searchableText,
+        m.proyecto, m.proyectos || [], m.localidad, m.localidades || [], m.estado,
         m.notas, m.observaciones,
-        m.ultimoConsumo, m.pedido, m.entrega, m.oc,
+        m.ultimoConsumo, m.pedido, m.entrega,
+        m.oc, m.ordenesCompra || [], m.proveedor, m.proveedores || [],
+        m.sc, m.solicitudesCompra || [],
         String(m.pendiente || ''), String(m.stock || ''), String(m.cantidad || ''),
         String(m.valorUnitario || ''), String(m.valorTotal || ''),
         m.rawData && typeof m.rawData === 'object' ? Object.values(m.rawData).join(' ') : ''
-    ].map(normalizeText).join(' ');
+    ].flat(Infinity).map(normalizeText).join(' ');
 }
 
 function scoreMaterial(material, rawQuery) {
@@ -961,6 +1314,7 @@ function scoreMaterial(material, rawQuery) {
 
     const code = normalizeText(item.codigo);
     const alt = normalizeText(item.codigoAlternativo);
+    const alternativeCodes = uniqueReportedValues(item.codigoAlternativos || []).map(normalizeText);
     const barcode = normalizeText(item.codigoBarra);
     const name = normalizeText(item.nombre);
     const desc = normalizeText(item.descripcion);
@@ -972,6 +1326,9 @@ function scoreMaterial(material, rawQuery) {
     const pedido = normalizeText(item.pedido);
     const entrega = normalizeText(item.entrega);
     const oc = normalizeText(item.oc);
+    const orderNumbers = uniqueReportedValues(item.ordenesCompra || []).map(normalizeText);
+    const supplier = normalizeText(item.proveedor);
+    const suppliers = uniqueReportedValues(item.proveedores || []).map(normalizeText);
     const notas = normalizeText(item.notas);
     const observaciones = normalizeText(item.observaciones);
     const recordType = normalizeText(item.recordType);
@@ -980,13 +1337,14 @@ function scoreMaterial(material, rawQuery) {
     queryTerms.forEach(term => {
         if (!term) return;
         if (code === term) { score = Math.max(score, 1000); matchType = 'exact'; }
-        if (alt === term || barcode === term) { score = Math.max(score, 940); matchType = 'exact'; }
-        if (code.startsWith(term) || alt.startsWith(term) || barcode.startsWith(term)) { score = Math.max(score, 820); matchType = matchType || 'partial'; }
-        if (code.includes(term) || alt.includes(term) || barcode.includes(term)) { score = Math.max(score, 740); matchType = matchType || 'partial'; }
+        if (alt === term || alternativeCodes.includes(term) || barcode === term) { score = Math.max(score, 940); matchType = 'exact'; }
+        if (code.startsWith(term) || alt.startsWith(term) || alternativeCodes.some(value => value.startsWith(term)) || barcode.startsWith(term)) { score = Math.max(score, 820); matchType = matchType || 'partial'; }
+        if (code.includes(term) || alt.includes(term) || alternativeCodes.some(value => value.includes(term)) || barcode.includes(term)) { score = Math.max(score, 740); matchType = matchType || 'partial'; }
         if (name.includes(term) || desc.includes(term)) { score = Math.max(score, 640); matchType = matchType || 'partial'; }
         if (aliases.some(a => a === term || a.includes(term) || term.includes(a))) { score = Math.max(score, 620); matchType = matchType || 'partial'; }
         if (proyecto.includes(term) || localidad.includes(term)) { score = Math.max(score, 560); matchType = matchType || 'partial'; }
-        if (pedido.includes(term) || entrega.includes(term) || oc.includes(term)) { score = Math.max(score, 540); matchType = matchType || 'partial'; }
+        if (pedido.includes(term) || entrega.includes(term) || oc.includes(term) || orderNumbers.some(value => value.includes(term))) { score = Math.max(score, 540); matchType = matchType || 'partial'; }
+        if (supplier.includes(term) || suppliers.some(value => value.includes(term))) { score = Math.max(score, 540); matchType = matchType || 'partial'; }
         if (estado.includes(term) || recordType.includes(term) || sourceSheet.includes(term)) { score = Math.max(score, 530); matchType = matchType || 'partial'; }
         if (notas.includes(term) || observaciones.includes(term)) { score = Math.max(score, 510); matchType = matchType || 'partial'; }
         if (searchable.includes(term)) { score = Math.max(score, 500); matchType = matchType || 'partial'; }
@@ -1025,12 +1383,19 @@ function scoreMaterial(material, rawQuery) {
     return { item, score, matchType, matchedWords };
 }
 
-function rankMaterials(rawQuery, minScore = 50) {
-    return StorageAdapter.getMaterials()
+function searchMaterials(rawQuery, minScore = 50) {
+    const candidates = activeDatabase?.searchIndex?.length
+        ? activeDatabase.searchIndex
+        : StorageAdapter.getMaterials();
+    return candidates
         .filter(m => !isFakeHeaderRecord(m))
         .map(m => scoreMaterial(m, rawQuery))
         .filter(r => r.score >= minScore || r.matchType === 'possible')
         .sort((a, b) => b.score - a.score);
+}
+
+function rankMaterials(rawQuery, minScore = 50) {
+    return searchMaterials(rawQuery, minScore);
 }
 
 function renderSearchSuggestions() {
@@ -1153,7 +1518,13 @@ function performSearch() {
                 ...materialsLocal[idx],
                 cantidadConsultas: Number(materialsLocal[idx].cantidadConsultas || 0) + 1
             });
-            StorageAdapter.saveMaterials(materialsLocal);
+            StorageAdapter.setRuntimeMaterials(materialsLocal);
+            if (activeDatabase) {
+                activeDatabase.materials = materialsLocal;
+                activeDatabase.materialMap.set(String(first.codigo), materialsLocal[idx]);
+                const searchIndexPosition = activeDatabase.searchIndex.findIndex(item => String(item.codigo) === String(first.codigo));
+                if (searchIndexPosition >= 0) activeDatabase.searchIndex[searchIndexPosition] = materialsLocal[idx];
+            }
         }
     } else {
         searchLogsLocal.push({
@@ -1311,7 +1682,9 @@ function buildResultCardHtml(r, isPrimary) {
     const costBadge = isCostOutdated(item) ? `<span class="badge badge-warning">Costo antiguo</span>` : '';
     const qualityBadge = `<span class="badge ${item.calidadDato >= 75 ? 'badge-success' : item.calidadDato >= 45 ? 'badge-warning' : 'badge-danger'}">Dato ${item.calidadDato}%</span>`;
 
-    const sourceInfo = item.sourceSheet ? escapeHtml(item.sourceSheet) : '';
+    const sourceInfo = item.sourceSheet
+        ? escapeHtml(`${item.sourceSheet}${item.sourceRow ? ` fila ${item.sourceRow}` : ''}`)
+        : '';
     const sourceBadge = sourceInfo ? `<span class="badge badge-neutral" style="font-size:0.72rem;">${sourceInfo}</span>` : '';
 
     const canonicalType = canonicalRecordType(item);
@@ -1332,20 +1705,30 @@ function buildResultCardHtml(r, isPrimary) {
             <div class="card-title">${escapeHtml(item.nombre || item.descripcion || 'Sin nombre')}</div>
             ${item.descripcion && item.descripcion !== item.nombre ? `<div class="card-desc">${escapeHtml(item.descripcion)}</div>` : ''}
             <div class="card-meta">
+                ${item.codigoAlternativo ? `<div><strong>Codigo alternativo</strong> <span>${escapeHtml(item.codigoAlternativo)}</span></div>` : ''}
+                ${item.unidadMedida ? `<div><strong>Unidad</strong> <span>${escapeHtml(item.unidadMedida)}</span></div>` : ''}
                 ${item.categoria ? `<div><strong>Categoria</strong> <span>${escapeHtml(item.categoria)}</span></div>` : ''}
                 ${item.ubicacion ? `<div><strong>Ubicacion</strong> <span>${escapeHtml(item.ubicacion)}</span></div>` : ''}
                 ${item.equipoAsociado ? `<div><strong>Equipo</strong> <span>${escapeHtml(item.equipoAsociado)}</span></div>` : ''}
-                ${item.costoPromedio !== '' && item.costoPromedio !== null ? `<div><strong>Costo</strong> <span>${escapeHtml(formatCurrency(item.costoPromedio))}</span></div>` : ''}
+                ${hasReportedValue(item.costoPromedio) ? `<div><strong>Costo promedio</strong> <span>${escapeHtml(formatMoney(item.costoPromedio, item.monedaCosto || (item._dataSource === 'bodega360-v1' ? '' : item.moneda)))}</span></div>` : ''}
                 ${item.estado && item.estado !== 'Activo' ? `<div><strong>Estado</strong> <span>${escapeHtml(item.estado)}</span></div>` : ''}
                 ${item.proyecto ? `<div><strong>Proyecto</strong> <span>${escapeHtml(item.proyecto)}</span></div>` : ''}
-                ${item.pendiente !== '' && item.pendiente !== null && item.pendiente !== undefined ? `<div><strong>Pendiente</strong> <span>${escapeHtml(String(item.pendiente))}</span></div>` : ''}
+                ${item.localidad ? `<div><strong>Localidad</strong> <span>${escapeHtml(item.localidad)}</span></div>` : ''}
+                ${item.tienePendiente ? `<div><strong>Pendiente</strong> <span>${hasReportedValue(item.cantidadPendiente) ? escapeHtml(String(item.cantidadPendiente)) : 'Si'}</span></div>` : ''}
+                ${item.entregaParcial ? `<div><strong>Entrega parcial</strong> <span>Si</span></div>` : ''}
                 ${item.pedido ? `<div><strong>Pedido</strong> <span>${escapeHtml(item.pedido)}</span></div>` : ''}
                 ${item.entrega ? `<div><strong>Entrega</strong> <span>${escapeHtml(item.entrega)}</span></div>` : ''}
-                ${item.localidad ? `<div><strong>Localidad</strong> <span>${escapeHtml(item.localidad)}</span></div>` : ''}
+                ${item.oc ? `<div><strong>OC</strong> <span>${escapeHtml(item.oc)}</span></div>` : ''}
+                ${item.proveedor ? `<div><strong>Proveedor</strong> <span>${escapeHtml(item.proveedor)}</span></div>` : ''}
+                ${hasReportedValue(item.monto) ? `<div><strong>Monto</strong> <span>${escapeHtml(formatMoney(item.monto, item.moneda))}</span></div>` : ''}
+                ${item.fechaEntrega ? `<div><strong>Fecha entrega</strong> <span>${escapeHtml(item.fechaEntrega)}</span></div>` : ''}
                 ${item.ultimoConsumo ? `<div><strong>Ult. consumo</strong> <span>${escapeHtml(item.ultimoConsumo)}</span></div>` : ''}
                 ${item.observaciones ? `<div><strong>Obs.</strong> <span>${escapeHtml(item.observaciones)}</span></div>` : ''}
-                ${item.stock !== '' && item.stock !== null && item.stock !== undefined ? `<div><strong>Stock</strong> <span>${escapeHtml(String(item.stock))}</span></div>` : ''}
+                ${hasReportedValue(item.stock) ? `<div><strong>Stock actual</strong> <span>${escapeHtml(String(item.stock))}</span></div>` : ''}
+                ${hasReportedValue(item.stockMinimo) ? `<div><strong>Stock minimo</strong> <span>${escapeHtml(String(item.stockMinimo))}</span></div>` : ''}
+                ${hasReportedValue(item.stockMaximo) ? `<div><strong>Stock maximo</strong> <span>${escapeHtml(String(item.stockMaximo))}</span></div>` : ''}
                 ${item.cantidad !== '' && item.cantidad !== null && item.cantidad !== undefined ? `<div><strong>Cantidad</strong> <span>${escapeHtml(String(item.cantidad))}</span></div>` : ''}
+                ${item.importWarnings.length ? `<div><strong>Advertencias</strong> <span>${escapeHtml(item.importWarnings.join(' | '))}</span></div>` : ''}
             </div>
             <div class="card-actions">
                 <button class="btn-secondary btn-copy-code" data-codigo="${escapeAttr(item.codigo)}">Copiar codigo</button>
@@ -1510,35 +1893,87 @@ function openDetailModal(codigo) {
     const item = materials.find(m => m.codigo === codigo);
     if (!item) return;
     const detail = normalizeMaterial(item);
-    const stockInfo = getStockInfo(detail);
-    const costOld = isCostOutdated(detail);
 
     const changeLogs = StorageAdapter.getChangeLogs();
     const lastChange = changeLogs.slice().reverse().find(l => l.codigo === codigo);
-    const modDateText = lastChange ? `${lastChange.fecha} ${lastChange.hora}` : 'Nunca (Original)';
-    const hasSource = detail.sourceFile || detail.sourceSheet || detail.sourceRow;
     const rawDataHtml = detail.rawData && typeof detail.rawData === 'object'
         ? `<details class="raw-data-panel detail-full"><summary>Ver datos originales</summary><pre>${escapeHtml(JSON.stringify(detail.rawData, null, 2))}</pre></details>`
         : '';
-
-    const recordTypeLabel = getRecordTypeLabel(detail.recordType);
+    const renderDetailItem = (label, value, full = false) => {
+        if (!hasReportedValue(value)) return '';
+        return `<div class="detail-item${full ? ' detail-full' : ''}"><div class="detail-label">${escapeHtml(label)}</div><div class="detail-value">${escapeHtml(value)}</div></div>`;
+    };
+    const sourceOrigins = Array.isArray(detail.sourceOrigins)
+        ? detail.sourceOrigins.map(origin => {
+            const sheet = firstReportedValue(origin.sheet, origin.sourceSheet);
+            const row = firstReportedValue(origin.row, origin.sourceRow);
+            return sheet ? `${sheet}${row ? ` fila ${row}` : ''}` : '';
+        })
+        : [];
+    const sourceSummary = summarizeValues(
+        sourceOrigins.length
+            ? sourceOrigins
+            : [`${detail.sourceSheet || ''}${detail.sourceRow ? ` fila ${detail.sourceRow}` : ''}`],
+        8
+    );
+    const alternativeCodes = summarizeValues(
+        detail.codigoAlternativos?.length ? detail.codigoAlternativos : [detail.codigoAlternativo],
+        8
+    );
+    const orderNumbers = summarizeValues(
+        detail.ordenesCompra?.length ? detail.ordenesCompra : [detail.oc],
+        8
+    );
+    const suppliers = summarizeValues(
+        detail.proveedores?.length ? detail.proveedores : [detail.proveedor],
+        8
+    );
+    const stockValue = hasReportedValue(detail.stock)
+        ? `${detail.stock}${detail.unidadMedida ? ` ${detail.unidadMedida}` : ''}`
+        : '';
+    const pendingValue = detail.pendienteInformado
+        ? (detail.tienePendiente
+            ? (hasReportedValue(detail.cantidadPendiente) ? detail.cantidadPendiente : 'Si')
+            : 'No')
+        : '';
+    const warnings = Array.isArray(detail.importWarnings) ? detail.importWarnings.join(' | ') : '';
+    const lastModification = lastChange
+        ? `${lastChange.fecha} ${lastChange.hora}`
+        : detail.ultimaModificacion;
     const content = document.getElementById('detail-content');
     content.innerHTML = `
-        ${item.foto ? `<img src="${item.foto}" class="detail-img" alt="${item.nombre}">` : ''}
-        <div class="detail-item"><div class="detail-label">Código</div><div class="detail-value">${item.codigo}</div></div>
-        <div class="detail-item"><div class="detail-label">Código Alternativo</div><div class="detail-value">${item.codigoAlternativo || '-'}</div></div>
-        <div class="detail-item detail-full"><div class="detail-label">Nombre</div><div class="detail-value">${item.nombre}</div></div>
-        <div class="detail-item detail-full"><div class="detail-label">Descripción</div><div class="detail-value">${item.descripcion || '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Categoría</div><div class="detail-value">${item.categoria || '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Marca</div><div class="detail-value">${item.marca || '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Modelo</div><div class="detail-value">${item.modelo || '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Stock</div><div class="detail-value">${item.stock !== "" && item.stock !== null ? item.stock + ' ' + (item.unidadMedida||'UN') : '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Costo Promedio</div><div class="detail-value">${item.costoPromedio !== "" && item.costoPromedio !== null ? formatCurrency(item.costoPromedio) + ' ' + (item.moneda || 'CLP') : '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Ubicación</div><div class="detail-value">${item.ubicacion || '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Estado</div><div class="detail-value">${item.estado || '-'}</div></div>
-        <div class="detail-item"><div class="detail-label">Validado</div><div class="detail-value">${item.validado ? 'Sí' : 'No'}</div></div>
-        <div class="detail-item"><div class="detail-label">Última Modificación</div><div class="detail-value">${modDateText}</div></div>
-        <div class="detail-item detail-full"><div class="detail-label">Observaciones</div><div class="detail-value">${item.observaciones || '-'}</div></div>
+        ${renderPhotoHtml(detail, 'detail-img', detail.nombre || detail.codigo)}
+        ${renderDetailItem('Codigo', detail.codigo)}
+        ${renderDetailItem('Codigo alternativo', alternativeCodes)}
+        ${renderDetailItem('Nombre', detail.nombre, true)}
+        ${renderDetailItem('Descripcion', detail.descripcion, true)}
+        ${renderDetailItem('Unidad de medida', detail.unidadMedida)}
+        ${renderDetailItem('Categoria', detail.categoria)}
+        ${renderDetailItem('Marca', detail.marca)}
+        ${renderDetailItem('Modelo', detail.modelo)}
+        ${renderDetailItem('Estado', detail.estado)}
+        ${renderDetailItem('Stock actual', stockValue)}
+        ${renderDetailItem('Stock minimo', hasReportedValue(detail.stockMinimo) ? detail.stockMinimo : '')}
+        ${renderDetailItem('Stock maximo', hasReportedValue(detail.stockMaximo) ? detail.stockMaximo : '')}
+        ${renderDetailItem('Ubicacion', detail.ubicacion)}
+        ${renderDetailItem('Proyecto', detail.proyecto)}
+        ${renderDetailItem('Localidad', detail.localidad)}
+        ${renderDetailItem('Pendiente', pendingValue)}
+        ${renderDetailItem('Entrega parcial', detail.entregaParcial ? 'Si' : '')}
+        ${renderDetailItem('Estado de entrega', detail.estadoEntrega)}
+        ${renderDetailItem('Cantidad pedida', detail.pedido)}
+        ${renderDetailItem('Cantidad entregada', detail.entrega)}
+        ${renderDetailItem('OC', orderNumbers)}
+        ${renderDetailItem('Proveedor', suppliers)}
+        ${renderDetailItem('Monto', hasReportedValue(detail.monto) ? formatMoney(detail.monto, detail.moneda) : '')}
+        ${renderDetailItem('Fecha de entrega', detail.fechaEntrega)}
+        ${renderDetailItem('Costo promedio', hasReportedValue(detail.costoPromedio) ? formatMoney(detail.costoPromedio, detail.monedaCosto || (detail._dataSource === 'bodega360-v1' ? '' : detail.moneda)) : '')}
+        ${renderDetailItem('Validado', detail.validadoInformado ? (detail.validado ? 'Si' : 'No') : '')}
+        ${renderDetailItem('Ultima modificacion', lastModification)}
+        ${renderDetailItem('Origen del dato', sourceSummary, true)}
+        ${renderDetailItem('Advertencias de calidad', warnings, true)}
+        ${renderDetailItem('Observaciones', detail.observaciones, true)}
+        ${rawDataHtml}
     `;
 
     document.getElementById('detail-modal').classList.remove('hidden');
@@ -2136,6 +2571,7 @@ function updateInventoryMaterial(mutator) {
     const nextMaterial = normalizeMaterial(mutator({ ...oldMaterial }));
     materials[idx] = nextMaterial;
     StorageAdapter.saveMaterials(materials);
+    markLocalDatabaseConfirmed('inventory-update', { codigo: nextMaterial.codigo });
     logChanges(oldMaterial.codigo, oldMaterial, nextMaterial);
     currentInventoryCode = nextMaterial.codigo;
     renderInventoryCard();
@@ -2291,6 +2727,7 @@ document.getElementById('material-form').addEventListener('submit', (e) => {
     }
 
     StorageAdapter.saveMaterials(materials);
+    markLocalDatabaseConfirmed(currentMaterialEditing ? 'manual-update' : 'manual-create', { codigo });
     resetMaterialForm();
     refreshAdminViews();
     switchTab('admin-materials');
@@ -2912,6 +3349,7 @@ document.getElementById('btn-restore-backup').addEventListener('click', () => {
             if (data.configuracion) StorageAdapter.saveSettings(data.configuracion);
             if (data.workbookRawMetadata) StorageAdapter.saveWorkbookMetadata(data.workbookRawMetadata);
             if (data.workbookRaw) StorageAdapter.saveWorkbookRaw(data.workbookRaw);
+            markLocalDatabaseConfirmed('backup-restore', { fileName: file.name });
 
             alert("Respaldo restaurado exitosamente.");
             refreshAdminViews();
@@ -2932,20 +3370,6 @@ document.getElementById('btn-clear-data').addEventListener('click', () => {
 // ============================================================================
 // MÓDULO: BASE MAESTRA
 // ============================================================================
-document.getElementById('btn-load-master-excel')?.addEventListener('click', loadDefaultMasterExcel);
-
-document.getElementById('btn-load-local-catalog')?.addEventListener('click', () => {
-    fetch('data/catalogo-materiales.json')
-        .then(res => {
-            if(!res.ok) throw new Error("File not found or CORS issue");
-            return res.json();
-        })
-        .then(data => { processMasterData(data, "data/catalogo-materiales.json"); })
-        .catch(err => {
-            alert("No se pudo cargar automáticamente desde /data.\nPosible causa: Ejecutando via file:// sin servidor local.\nAbre la app con 'python -m http.server' o usa 'Seleccionar archivo'.");
-        });
-});
-
 document.getElementById('file-master-catalog')?.addEventListener('change', (e) => {
     if(!e.target.files.length) return;
     const file = e.target.files[0];
@@ -2969,28 +3393,6 @@ document.getElementById('file-master-catalog')?.addEventListener('change', (e) =
     if (ext === 'xlsx' || ext === 'xls') reader.readAsArrayBuffer(file);
     else reader.readAsText(file);
 });
-
-async function loadDefaultMasterExcel() {
-    const fileProtocolMsg = 'Para cargar automáticamente el Excel desde /data, abra la app con servidor local. También puede usar Seleccionar archivo.';
-    if (location.protocol === 'file:') {
-        setMasterMessage(fileProtocolMsg, 'warning');
-        alert(fileProtocolMsg);
-        return;
-    }
-    if (!ensureXlsxAvailable()) return;
-    try {
-        setMasterMessage('Cargando Excel maestro desde /data...', 'info');
-        const response = await fetch(encodeURI(DEFAULT_MASTER_EXCEL_PATH));
-        if (!response.ok) throw new Error(`HTTP ${response.status}`);
-        const buffer = await response.arrayBuffer();
-        processWorkbookArrayBuffer(buffer, DEFAULT_MASTER_EXCEL_PATH, DEFAULT_MASTER_EXCEL_PATH);
-        setMasterMessage('Excel maestro cargado. Revise hojas, vista previa y politica antes de importar.', 'success');
-    } catch (err) {
-        const msg = `No se pudo cargar automaticamente el Excel desde /data. Use Seleccionar archivo o abra la app con servidor local. Detalle: ${err.message}`;
-        setMasterMessage(msg, 'error');
-        alert(msg);
-    }
-}
 
 function setMasterMessage(message, type = 'info') {
     const box = document.getElementById('master-auto-message');
@@ -3184,25 +3586,28 @@ function parseRowBySheetProfile(sheetName, row, rowNumber, headerMap, fileName) 
         codigoBarra: getMappedValue(row, headerMap.codigoBarra) || '',
         nombre,
         descripcion,
-        unidadMedida: getMappedValue(row, headerMap.unidadMedida) || 'UN',
+        unidadMedida: getMappedValue(row, headerMap.unidadMedida) || '',
         categoria: getMappedValue(row, headerMap.categoria) || '',
         marca: getMappedValue(row, headerMap.marca) || '',
         modelo: getMappedValue(row, headerMap.modelo) || '',
         stock: toNumberOrBlank(getMappedValue(row, headerMap.stock)),
         stockMinimo: toNumberOrBlank(getMappedValue(row, headerMap.stockMinimo)),
+        stockMaximo: toNumberOrBlank(getMappedValue(row, headerMap.stockMaximo)),
         cantidad: toNumberOrBlank(getMappedValue(row, headerMap.cantidad)),
         valorUnitario: toNumberOrBlank(getMappedValue(row, headerMap.valorUnitario)),
         valorTotal: toNumberOrBlank(getMappedValue(row, headerMap.valorTotal)),
         costoPromedio: toNumberOrBlank(getMappedValue(row, headerMap.costoPromedio)),
-        moneda: getMappedValue(row, headerMap.moneda) || 'CLP',
+        moneda: getMappedValue(row, headerMap.moneda) || '',
         ubicacion: getMappedValue(row, headerMap.ubicacion) || '',
-        estado: getMappedValue(row, headerMap.estado) || 'Activo',
+        estado: getMappedValue(row, headerMap.estado) || '',
         proyecto: getMappedValue(row, headerMap.proyecto) || '',
         localidad: getMappedValue(row, headerMap.localidad) || '',
         pedido: getMappedValue(row, headerMap.pedido) || '',
         entrega: getMappedValue(row, headerMap.entrega) || '',
         pendiente: toNumberOrBlank(getMappedValue(row, headerMap.pendiente)),
         oc: getMappedValue(row, headerMap.oc) || '',
+        proveedor: getMappedValue(row, headerMap.proveedor) || '',
+        sc: getMappedValue(row, headerMap.sc) || '',
         fecha: getMappedValue(row, headerMap.fecha) || '',
         fechaAprobacion: getMappedValue(row, headerMap.fechaAprobacion) || '',
         fechaEntrega: getMappedValue(row, headerMap.fechaEntrega) || '',
@@ -3211,17 +3616,19 @@ function parseRowBySheetProfile(sheetName, row, rowNumber, headerMap, fileName) 
         notas: getMappedValue(row, headerMap.notas) || '',
         equipoAsociado: getMappedValue(row, headerMap.equipoAsociado) || '',
         aliasBusqueda: [getMappedValue(row, headerMap.aliasBusqueda), codigoAlternativo].filter(Boolean).join(', '),
-        estadoRevision: 'Pendiente',
-        validado: headerMap.validado ? parseBooleanLike(getMappedValue(row, headerMap.validado)) : true,
+        estadoRevision: '',
+        validado: headerMap.validado ? parseBooleanLike(getMappedValue(row, headerMap.validado)) : false,
+        validadoInformado: Boolean(headerMap.validado),
         esCritico: false,
-        origenCosto: 'Excel',
+        origenCosto: headerMap.costoPromedio ? 'Excel' : '',
         sourceSheet: sheetName,
         sourceRow: rowNumber,
         sourceFile: fileName,
         rawData: { ...raw },
         recordType: profile.recordType,
         encabezadosDetectados: { ...headerMap },
-        importWarnings: []
+        importWarnings: [],
+        _preserveMissingFields: true
     };
 
     if (profile.deriveEstado) {
@@ -3241,9 +3648,10 @@ function buildSearchableText(item) {
         item.sourceSheet, item.recordType,
         item.proyecto, item.localidad, item.estado,
         item.notas, item.observaciones,
-        item.ultimoConsumo, item.pedido, item.entrega, item.oc,
+        item.ultimoConsumo, item.pedido, item.entrega, item.oc, item.proveedor, item.sc,
         item.aliasBusqueda,
-        String(item.pendiente), String(item.stock), String(item.cantidad)
+        String(item.pendiente), String(item.stock), String(item.cantidad),
+        String(item.valorUnitario), String(item.valorTotal)
     ];
     return normalizeText(fields.filter(Boolean).join(' '));
 }
@@ -3251,19 +3659,37 @@ function buildSearchableText(item) {
 function processWorkbookArrayBuffer(buffer, fileName, sourcePath = fileName) {
     if (!ensureXlsxAvailable()) return;
     const workbook = XLSX.read(buffer, { type: 'array', cellText: true, cellDates: false, raw: true });
-    currentImportData = parseWorkbookToImportData(workbook, fileName, sourcePath);
+    currentImportData = normalizeExcelWorkbookToBodega360V1(workbook, fileName, sourcePath);
     renderMasterPreview();
+}
+
+function normalizeExcelWorkbookToBodega360V1(workbook, fileName = 'importacion.xlsx', sourcePath = fileName) {
+    const importData = parseWorkbookToImportData(workbook, fileName, sourcePath);
+    const normalizedDb = {
+        materials: buildNormalizedMaterials(importData),
+        rawSheets: importData.workbookRaw || []
+    };
+    normalizedDb.searchIndex = buildSearchIndexes(normalizedDb);
+    importData.normalizedDb = normalizedDb;
+    return importData;
+}
+
+function buildRawSheets(workbook) {
+    return workbook.SheetNames.map(sheetName =>
+        extractSheetRaw(workbook.Sheets[sheetName], sheetName)
+    );
 }
 
 function parseWorkbookToImportData(workbook, fileName, sourcePath = fileName) {
     const sheets = [];
-    const workbookRaw = [];
+    const rawSheets = buildRawSheets(workbook);
+    const workbookRaw = rawSheets.map(sheet => ({ sheetName: sheet.sheetName, rows: sheet.rows }));
     const items = [];
     let totalRowsRead = 0;
     let ignoredRows = 0;
 
-    workbook.SheetNames.forEach(sheetName => {
-        const sheetRaw = extractSheetRaw(workbook.Sheets[sheetName], sheetName);
+    rawSheets.forEach(sheetRaw => {
+        const sheetName = sheetRaw.sheetName;
         const detected = detectSheetStructure(sheetRaw);
         const sheetItems = buildMaterialsFromSheet(sheetRaw, detected, fileName);
         const selected = shouldSelectSheetByDefault(sheetName, detected, sheetItems);
@@ -3272,7 +3698,6 @@ function parseWorkbookToImportData(workbook, fileName, sourcePath = fileName) {
 
         totalRowsRead += sheetRaw.rows.length;
         ignoredRows += detected.ignoredRows;
-        workbookRaw.push({ sheetName, rows: sheetRaw.rows });
         sheets.push({
             sheetName,
             selected,
@@ -3374,8 +3799,6 @@ function collectWorkbookWarnings(sheets) {
 }
 
 function shouldSelectSheetByDefault(sheetName, detected, sheetItems) {
-    const upperName = normalizeText(sheetName).toUpperCase();
-    if (CONTROL_SHEETS.has(upperName)) return false;
     const profile = getSheetProfile(sheetName);
     if (profile.recordType === 'hoja_generica') return false;
     if (DEFAULT_MATERIAL_SHEETS.has(sheetName.toUpperCase()) || profile.recordType !== 'catalogo_codigo') return sheetItems.length > 0;
@@ -3517,6 +3940,7 @@ function detectHeaderField(label) {
     if (/(alternativo|altern|corto|referencia|parte|part number|partnumber|nombre busqueda|search name)/.test(n)) return 'codigoAlternativo';
     if (/(codigo\s*prod|codigo\s*producto|codigo|code|cod\b|sku|item\s*code|itemcode|items\s*code|stock\s*code|material\s*code)/.test(n) || ['cod', 'codigo', 'code', 'sku'].includes(c)) return 'codigo';
     if (/(u\/m|um\b|unidad\s*medida|unid|med\b|unidad)/.test(n) || ['um', 'unid', 'unidad'].includes(c)) return 'unidadMedida';
+    if (/(stock\s*maximo|maximo|stock\s*tope)/.test(n)) return 'stockMaximo';
     if (/(stock\s*minimo|minimo|stock\s*critico)/.test(n)) return 'stockMinimo';
     if (/(^stock$|stock\s|existencia|disp)/.test(n) && !/stock.minimo/.test(n)) return 'stock';
     if (/(costo\s*promedio|costo|precio)/.test(n)) return 'costoPromedio';
@@ -3534,10 +3958,12 @@ function detectHeaderField(label) {
     if (/(detalle|glosa|texto\s*breve|descripcion|description)/.test(n)) return 'descripcion';
     if (/(id\.?\s*de\s*proyecto|id\s*proyecto|proyecto|project)/.test(n)) return 'proyecto';
     if (/(localidad|locacion|locaci.n|ciudad|sector)/.test(n)) return 'localidad';
-    if (/(pedido|orden\s*de\s*compra|no\.?\s*pedido|po\b)/.test(n)) return 'pedido';
+    if (/(proveedor|supplier|vendor)/.test(n)) return 'proveedor';
+    if (/(^sc$|solicitud\s*(de\s*)?compra|purchase\s*request)/.test(n)) return 'sc';
+    if (/(oc\b|o\.c|orden\s*(de\s*)?compra|po\b|purchase\s*order)/.test(n)) return 'oc';
+    if (/(pedido|no\.?\s*pedido)/.test(n)) return 'pedido';
     if (/entrega/.test(n)) return 'entrega';
     if (/(pendiente|pend|saldo)/.test(n)) return 'pendiente';
-    if (/(oc\b|o\.c|orden\s*compra|oc\s+puest)/.test(n)) return 'oc';
     if (/(fecha\s*aprob|fecha\s*aprob\.?\s*sol)/.test(n)) return 'fechaAprobacion';
     if (/(fecha\s*entrega|fec\s*entrega)/.test(n)) return 'fechaEntrega';
     if (/(ultimo\s*consumo|ult\.?\s*consumo|ultimo\s*consumo|fecha\s*consumo|fec\s*consumo|consumo)/.test(n)) return 'ultimoConsumo';
@@ -3681,7 +4107,8 @@ function buildMaterialCandidate(row, sheetName, detected, fileName, profile) {
 
     const item = {
         ...parsed,
-        origenCosto: 'Excel',
+        origenCosto: hasReportedValue(parsed.costoPromedio) ? 'Excel' : '',
+        _preserveMissingFields: true,
         importWarnings: detected.warnings || []
     };
     return normalizeMaterial(item);
@@ -3690,10 +4117,12 @@ function buildMaterialCandidate(row, sheetName, detected, fileName, profile) {
 function normalizeMasterRow(row) {
     const out = {
         codigo: '', codigoAlternativo: '', codigoBarra: '', nombre: '', descripcion: '', categoria: '',
-        marca: '', modelo: '', unidadMedida: 'UN', stock: '', stockMinimo: '', costoPromedio: '',
-        fechaCostoPromedio: '', origenCosto: 'Excel', moneda: 'CLP', ubicacion: '', estado: 'Activo',
-        equipoAsociado: '', aliasBusqueda: '', estadoRevision: 'Pendiente',
-        observaciones: '', fotoPrincipal: '', foto: '', fotosAdicionales: [], validado: true, esCritico: false
+        marca: '', modelo: '', unidadMedida: '', stock: '', stockMinimo: '', stockMaximo: '', costoPromedio: '',
+        fechaCostoPromedio: '', origenCosto: '', moneda: '', ubicacion: '', estado: '',
+        equipoAsociado: '', aliasBusqueda: '', estadoRevision: '',
+        observaciones: '', fotoPrincipal: '', foto: '', fotosAdicionales: [],
+        validado: false, validadoInformado: false, esCritico: false,
+        _preserveMissingFields: true
     };
 
     Object.keys(row).forEach(k => {
@@ -3710,6 +4139,7 @@ function normalizeMasterRow(row) {
         else if (['unidadmedida','unidad','um'].includes(kl)) out.unidadMedida = String(val);
         else if (['stock','cantidad','existencia'].includes(kl)) out.stock = val;
         else if (['stockminimo','minimo','stockcritico'].includes(kl)) out.stockMinimo = val;
+        else if (['stockmaximo','maximo','stocktope'].includes(kl)) out.stockMaximo = val;
         else if (['costopromedio','preciopromedio','costo','precio','valor'].includes(kl)) out.costoPromedio = val;
         else if (['fechacostopromedio','fechacosto','fechaprecio'].includes(kl)) out.fechaCostoPromedio = String(val);
         else if (['origencosto','origenprecio'].includes(kl)) out.origenCosto = String(val);
@@ -3722,12 +4152,16 @@ function normalizeMasterRow(row) {
         else if (['observaciones','nota','comentario'].includes(kl)) out.observaciones = String(val);
         else if (['fotoprincipal','foto','imagen','urlfoto'].includes(kl)) { out.fotoPrincipal = String(val); out.foto = String(val); }
         else if (['fotosadicionales','fotos','imagenes'].includes(kl)) out.fotosAdicionales = splitKeywords(val);
-        else if (['validado','revisado'].includes(kl)) out.validado = (val === 'true' || val === true || val === '1' || String(val).toLowerCase() === 'si');
+        else if (['validado','revisado'].includes(kl)) {
+            out.validado = (val === 'true' || val === true || val === '1' || String(val).toLowerCase() === 'si');
+            out.validadoInformado = true;
+        }
         else if (['escritico','critico','materialcritico'].includes(kl)) out.esCritico = (val === 'true' || val === true || val === '1' || String(val).toLowerCase() === 'si');
     });
 
     if(out.stock !== "" && !isNaN(out.stock)) out.stock = Number(out.stock);
     if(out.stockMinimo !== "" && !isNaN(out.stockMinimo)) out.stockMinimo = Number(out.stockMinimo);
+    if(out.stockMaximo !== "" && !isNaN(out.stockMaximo)) out.stockMaximo = Number(out.stockMaximo);
     if(out.costoPromedio !== "" && !isNaN(out.costoPromedio)) out.costoPromedio = Number(out.costoPromedio);
 
     return normalizeMaterial({
@@ -3854,6 +4288,637 @@ function processMasterData(rawData, fileName) {
     renderMasterPreview();
 }
 
+function cleanImportCandidate(item) {
+    const clean = { ...item };
+    delete clean._originalRow;
+    delete clean._errors;
+    delete clean._warnings;
+    delete clean._isExisting;
+    return clean;
+}
+
+function getMaterialIdentityPriority(recordType) {
+    const priorities = {
+        catalogo_codigo: 100,
+        codigo_konec: 90,
+        material_sin_movimiento: 70,
+        repuesto_mali: 70,
+        insumo_reamer: 70,
+        tricono: 70,
+        repuesto_peru: 70,
+        min_max: 50,
+        pendiente_entrega: 40,
+        control_sc_chile: 30,
+        control_sc_extranjero: 30
+    };
+    return priorities[recordType] || 10;
+}
+
+function buildNormalizedMaterials(rawSheets) {
+    const items = Array.isArray(rawSheets)
+        ? rawSheets
+        : (rawSheets?.items || []);
+    const grouped = new Map();
+    const stockRecordTypes = new Set([
+        'catalogo_codigo',
+        'codigo_konec',
+        'material_sin_movimiento',
+        'repuesto_mali',
+        'insumo_reamer',
+        'tricono',
+        'repuesto_peru'
+    ]);
+
+    items.forEach(candidate => {
+        if (candidate?._errors?.length) return;
+        const item = cleanImportCandidate(candidate || {});
+        const code = String(item.codigo || '').trim();
+        if (!code || code.startsWith(`${item.recordType}:`)) return;
+        const recordType = canonicalRecordType(item);
+        const priority = getMaterialIdentityPriority(recordType);
+
+        if (!grouped.has(code)) {
+            grouped.set(code, {
+                id: `mat::${code}`,
+                codigo: code,
+                codigoAlternativo: '',
+                codigoAlternativos: new Set(),
+                nombre: '',
+                nombresAlternativos: new Set(),
+                descripcion: '',
+                descripcionesAlternativas: new Set(),
+                unidadMedida: '',
+                categoria: '',
+                estado: '',
+                proyectos: new Set(),
+                localidades: new Set(),
+                stockActual: null,
+                stockMinimo: null,
+                stockMaximo: null,
+                stockFuentes: [],
+                compras: [],
+                pendientes: [],
+                costos: [],
+                observaciones: new Set(),
+                origenes: [],
+                sourceSheets: new Set(),
+                identityPriority: -1
+            });
+        }
+
+        const target = grouped.get(code);
+        target.sourceSheets.add(item.sourceSheet || '');
+        target.origenes.push({
+            sheet: item.sourceSheet || '',
+            row: item.sourceRow || '',
+            recordType
+        });
+
+        if (item.codigoAlternativo) target.codigoAlternativos.add(String(item.codigoAlternativo).trim());
+        if (item.nombre) target.nombresAlternativos.add(String(item.nombre).trim());
+        if (item.descripcion) target.descripcionesAlternativas.add(String(item.descripcion).trim());
+        if (item.proyecto) target.proyectos.add(String(item.proyecto).trim());
+        if (item.localidad) target.localidades.add(String(item.localidad).trim());
+        if (item.observaciones) target.observaciones.add(String(item.observaciones).trim());
+        if (item.notas) target.observaciones.add(String(item.notas).trim());
+
+        if (priority > target.identityPriority) {
+            target.identityPriority = priority;
+            for (const field of ['codigoAlternativo', 'nombre', 'descripcion', 'unidadMedida', 'categoria', 'estado']) {
+                if (hasReportedValue(item[field])) target[field] = item[field];
+            }
+        } else {
+            for (const field of ['codigoAlternativo', 'nombre', 'descripcion', 'unidadMedida', 'categoria', 'estado']) {
+                if (!hasReportedValue(target[field]) && hasReportedValue(item[field])) target[field] = item[field];
+            }
+        }
+
+        if (recordType === 'min_max') {
+            if (hasReportedValue(item.stockMinimo)) target.stockMinimo = Number(item.stockMinimo);
+            if (hasReportedValue(item.stockMaximo)) target.stockMaximo = Number(item.stockMaximo);
+        } else {
+            if (hasReportedValue(item.stockMinimo)) target.stockMinimo = Number(item.stockMinimo);
+            if (hasReportedValue(item.stockMaximo)) target.stockMaximo = Number(item.stockMaximo);
+            if (stockRecordTypes.has(recordType) && hasReportedValue(item.stock)) {
+                const stock = Number(item.stock);
+                if (Number.isFinite(stock)) {
+                    target.stockActual = (target.stockActual ?? 0) + stock;
+                    target.stockFuentes.push({
+                        cantidad: stock,
+                        ubicacion: item.ubicacion || '',
+                        proyecto: item.proyecto || '',
+                        localidad: item.localidad || '',
+                        sourceSheet: item.sourceSheet || '',
+                        sourceRow: item.sourceRow || ''
+                    });
+                }
+            }
+        }
+
+        if (recordType === 'pendiente_entrega') {
+            target.pendientes.push({
+                tipo: 'pendiente_entrega',
+                estadoEntrega: item.estado || '',
+                pedido: numberOrEmpty(item.pedido),
+                entrega: numberOrEmpty(item.entrega),
+                pendiente: numberOrEmpty(item.pendiente),
+                valorPendiente: numberOrEmpty(item.valorTotal),
+                proyecto: item.proyecto || '',
+                localidad: item.localidad || '',
+                fechaEntrega: item.fechaEntrega || '',
+                sourceSheet: item.sourceSheet || '',
+                sourceRow: item.sourceRow || ''
+            });
+        }
+
+        if (recordType === 'control_sc_chile' || recordType === 'control_sc_extranjero') {
+            target.compras.push({
+                tipo: 'compra',
+                sc: item.sc || '',
+                oc: item.oc || item.pedido || '',
+                proveedor: item.proveedor || '',
+                estado: item.estado || '',
+                cantidad: numberOrEmpty(item.cantidad),
+                valorUnitario: numberOrEmpty(item.valorUnitario),
+                valorTotal: numberOrEmpty(item.valorTotal),
+                moneda: item.moneda || '',
+                fecha: item.fecha || '',
+                sourceSheet: item.sourceSheet || '',
+                sourceRow: item.sourceRow || ''
+            });
+        }
+
+        if (hasReportedValue(item.costoPromedio)) {
+            target.costos.push({
+                costoPromedio: Number(item.costoPromedio),
+                moneda: item.moneda || '',
+                origenCosto: item.origenCosto || 'Excel',
+                sourceSheet: item.sourceSheet || '',
+                sourceRow: item.sourceRow || ''
+            });
+        }
+    });
+
+    return Array.from(grouped.values()).map(target => {
+        const pendingRecords = target.pendientes;
+        const purchaseRecords = target.compras;
+        const allPurchaseRecords = [...purchaseRecords, ...pendingRecords];
+        const activePendingRecords = pendingRecords.filter(record =>
+            Number(record.pendiente || 0) > 0
+            || /pendiente|parcial/i.test(String(record.estadoEntrega || ''))
+        );
+        const amountPending = activePendingRecords.reduce((sum, record) =>
+            sum + (Number(record.pendiente) || 0), 0
+        );
+        const moneyPending = activePendingRecords.reduce((sum, record) =>
+            sum + (Number(record.valorPendiente) || 0), 0
+        );
+        const partial = activePendingRecords.some(record =>
+            /parcial/i.test(String(record.estadoEntrega || ''))
+        );
+        const cost = target.costos.slice().reverse()[0] || null;
+        const alternativeCodes = uniqueReportedValues(Array.from(target.codigoAlternativos));
+        const alternativeNames = uniqueReportedValues(Array.from(target.nombresAlternativos))
+            .filter(value => value !== target.nombre);
+        const alternativeDescriptions = uniqueReportedValues(Array.from(target.descripcionesAlternativas))
+            .filter(value => value !== target.descripcion);
+        const projects = uniqueReportedValues(Array.from(target.proyectos));
+        const locations = uniqueReportedValues(Array.from(target.localidades));
+        const sourceSheets = uniqueReportedValues(Array.from(target.sourceSheets));
+        const observations = uniqueReportedValues(Array.from(target.observaciones));
+        const searchableText = uniqueReportedValues([
+            target.codigo,
+            target.codigoAlternativo,
+            alternativeCodes,
+            target.nombre,
+            alternativeNames,
+            target.descripcion,
+            alternativeDescriptions,
+            target.unidadMedida,
+            target.categoria,
+            projects,
+            locations,
+            observations,
+            allPurchaseRecords.flatMap(record => Object.values(record))
+        ]).join(' ');
+        const qualityChecks = [
+            target.codigo,
+            target.nombre,
+            target.descripcion,
+            target.unidadMedida,
+            target.categoria,
+            target.estado,
+            sourceSheets.length,
+            searchableText
+        ];
+
+        return {
+            id: target.id,
+            codigo: target.codigo,
+            codigoAlternativo: target.codigoAlternativo || alternativeCodes[0] || '',
+            codigoAlternativos: alternativeCodes,
+            nombre: target.nombre || target.descripcion,
+            nombresAlternativos: alternativeNames,
+            descripcion: target.descripcion || target.nombre,
+            descripcionesAlternativas: alternativeDescriptions,
+            unidadMedida: target.unidadMedida,
+            categoria: target.categoria,
+            estado: target.estado,
+            proyectos: projects,
+            localidades: locations,
+            stock: {
+                actual: target.stockActual,
+                minimo: target.stockMinimo,
+                maximo: target.stockMaximo,
+                confiabilidad: target.stockFuentes.length ? 'detectado_en_excel' : 'sin_stock_detectado',
+                ubicaciones: target.stockFuentes,
+                fuentes: target.stockFuentes
+            },
+            compras: {
+                pendiente: activePendingRecords.length > 0,
+                estadoEntrega: partial ? 'Parcial' : (activePendingRecords.length ? 'Pendiente' : ''),
+                cantidadPendiente: activePendingRecords.length ? amountPending : null,
+                montoPendiente: activePendingRecords.length ? moneyPending : null,
+                moneda: uniqueReportedValues(allPurchaseRecords.map(record => record.moneda))[0] || '',
+                registros: allPurchaseRecords
+            },
+            costos: {
+                costoPromedio: cost ? cost.costoPromedio : null,
+                moneda: cost?.moneda || '',
+                origenCosto: cost?.origenCosto || '',
+                fuentes: target.costos
+            },
+            observaciones: observations,
+            origenes: target.origenes,
+            sourceSheets,
+            searchableText,
+            calidadDato: Math.round((qualityChecks.filter(Boolean).length / qualityChecks.length) * 100)
+        };
+    });
+}
+
+function buildSearchIndexes(normalizedDb) {
+    return (normalizedDb?.materials || []).map(material => ({
+        id: material.id,
+        codigo: material.codigo,
+        codigoAlternativo: material.codigoAlternativo,
+        codigoAlternativos: material.codigoAlternativos || [],
+        nombre: material.nombre,
+        descripcion: material.descripcion,
+        unidadMedida: material.unidadMedida,
+        categoria: material.categoria,
+        estado: material.estado,
+        stockActualDetectado: material.stock?.actual ?? null,
+        stockMinimo: material.stock?.minimo ?? null,
+        stockMaximo: material.stock?.maximo ?? null,
+        pendiente: material.compras?.pendiente === true,
+        cantidadPendiente: material.compras?.cantidadPendiente ?? null,
+        montoPendiente: material.compras?.montoPendiente ?? null,
+        estadoEntrega: material.compras?.estadoEntrega || '',
+        proyectos: material.proyectos || [],
+        localidades: material.localidades || [],
+        sourceSheets: material.sourceSheets || [],
+        calidadDato: material.calidadDato,
+        searchableText: material.searchableText
+    }));
+}
+
+function buildImportedDatabaseFromSelection() {
+    const selectedItems = getSelectedImportItems();
+    const normalizedMaterials = buildNormalizedMaterials({ items: selectedItems });
+    const normalizedDb = { materials: normalizedMaterials };
+    const searchIndex = buildSearchIndexes(normalizedDb);
+    const searchEntryMap = new Map(searchIndex.map(entry => [String(entry.codigo), entry]));
+    const materials = normalizedMaterials.map(material =>
+        normalizeMaterialForCurrentUI(material, searchEntryMap.get(String(material.codigo)))
+    );
+    return {
+        schema: 'bodega360-json-modelo-v1',
+        generatedAt: new Date().toISOString(),
+        sourceFile: currentImportData?.fileName || '',
+        normalizedMaterials,
+        searchIndex,
+        materials
+    };
+}
+
+function comparableMaterialValue(value) {
+    if (Array.isArray(value)) return JSON.stringify(uniqueReportedValues(value).sort());
+    if (!hasReportedValue(value)) return '';
+    if (typeof value === 'boolean') return value ? 'true' : 'false';
+    return normalizeText(String(value));
+}
+
+function isImportedFieldReported(material, field) {
+    if (field === 'tienePendiente') return material.pendienteInformado === true;
+    const value = material[field];
+    if (Array.isArray(value)) return value.length > 0;
+    return hasReportedValue(value);
+}
+
+function compareImportedDatabase(currentDb, importedDb) {
+    const currentMaterials = currentDb?.materials || [];
+    const importedMaterials = importedDb?.materials || [];
+    const currentMap = new Map(currentMaterials.map(material => [String(material.codigo), normalizeMaterial(material)]));
+    const importedMap = new Map(importedMaterials.map(material => [String(material.codigo), normalizeMaterial(material)]));
+    const fields = [
+        'codigoAlternativo', 'nombre', 'descripcion', 'unidadMedida', 'categoria',
+        'estado', 'stock', 'stockMinimo', 'stockMaximo', 'tienePendiente',
+        'cantidadPendiente', 'montoPendiente', 'proyecto', 'localidad',
+        'oc', 'proveedor', 'fechaEntrega', 'costoPromedio', 'monedaCosto'
+    ];
+    const result = {
+        added: [],
+        updated: [],
+        removed: [],
+        unchanged: [],
+        warnings: [],
+        errors: [],
+        stats: {}
+    };
+
+    importedMap.forEach((after, code) => {
+        const before = currentMap.get(code);
+        if (!before) {
+            result.added.push(after);
+            return;
+        }
+        const changes = {};
+        fields.forEach(field => {
+            if (!isImportedFieldReported(after, field)) return;
+            const beforeValue = comparableMaterialValue(before[field]);
+            const afterValue = comparableMaterialValue(after[field]);
+            if (beforeValue !== afterValue) {
+                changes[field] = { before: before[field] ?? '', after: after[field] ?? '' };
+            }
+        });
+        if (Object.keys(changes).length) {
+            result.updated.push({ codigo: code, before, after, changes });
+        } else {
+            result.unchanged.push(after);
+        }
+    });
+
+    currentMap.forEach((material, code) => {
+        if (importedMap.has(code)) return;
+        result.removed.push({
+            ...material,
+            posibleEliminado: true,
+            noEncontradoEnUltimaCarga: true
+        });
+    });
+
+    result.stats = {
+        current: currentMaterials.length,
+        imported: importedMaterials.length,
+        added: result.added.length,
+        updated: result.updated.length,
+        removed: result.removed.length,
+        unchanged: result.unchanged.length,
+        decreasePercent: currentMaterials.length
+            ? Math.max(0, Math.round(((currentMaterials.length - importedMaterials.length) / currentMaterials.length) * 1000) / 10)
+            : 0
+    };
+    if (result.removed.length) {
+        result.warnings.push(`${result.removed.length} codigos no aparecen en la nueva carga; se marcaran como posibles eliminados y se conservaran por defecto.`);
+    }
+    return result;
+}
+
+function validateImportedDatabase(importData, importedDb, selectedItems) {
+    const currentCount = StorageAdapter.getMaterials().length;
+    const importedCount = importedDb.materials.length;
+    const selectedSheets = (importData.sheets || []).filter(sheet => sheet.selected);
+    const rowsWithoutCode = selectedItems.filter(item =>
+        !item.codigo || String(item.codigo).startsWith(`${item.recordType}:`)
+    ).length;
+    const parseErrors = selectedItems.filter(item => item._errors?.length).length;
+    const criticalEmpty = importedDb.materials.filter(material =>
+        !material.codigo || (!material.nombre && !material.descripcion)
+    ).length;
+    const duplicateMap = new Map();
+    selectedItems
+        .filter(item => ['catalogo_codigo', 'codigo_konec'].includes(canonicalRecordType(item)))
+        .filter(item => item.codigo)
+        .forEach(item => {
+            const key = `${item.sourceSheet}:${item.codigo}`;
+            duplicateMap.set(key, (duplicateMap.get(key) || 0) + 1);
+        });
+    const duplicateCodes = Array.from(duplicateMap.entries()).filter(([, count]) => count > 1);
+    const unknownColumns = selectedSheets.flatMap(sheet => {
+        const mappedColumns = new Set(Object.values(sheet.mapping || {}));
+        return Object.entries(sheet.headersByColumn || {})
+            .filter(([column]) => !mappedColumns.has(column))
+            .map(([, label]) => `${sheet.sheetName}: ${label}`);
+    });
+    const decreasePercent = currentCount
+        ? Math.max(0, ((currentCount - importedCount) / currentCount) * 100)
+        : 0;
+    const errors = [];
+    const warnings = [];
+
+    if (!/\.(xlsx|xls|csv|json)$/i.test(importData.fileName || '')) errors.push('Formato de archivo no reconocido.');
+    if (!selectedSheets.length) errors.push('No hay hojas seleccionadas.');
+    if (selectedItems.length === 0) errors.push('No se detectaron filas candidatas.');
+    if (importedCount === 0) errors.push('No se detectaron codigos normalizados.');
+    if (parseErrors) {
+        const parseErrorPercent = selectedItems.length ? (parseErrors / selectedItems.length) * 100 : 100;
+        if (parseErrorPercent > 10) {
+            errors.push(`${parseErrors} filas tienen errores de parseo (${parseErrorPercent.toFixed(1)}%).`);
+        } else {
+            warnings.push(`${parseErrors} filas con errores de parseo seran omitidas.`);
+        }
+    }
+    if (criticalEmpty) errors.push(`${criticalEmpty} materiales tienen campos criticos vacios.`);
+    const requiresCriticalConfirmation = decreasePercent > 30;
+    if (requiresCriticalConfirmation) {
+        warnings.unshift(`ADVERTENCIA CRITICA: la carga tiene ${decreasePercent.toFixed(1)}% menos materiales que la base actual. Requiere confirmacion reforzada.`);
+    }
+    if (rowsWithoutCode) warnings.push(`${rowsWithoutCode} filas no tienen codigo utilizable.`);
+    if (duplicateCodes.length) warnings.push(`${duplicateCodes.length} codigos duplicados fueron detectados en hojas de catalogo.`);
+    if (unknownColumns.length) warnings.push(`${unknownColumns.length} columnas no fueron mapeadas; permanecen en rawData.`);
+    if (selectedItems.length < 5) warnings.push('La carga contiene menos de 5 filas candidatas.');
+
+    return {
+        errors,
+        warnings,
+        blocked: errors.length > 0,
+        requiresCriticalConfirmation,
+        stats: {
+            sheetsDetected: (importData.sheets || []).length,
+            sheetsSelected: selectedSheets.length,
+            rowsSelected: selectedItems.length,
+            codesDetected: importedCount,
+            duplicateCodes: duplicateCodes.length,
+            rowsWithoutCode,
+            unknownColumns: unknownColumns.length,
+            criticalEmpty,
+            parseErrors,
+            currentCount,
+            decreasePercent: Math.round(decreasePercent * 10) / 10
+        }
+    };
+}
+
+function renderImportValidationSummary(report) {
+    const container = document.getElementById('master-validation-summary');
+    if (!container || !report) return;
+    const status = report.blocked
+        ? '<div class="recommendation-item" style="border-color:var(--danger-color);color:var(--danger-color);"><strong>Importacion bloqueada:</strong> corrija los errores antes de aplicar.</div>'
+        : report.requiresCriticalConfirmation
+            ? '<div class="recommendation-item" style="border-color:var(--danger-color);color:var(--danger-color);"><strong>Confirmacion critica requerida:</strong> la carga reduce la base activa en mas de 30%.</div>'
+            : '<div class="recommendation-item"><strong>Validacion lista:</strong> la carga puede confirmarse.</div>';
+    container.innerHTML = status
+        + report.errors.map(error => `<div class="recommendation-item" style="border-color:var(--danger-color);">${escapeHtml(error)}</div>`).join('')
+        + report.warnings.slice(0, 8).map(warning => `<div class="recommendation-item warning">${escapeHtml(warning)}</div>`).join('');
+}
+
+function renderDiffSummary(diff) {
+    const container = document.getElementById('master-diff-summary');
+    if (!container || !diff) return;
+    container.innerHTML = `
+        <div><strong>Comparacion contra base activa</strong></div>
+        <div>Nuevos: <strong>${diff.stats.added}</strong></div>
+        <div>Modificados: <strong>${diff.stats.updated}</strong></div>
+        <div>No encontrados en la carga: <strong>${diff.stats.removed}</strong> (se conservan por defecto)</div>
+        <div>Sin cambios: <strong>${diff.stats.unchanged}</strong></div>
+        ${diff.warnings.map(warning => `<div class="text-muted">${escapeHtml(warning)}</div>`).join('')}
+    `;
+}
+
+function refreshImportAnalysis() {
+    if (!currentImportData) return null;
+    const selectedItems = getSelectedImportItems();
+    const importedDb = buildImportedDatabaseFromSelection();
+    const validationReport = validateImportedDatabase(currentImportData, importedDb, selectedItems);
+    const diff = compareImportedDatabase({ materials: StorageAdapter.getMaterials() }, importedDb);
+    diff.warnings.push(...validationReport.warnings);
+    diff.errors.push(...validationReport.errors);
+    currentImportData.importedDb = importedDb;
+    currentImportData.validationReport = validationReport;
+    currentImportData.diff = diff;
+    renderImportValidationSummary(validationReport);
+    renderDiffSummary(diff);
+    return { selectedItems, importedDb, validationReport, diff };
+}
+
+function applyConfirmedChanges(currentDb, diff, options = {}) {
+    const policy = options.policy || 'update';
+    const importedDb = options.importedDb || { materials: [] };
+    if (policy === 'replace_all') return importedDb.materials.map(normalizeMaterial);
+
+    const nextMaterials = (currentDb?.materials || []).map(normalizeMaterial);
+    const indexByCode = new Map(nextMaterials.map((material, index) => [String(material.codigo), index]));
+    diff.added.forEach(material => {
+        if (!indexByCode.has(String(material.codigo))) {
+            indexByCode.set(String(material.codigo), nextMaterials.length);
+            nextMaterials.push(normalizeMaterial(material));
+        }
+    });
+    if (policy === 'update') {
+        diff.updated.forEach(change => {
+            const index = indexByCode.get(String(change.codigo));
+            if (index === undefined) return;
+            const merged = { ...nextMaterials[index] };
+            Object.keys(change.changes).forEach(field => {
+                if (isImportedFieldReported(change.after, field)) merged[field] = change.after[field];
+            });
+            for (const field of ['codigoAlternativo', 'nombre', 'descripcion', 'unidadMedida', 'categoria', 'estado', 'aliasBusqueda', 'searchableText']) {
+                if (isImportedFieldReported(change.after, field)) merged[field] = change.after[field];
+            }
+            for (const field of ['codigoAlternativos', 'sourceSheets', 'sourceOrigins', 'importWarnings']) {
+                if (Array.isArray(change.after[field]) && change.after[field].length) merged[field] = change.after[field];
+            }
+            nextMaterials[index] = normalizeMaterial(merged);
+        });
+    }
+    return nextMaterials;
+}
+
+function saveRuntimeDatabase(db, metadata = {}) {
+    const materials = (db?.materials || []).map(normalizeMaterial);
+    StorageAdapter.saveMaterials(materials);
+    markLocalDatabaseConfirmed(metadata.source || 'confirmed-import', {
+        fileName: metadata.fileName || '',
+        policy: metadata.policy || '',
+        materialCount: materials.length
+    });
+    return materials;
+}
+
+function materialToBodega360V1Export(material) {
+    const item = normalizeMaterial(material);
+    return {
+        id: item.id || `mat::${item.codigo}`,
+        codigo: item.codigo,
+        codigoAlternativo: item.codigoAlternativo,
+        codigoAlternativos: item.codigoAlternativos || [],
+        nombre: item.nombre,
+        descripcion: item.descripcion,
+        unidadMedida: item.unidadMedida,
+        categoria: item.categoria,
+        estado: item.estado,
+        proyectos: item.proyectos || uniqueReportedValues([item.proyecto]),
+        localidades: item.localidades || uniqueReportedValues([item.localidad]),
+        stock: {
+            actual: hasReportedValue(item.stock) ? item.stock : null,
+            minimo: hasReportedValue(item.stockMinimo) ? item.stockMinimo : null,
+            maximo: hasReportedValue(item.stockMaximo) ? item.stockMaximo : null,
+            ubicaciones: [],
+            fuentes: []
+        },
+        compras: item.compras && typeof item.compras === 'object'
+            ? item.compras
+            : {
+                pendiente: item.tienePendiente === true,
+                estadoEntrega: item.estadoEntrega || '',
+                cantidadPendiente: hasReportedValue(item.cantidadPendiente) ? item.cantidadPendiente : null,
+                montoPendiente: hasReportedValue(item.montoPendiente) ? item.montoPendiente : null,
+                moneda: item.moneda || '',
+                registros: []
+            },
+        costos: item.costos && typeof item.costos === 'object'
+            ? item.costos
+            : {
+                costoPromedio: hasReportedValue(item.costoPromedio) ? item.costoPromedio : null,
+                moneda: item.monedaCosto || '',
+                origenCosto: item.origenCosto || '',
+                fuentes: []
+            },
+        observaciones: item.observacionesLista || uniqueReportedValues([item.observaciones]),
+        origenes: item.sourceOrigins || [],
+        sourceSheets: item.sourceSheets || uniqueReportedValues([item.sourceSheet]),
+        searchableText: getSearchableText(item),
+        calidadDato: item.calidadDato
+    };
+}
+
+function exportBodega360V1Package(db = activeDatabase) {
+    const materials = (db?.materials || StorageAdapter.getMaterials()).map(materialToBodega360V1Export);
+    const normalizedDb = { materials };
+    const generatedAt = new Date().toISOString();
+    const packageData = {
+        packageFormat: 'bodega360-v1-json-package',
+        generatedAt,
+        files: {
+            'manifest.json': {
+                schema: 'bodega360-json-modelo-v1',
+                generatedAt,
+                status: 'OK',
+                stats: { materialsNormalized: materials.length }
+            },
+            'normalized/materiales.json': materials,
+            'index/search-index.json': buildSearchIndexes(normalizedDb)
+        }
+    };
+    downloadFile(
+        JSON.stringify(packageData, null, 2),
+        `bodega360-v1-package-${generatedAt.slice(0, 10)}.json`,
+        'application/json'
+    );
+    return packageData;
+}
+
 function renderMasterPreview() {
     document.getElementById('master-preview-section').classList.remove('hidden');
     renderMasterSummary();
@@ -3947,6 +5012,7 @@ function getSelectedImportItems() {
 function renderMasterPreviewBody() {
     const d = currentImportData;
     if (!d) return;
+    refreshImportAnalysis();
     const selectedItems = getSelectedImportItems();
     const validItems = selectedItems.filter(i => i._errors.length === 0);
     const errorItems = selectedItems.filter(i => i._errors.length > 0);
@@ -4016,59 +5082,58 @@ document.getElementById('btn-cancel-master-import').addEventListener('click', ()
 
 document.getElementById('btn-confirm-master-import').addEventListener('click', () => {
     if(!currentImportData) return;
-    const selectedItemsNew = getSelectedImportItems();
-    const selectedErrorsNew = selectedItemsNew.filter(i => i._errors.length > 0).length;
-    if(selectedItemsNew.length === 0) return alert('Seleccione al menos una hoja con materiales candidatos.');
-    if(selectedErrorsNew > 0) {
-        if(!confirm(`Hay ${selectedErrorsNew} filas con errores bloqueantes. Estas no se importaran. Continuar?`)) return;
+    const activeAnalysis = refreshImportAnalysis();
+    if (!activeAnalysis) return;
+    const { selectedItems, importedDb, validationReport, diff } = activeAnalysis;
+    if (validationReport.blocked) {
+        return alert(`La importacion esta bloqueada:\n- ${validationReport.errors.join('\n- ')}`);
+    }
+    if (validationReport.requiresCriticalConfirmation) {
+        const criticalText = prompt('La carga tiene mas de 30% menos materiales. Para continuar escriba APLICAR RIESGO');
+        if (criticalText !== 'APLICAR RIESGO') {
+            return alert('Importacion cancelada. La base activa no fue modificada.');
+        }
     }
 
-    const policyNew = document.getElementById('master-import-policy').value;
-    if(policyNew === 'replace_all') {
-        const typed = prompt('Para reemplazar toda la base actual escriba REEMPLAZAR');
-        if(typed !== 'REEMPLAZAR') return alert('Importacion cancelada. No se reemplazo la base actual.');
+    const selectedPolicy = document.getElementById('master-import-policy').value;
+    if (selectedPolicy === 'replace_all') {
+        const replaceText = prompt('Para reemplazar toda la base actual escriba REEMPLAZAR');
+        if (replaceText !== 'REEMPLAZAR') {
+            return alert('Importacion cancelada. No se reemplazo la base actual.');
+        }
     }
 
-    let nextMaterials = policyNew === 'replace_all' ? [] : StorageAdapter.getMaterials();
-    let addedNew = 0;
-    let updatedNew = 0;
-    let skippedNew = 0;
-    const validItemsNew = selectedItemsNew.filter(i => i._errors.length === 0);
-    const seenImportCodesNew = new Set();
+    const confirmationSummary = [
+        `Nuevos: ${diff.stats.added}`,
+        `Modificados: ${diff.stats.updated}`,
+        `No encontrados: ${diff.stats.removed}`,
+        `Sin cambios: ${diff.stats.unchanged}`,
+        '',
+        'Los codigos no encontrados se conservaran salvo que haya elegido reemplazar toda la base.'
+    ].join('\n');
+    if (!confirm(`Revise la comparacion antes de aplicar:\n\n${confirmationSummary}\n\nConfirmar cambios?`)) {
+        return;
+    }
 
-    validItemsNew.forEach(importItem => {
-        const cleanItem = { ...importItem };
-        delete cleanItem._originalRow;
-        delete cleanItem._errors;
-        delete cleanItem._warnings;
-        delete cleanItem._isExisting;
-
-        if (seenImportCodesNew.has(cleanItem.codigo)) {
-            skippedNew++;
-            return;
-        }
-        seenImportCodesNew.add(cleanItem.codigo);
-
-        const idx = nextMaterials.findIndex(m => m.codigo === cleanItem.codigo);
-        if(idx >= 0) {
-            if(policyNew === 'skip' || policyNew === 'new_only') {
-                skippedNew++;
-            } else if(policyNew === 'update') {
-                nextMaterials[idx] = cleanItem;
-                updatedNew++;
-            }
-        } else if(policyNew === 'update' || policyNew === 'skip' || policyNew === 'new_only' || policyNew === 'replace_all') {
-            nextMaterials.push(cleanItem);
-            addedNew++;
-        }
+    const currentDb = { materials: StorageAdapter.getMaterials() };
+    const nextRuntimeMaterials = applyConfirmedChanges(currentDb, diff, {
+        policy: selectedPolicy,
+        importedDb
     });
+    const validSelectedItems = selectedItems.filter(item => !item._errors?.length);
 
     try {
-        StorageAdapter.saveMaterials(nextMaterials.map(normalizeMaterial));
-        persistWorkbookImportState(currentImportData, validItemsNew);
+        saveRuntimeDatabase({ materials: nextRuntimeMaterials }, {
+            source: 'excel-import',
+            fileName: currentImportData.fileName,
+            policy: selectedPolicy
+        });
+        currentImportData.workbookMetadata.validationReport = validationReport;
+        currentImportData.workbookMetadata.diffStats = diff.stats;
+        persistWorkbookImportState(currentImportData, validSelectedItems);
 
-        const excelRecords = validItemsNew.filter(i => i.sourceSheet).map(item => ({
-            id: String(item.sourceSheet) + ':' + String(item.sourceRow) + ':' + (item.recordType || item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_') + ':' + String(item.codigo),
+        const excelRecords = validSelectedItems.filter(item => item.sourceSheet).map(item => ({
+            id: `${item.sourceSheet}:${item.sourceRow}:${(item.recordType || item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_')}:${item.codigo}`,
             sheetName: item.sourceSheet,
             sourceRow: item.sourceRow,
             recordType: item.recordType || (item.sourceSheet || 'unknown').replace(/[^a-zA-Z0-9]/g, '_'),
@@ -4085,108 +5150,41 @@ document.getElementById('btn-confirm-master-import').addEventListener('click', (
             },
             importedAt: new Date().toISOString()
         }));
-        if (excelRecords.length > 0) StorageAdapter.upsertExcelRecords(excelRecords);
-    } catch (err) {
-        alert(`No se pudo guardar la importacion en localStorage: ${err.message}. Seleccione menos hojas o exporte/limpie datos antes de reintentar.`);
+        if (excelRecords.length) StorageAdapter.upsertExcelRecords(excelRecords);
+    } catch (error) {
+        alert(`No se pudo guardar la importacion: ${error.message}`);
         return;
     }
 
-    const logNew = {
+    const appliedUpdated = selectedPolicy === 'update' || selectedPolicy === 'replace_all'
+        ? diff.stats.updated
+        : 0;
+    const appliedAdded = diff.stats.added;
+    const appliedSkipped = diff.stats.unchanged + (selectedPolicy === 'update' || selectedPolicy === 'replace_all' ? 0 : diff.stats.updated);
+    const importLog = {
         fecha: formatDate(new Date()),
         hora: formatTime(new Date()),
         nombreArchivo: currentImportData.fileName,
         archivo: currentImportData.fileName,
-        hojasProcesadas: currentImportData.sheets.filter(s => s.selected).map(s => s.sheetName),
-        totalFilas: selectedItemsNew.length,
-        materialesDetectados: validItemsNew.length,
-        importados: addedNew,
-        actualizados: updatedNew,
-        omitidos: skippedNew,
-        errores: selectedErrorsNew,
-        politica: policyNew,
+        hojasProcesadas: currentImportData.sheets.filter(sheet => sheet.selected).map(sheet => sheet.sheetName),
+        totalFilas: selectedItems.length,
+        materialesDetectados: importedDb.materials.length,
+        importados: appliedAdded,
+        actualizados: appliedUpdated,
+        omitidos: appliedSkipped,
+        posiblesEliminados: diff.stats.removed,
+        errores: validationReport.stats.parseErrors,
+        politica: selectedPolicy,
         usuario: 'admin'
     };
-    const logsNew = StorageAdapter.getImportLogs();
-    logsNew.push(logNew);
-    StorageAdapter.saveImportLogs(logsNew);
+    const importLogs = StorageAdapter.getImportLogs();
+    importLogs.push(importLog);
+    StorageAdapter.saveImportLogs(importLogs);
 
-    alert(`Importacion completada.\nNuevos: ${addedNew}\nActualizados: ${updatedNew}\nOmitidos: ${skippedNew}\nErrores: ${selectedErrorsNew}`);
-    if(confirm("Importacion completada con exito. Es recomendable exportar un respaldo JSON ahora mismo para no perder esta carga. Exportar ahora?")) {
-        document.getElementById('btn-export-backup').click();
-    }
-
+    alert(`Importacion confirmada.\nNuevos: ${appliedAdded}\nActualizados: ${appliedUpdated}\nConservados/no encontrados: ${diff.stats.removed}\nOmitidos: ${appliedSkipped}`);
     document.getElementById('master-preview-section').classList.add('hidden');
     document.getElementById('file-master-catalog').value = '';
     currentImportData = null;
-    refreshAdminViews();
-    return;
-
-    if(currentImportData.error > 0) {
-        if(!confirm(`Hay ${currentImportData.error} filas con errores bloqueantes. Éstas no se importarán. ¿Continuar?`)) return;
-    }
-
-    const policy = document.getElementById('master-import-policy').value;
-    if(policy === 'replace_all') {
-        if(!confirm("⚠️ PELIGRO: Has elegido REEMPLAZAR TODA LA BASE ACTUAL. Todos los materiales existentes desaparecerán si no están en este archivo. ¿Confirmar 100%?")) return;
-    }
-
-    let existingMaterials = policy === 'replace_all' ? [] : StorageAdapter.getMaterials();
-    
-    let added = 0;
-    let updated = 0;
-    let skipped = 0;
-
-    const validItems = currentImportData.items.filter(i => i._errors.length === 0);
-
-    validItems.forEach(importItem => {
-        const cleanItem = { ...importItem };
-        delete cleanItem._originalRow; delete cleanItem._errors; delete cleanItem._warnings; delete cleanItem._isExisting;
-
-        const idx = existingMaterials.findIndex(m => m.codigo === cleanItem.codigo);
-
-        if(idx >= 0) {
-            if(policy === 'skip' || policy === 'new_only') {
-                skipped++;
-            } else if(policy === 'update') {
-                existingMaterials[idx] = cleanItem;
-                updated++;
-            }
-        } else {
-            if(policy === 'update' || policy === 'skip' || policy === 'new_only' || policy === 'replace_all') {
-                existingMaterials.push(cleanItem);
-                added++;
-            }
-        }
-    });
-
-    StorageAdapter.saveMaterials(existingMaterials);
-
-    const log = {
-        fecha: formatDate(new Date()),
-        hora: formatTime(new Date()),
-        nombreArchivo: currentImportData.fileName,
-        totalFilas: currentImportData.total,
-        importados: added,
-        actualizados: updated,
-        omitidos: skipped,
-        errores: currentImportData.error,
-        politica: policy,
-        usuario: 'admin'
-    };
-    const iLogs = StorageAdapter.getImportLogs();
-    iLogs.push(log);
-    StorageAdapter.saveImportLogs(iLogs);
-
-    alert(`Importación completada.\nNuevos: ${added}\nActualizados: ${updated}\nOmitidos: ${skipped}\nErrores: ${currentImportData.error}`);
-    
-    if(confirm("Importación completada con éxito. Es altamente recomendable que exportes un respaldo JSON ahora mismo para no perder esta carga. ¿Exportar ahora?")) {
-        document.getElementById('btn-export-backup').click();
-    }
-
-    document.getElementById('master-preview-section').classList.add('hidden');
-    document.getElementById('file-master-catalog').value = '';
-    currentImportData = null;
-    
     refreshAdminViews();
 });
 
@@ -4818,6 +5816,7 @@ document.getElementById('btn-import-data')?.addEventListener('click', () => {
                 }
             });
             StorageAdapter.saveMaterials(materials);
+            markLocalDatabaseConfirmed('legacy-import', { fileName: file.name, mode });
             alert(`Importacion legacy completada. Nuevos: ${added}. Actualizados: ${updated}.`);
             input.value = '';
             refreshAdminViews();
@@ -4850,9 +5849,14 @@ document.getElementById('btn-download-json-template').addEventListener('click', 
     downloadFile(JSON.stringify(json, null, 2), "plantilla-bodega360.json", "application/json");
 });
 
+document.getElementById('btn-export-bodega360-package')?.addEventListener('click', () => {
+    exportBodega360V1Package();
+});
+
 // Init (async: espera StorageAdapter IndexedDB listo)
 (async () => {
     await StorageAdapter.init();
+    await getActiveDatabase();
     if (localStorage.getItem('bodega360_theme') === 'dark') {
         document.body.classList.add('dark-mode');
     }

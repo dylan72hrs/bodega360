@@ -1,0 +1,66 @@
+{
+  "schema": "bodega360-json-modelo-v1",
+  "generatedAt": "2026-06-08T13:06:20",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "sourceSizeBytes": 2403139,
+  "status": "OK",
+  "files": {
+    "rawSheets": {
+      "CODIGOS": "data/raw-sheets/codigos.json",
+      "CONTROL SC CHILE": "data/raw-sheets/control-sc-chile.json",
+      "CONTROL SC EXTRANJERO": "data/raw-sheets/control-sc-extranjero.json",
+      "S-A PEND ENTREGA ": "data/raw-sheets/s-a-pend-entrega.json",
+      "ACTIVOS": "data/raw-sheets/activos.json",
+      "CODIGOS KONEC": "data/raw-sheets/codigos-konec.json",
+      "MIN-MAX": "data/raw-sheets/min-max.json",
+      "Hoja2": "data/raw-sheets/hoja2.json",
+      "Hoja4": "data/raw-sheets/hoja4.json",
+      "Hoja5": "data/raw-sheets/hoja5.json",
+      "Hoja6": "data/raw-sheets/hoja6.json",
+      "Hoja7": "data/raw-sheets/hoja7.json",
+      "INSUMOS REAMERS": "data/raw-sheets/insumos-reamers.json",
+      "TRICONOS": "data/raw-sheets/triconos.json",
+      "REPTOS. MALI": "data/raw-sheets/reptos-mali.json",
+      "Hoja1": "data/raw-sheets/hoja1.json",
+      "MATERIALES SIN CONSUMO": "data/raw-sheets/materiales-sin-consumo.json",
+      "REPUESTOS A PERU": "data/raw-sheets/repuestos-a-peru.json"
+    },
+    "normalized": {
+      "materiales": "data/normalized/materiales.json",
+      "stock": "data/normalized/stock.json",
+      "compras": "data/normalized/compras.json",
+      "pendientes": "data/normalized/pendientes.json",
+      "costos": "data/normalized/costos.json",
+      "proyectos": "data/normalized/proyectos.json",
+      "activos": "data/normalized/activos.json",
+      "herramientasInsumos": "data/normalized/herramientas-insumos.json",
+      "eppEntregas": "data/normalized/epp-entregas.json"
+    },
+    "index": {
+      "searchIndex": "data/index/search-index.json",
+      "codigoIndex": "data/index/codigo-index.json",
+      "proyectoIndex": "data/index/proyecto-index.json",
+      "pendienteIndex": "data/index/pendiente-index.json"
+    },
+    "reports": {
+      "validationReport": "data/validation-report.json",
+      "importLog": "data/import-log.json",
+      "schema": "data/schema-bodega360-v1.json"
+    }
+  },
+  "stats": {
+    "sheetsDetected": 18,
+    "rawRowsWithData": 17701,
+    "rawCellsWithData": 258434,
+    "materialsNormalized": 4547,
+    "stockRecords": 229,
+    "purchaseRecords": 3318,
+    "pendingRecords": 7720,
+    "costRecords": 1146,
+    "projectReferences": 7720,
+    "assetRecords": 8,
+    "toolRecords": 41,
+    "eppRecords": 5,
+    "duplicateCodesInCodigos": 42
+  }
+}

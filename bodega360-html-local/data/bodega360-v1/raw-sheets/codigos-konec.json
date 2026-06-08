@@ -1,0 +1,794 @@
+{
+  "sheetName": "CODIGOS KONEC",
+  "sheetSlug": "codigos-konec",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 53,
+  "maxColumnDetected": 12,
+  "nonEmptyRows": 53,
+  "nonEmptyCells": 518,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "CODIGO",
+        "B": "NOMBRE BUSQUEDA",
+        "C": "U/M",
+        "D": "DESCRIPCION",
+        "E": "PROVEEDOR",
+        "F": "OC",
+        "G": "FACTURA",
+        "H": "TIPO COMPRA",
+        "I": "INGRESO",
+        "J": "SALIDA GD 4873 10/01/25",
+        "K": "SALIDA GD 4879 15/01/25",
+        "L": "SALDO"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": 1018101080,
+        "B": "AMAR-30035",
+        "C": "PQT",
+        "D": "AMARRA PLASTICA 300 x 3,5 MM (x 100 UN)",
+        "E": "DESIMAT",
+        "F": 37276,
+        "G": 430549,
+        "H": "SERVICIO",
+        "I": 150,
+        "J": 20,
+        "L": 130
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": 1511105960,
+        "B": "AUTO-8X1HEX",
+        "C": "C/U",
+        "D": "AUTOPERFORANTE N°8 X 1\", CABEZA HEXAGONAL",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 2000,
+        "J": 200,
+        "L": 1800
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 1241101030,
+        "B": "BALI-1224-AMARILLA",
+        "C": "C/U",
+        "D": "BALIZA ESTROBOSCOPICA INTERIOR AMARILLA, 12-24 VDC",
+        "E": "ENCENDIDO TOTAL",
+        "F": 37275,
+        "G": 631994,
+        "H": "SERVICIO",
+        "I": 150,
+        "J": 20,
+        "L": 130
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 1241101040,
+        "B": "BALI-1224-BLANCA",
+        "C": "C/U",
+        "D": "BALIZA ESTROBOSCOPICA INTERIOR BLANCA, 12-24 VDC",
+        "E": "ENCENDIDO TOTAL",
+        "F": 37275,
+        "G": 631994,
+        "H": "SERVICIO",
+        "I": 150,
+        "J": 20,
+        "L": 130
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": 1241101020,
+        "B": "BALI-1224-ROJA",
+        "C": "C/U",
+        "D": "BALIZA ESTROBOSCOPICA INTERIOR ROJA, 12-24 VDC",
+        "E": "ENCENDIDO TOTAL",
+        "F": 37275,
+        "G": 631994,
+        "H": "SERVICIO",
+        "I": 150,
+        "J": 20,
+        "L": 130
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": 1241101050,
+        "B": "BALI-1224-SIRENA",
+        "C": "C/U",
+        "D": "BALIZA SIRENA EXTERIOR, 12-24 VDC",
+        "E": "ELECTRIGOM",
+        "F": 37311,
+        "G": 29942,
+        "H": "SERVICIO",
+        "I": 50,
+        "J": 20,
+        "L": 30
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": 1213103890,
+        "B": "CABL-12G1MM",
+        "C": "MTS",
+        "D": "CABLE CONTROL 12G X 1.0 MM F-CY NO APANTALLADO",
+        "E": "DESIMAT",
+        "F": 37276,
+        "G": 430549,
+        "H": "SERVICIO",
+        "I": 450,
+        "J": 60,
+        "L": 390
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 1213101730,
+        "B": "CABLE-013",
+        "C": "MTS",
+        "D": "CABLE OLFLEX CLASSIC 110 300/500V 3G 0,75MM2 (COD. DESIMAT 1119103)",
+        "E": "DESIMAT",
+        "F": 37276,
+        "G": 430549,
+        "H": "SERVICIO",
+        "I": 1800,
+        "J": 240,
+        "L": 1560
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 1219107820,
+        "B": "CAJA-90300240",
+        "C": "C/U",
+        "D": "CAJA DE SEGURIDAD METALICA CON LLAVE, 90 X 300 X 240 mm",
+        "E": "PRISA",
+        "F": 37292,
+        "G": "13635468 - 13629703",
+        "H": "SERVICIO",
+        "I": 40,
+        "J": 9,
+        "L": 31
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": 1310114740,
+        "B": "CONE-3X3",
+        "C": "C/U",
+        "D": "CONECTOR RAPIDO, 3 X 3",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 1500,
+        "J": 200,
+        "L": 1300
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": 1310114730,
+        "B": "CONE-45P",
+        "C": "C/U",
+        "D": "CONECTOR RAPÍDO, 4-5 PINES",
+        "E": "DESIMAT",
+        "F": 37276,
+        "G": 430549,
+        "H": "SERVICIO",
+        "I": 1525,
+        "J": 200,
+        "L": 1325
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": 1310114760,
+        "B": "CONE-98X3710A-AZUL",
+        "C": "C/U",
+        "D": "CONECTOR RAPIDO AZUL, 9.8 X 37MM, 10A",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 700,
+        "J": 100,
+        "L": 600
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 1310114770,
+        "B": "CONE-98X3715A-ROJO",
+        "C": "C/U",
+        "D": "CONECTOR RAPIDO ROJO, 9.8 X 37MM, 15A",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 700,
+        "J": 100,
+        "L": 600
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 1310114750,
+        "B": "CONE-98X3720A-AMA",
+        "C": "C/U",
+        "D": "CONECTOR RAPIDO AMARILLO, 9.8 X 37MM, 20A",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 700,
+        "J": 100,
+        "L": 600
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": 1219107770,
+        "B": "CORR-10MM",
+        "C": "MTS",
+        "D": "CORRUGADO VEHICULAR ABIERTO, 10 MM",
+        "E": "ENCENDIDO TOTAL",
+        "F": 37275,
+        "G": 631994,
+        "H": "SERVICIO",
+        "I": 3750,
+        "J": 500,
+        "L": 3250
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": 1219107780,
+        "B": "CORR-22MM",
+        "C": "MTS",
+        "D": "CORRUGADO VEHICULAR ABIERTO, 22 MM",
+        "E": "ENCENDIDO TOTAL",
+        "F": 37275,
+        "G": 631994,
+        "H": "SERVICIO",
+        "I": 450,
+        "J": 40,
+        "L": 410
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": 1247101150,
+        "B": "FUSI-10A",
+        "C": "C/U",
+        "D": "FUSIBLE, 10A, ATO",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 1500,
+        "J": 20,
+        "L": 1480
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": 1537103780,
+        "B": "GOLI-1/4PL-INOX",
+        "C": "C/U",
+        "D": "GOLILLA PLANA 1/4'', ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 5100,
+        "J": 600,
+        "L": 4500
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": 1537103790,
+        "B": "GOLI-1/4PR-INOX",
+        "C": "C/U",
+        "D": "GOLILLA PRESION 1/4'', ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 3500,
+        "J": 400,
+        "L": 3100
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": 1219107850,
+        "B": "GOLI-M4PL-INOX",
+        "C": "C/U",
+        "D": "GOLILLA PLANA M4, ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 4600,
+        "J": 480,
+        "L": 4120
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": 1219107840,
+        "B": "GOLI-M4PR-INOX",
+        "C": "C/U",
+        "D": "GOLILLA PRESION M4, ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 4600,
+        "J": 480,
+        "L": 4120
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "A": 1525106570,
+        "B": "HILO-1/4ZINC",
+        "C": "C/U",
+        "D": "HILO CORRIDO 1/4'',  ZINCADO",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 150,
+        "J": 20,
+        "L": 130
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "A": 1213103880,
+        "B": "KONEC-1063",
+        "C": "C/U",
+        "D": "EXTENSION CABLE 10-63#5M (KONEC-1063)",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 5,
+        "K": 5,
+        "L": 0
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "A": 1219107730,
+        "B": "KONEC-575",
+        "C": "C/U",
+        "D": "CALIBRATION TOOL, AC575, KONEC-575",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 4,
+        "K": 4,
+        "L": 0
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "A": 1219107740,
+        "B": "KONEC-601",
+        "C": "C/U",
+        "D": "ALARM BUZZER, AC601, KONEC-601",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 5,
+        "K": 5,
+        "L": 0
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "A": 1235101740,
+        "B": "KONEC-C37",
+        "C": "C/U",
+        "D": "REARVIEW CAMERA, ADA37-H, KONEC-C37",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 220,
+        "L": 220
+      }
+    },
+    {
+      "row": 28,
+      "cells": {
+        "A": 1235101760,
+        "B": "KONEC-D17+C37",
+        "C": "C/U",
+        "D": "BIRD VIEW SYSTEM, BV060A17CWG, ADA37-H, KONEC-D17+KONEC-C37",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 100,
+        "K": 20,
+        "L": 80
+      }
+    },
+    {
+      "row": 29,
+      "cells": {
+        "A": 1235101750,
+        "B": "KONEC-D18",
+        "C": "C/U",
+        "D": "BIRD VIEW SYSTEM, BV060A18CVWG4, KONEC-D18",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 50,
+        "K": 4,
+        "L": 46
+      }
+    },
+    {
+      "row": 30,
+      "cells": {
+        "A": 1219107750,
+        "B": "KONEC-M93",
+        "C": "C/U",
+        "D": "REARVIEW MONITOR, HD100293DC, KONEC-M93",
+        "E": "STONKAM",
+        "F": 37376,
+        "G": "SV-KONEC-241106",
+        "H": "COD. STOCK",
+        "I": 150,
+        "K": 24,
+        "L": 126
+      }
+    },
+    {
+      "row": 31,
+      "cells": {
+        "A": 1219107890,
+        "B": "MODU-HP43SP",
+        "C": "C/U",
+        "D": "MODULO PLACA COMPONENTE RELE, CONTROLADOR INALAMBRICO, HP43SP",
+        "E": "INNOVA",
+        "F": 37308,
+        "G": 104,
+        "H": "SERVICIO",
+        "I": 20,
+        "L": 20
+      }
+    },
+    {
+      "row": 32,
+      "cells": {
+        "A": 1511105950,
+        "B": "PHEX-1/4X2-INOX",
+        "C": "C/U",
+        "D": "PERNO HEX. 1/4'' X 2'', ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 1800,
+        "J": 160,
+        "L": 1640
+      }
+    },
+    {
+      "row": 33,
+      "cells": {
+        "A": 1511105940,
+        "B": "PHEX-1/4X3-INOX",
+        "C": "C/U",
+        "D": "PERNO HEX. 1/4'' X 3'', ACERO INOXIDABLE HILO COMPLETO",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 400,
+        "L": 400
+      }
+    },
+    {
+      "row": 34,
+      "cells": {
+        "A": 1511105920,
+        "B": "PHEX-4X20-INOX",
+        "C": "C/U",
+        "D": "PERNO HEX. M4 X 20, ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 4600,
+        "J": 480,
+        "L": 4120
+      }
+    },
+    {
+      "row": 35,
+      "cells": {
+        "A": 1511105930,
+        "B": "PHEX-6X12-INOX",
+        "C": "C/U",
+        "D": "PERNO HEX. M6 X 12, ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 2400,
+        "L": 2400
+      }
+    },
+    {
+      "row": 36,
+      "cells": {
+        "A": 1219107880,
+        "B": "PLAC-ICK4.0-241206",
+        "C": "C/U",
+        "D": "PLACA PLC INTEGRADA PARA  CONTROLADOR INTERFAZ, ICK4.0-241206",
+        "E": "INNOVA",
+        "F": 37308,
+        "G": 104,
+        "H": "SERVICIO",
+        "I": 20,
+        "L": 20
+      }
+    },
+    {
+      "row": 37,
+      "cells": {
+        "A": 1247101160,
+        "B": "PORT-F10",
+        "C": "C/U",
+        "D": "PORTA FUSIBLE, 10A, ATO",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 1500,
+        "J": 20,
+        "L": 1480
+      }
+    },
+    {
+      "row": 38,
+      "cells": {
+        "A": 1223100320,
+        "B": "PREN-PG21",
+        "C": "C/U",
+        "D": "PRENSA ESTOPA PLASTICA, PG-21",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 1000,
+        "J": 120,
+        "L": 880
+      }
+    },
+    {
+      "row": 39,
+      "cells": {
+        "A": 1223100310,
+        "B": "PREN-PG29",
+        "C": "C/U",
+        "D": "PRENSA ESTOPA PLASTICA, PG-29",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 200,
+        "J": 20,
+        "L": 180
+      }
+    },
+    {
+      "row": 40,
+      "cells": {
+        "A": 1219107790,
+        "B": "PROT-9090120",
+        "C": "C/U",
+        "D": "PORTECTOR METALICO PARA CAMARA, 90 X 90 X120mm",
+        "L": 0
+      }
+    },
+    {
+      "row": 41,
+      "cells": {
+        "A": 1219107830,
+        "B": "RIEL-1935",
+        "C": "MTS",
+        "D": "RIEL ANDINO, 19 X 35MM, (PERFIL DE MONTAJE)",
+        "E": "ELECTRIGOM",
+        "F": 37291,
+        "G": 29941,
+        "H": "SERVICIO",
+        "I": 100,
+        "J": 20,
+        "L": 80
+      }
+    },
+    {
+      "row": 42,
+      "cells": {
+        "A": 1219107870,
+        "B": "SELL-15400AZUL",
+        "C": "C/U",
+        "D": "SELLO METAL AJUSTABLE ALUMINIO, CABLE ACERO, 1.5 MM x 400 MM, AZUL",
+        "E": "QUIMITECNICA",
+        "F": 37366,
+        "G": 1271,
+        "H": "SERVICIO",
+        "I": 100,
+        "J": 20,
+        "L": 80
+      }
+    },
+    {
+      "row": 43,
+      "cells": {
+        "A": 1219107800,
+        "B": "SOPO-C850/2",
+        "C": "C/U",
+        "D": "SOPORTE CORTO PARA PROTECCION CAMARA, 850mm/ 2mm",
+        "L": 0
+      }
+    },
+    {
+      "row": 44,
+      "cells": {
+        "A": 1219107810,
+        "B": "SOPO-L1000/2",
+        "C": "C/U",
+        "D": "SOPORTE LARGO PARA PROTECCION CAMARA, 1000mm/ 2mm",
+        "L": 0
+      }
+    },
+    {
+      "row": 45,
+      "cells": {
+        "A": 1219107860,
+        "B": "TARJ-256GB",
+        "C": "C/U",
+        "D": "TARJETA DE MEMORIA, CARD SD, 256GB",
+        "E": "VASTDIGI TECHNOLOGY",
+        "G": "SIN N°",
+        "H": "COD. STOCK",
+        "I": 150,
+        "J": 20,
+        "L": 130
+      }
+    },
+    {
+      "row": 46,
+      "cells": {
+        "A": 1521102370,
+        "B": "TUER-1/4-INOX",
+        "C": "C/U",
+        "D": "TUERCA 1/4'', ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 5100,
+        "J": 600,
+        "L": 4500
+      }
+    },
+    {
+      "row": 47,
+      "cells": {
+        "A": 1521102540,
+        "B": "TUER-M6-R",
+        "C": "C/U",
+        "D": "TUERCA, REMACHE, M6"
+      }
+    },
+    {
+      "row": 48,
+      "cells": {
+        "A": 1521102550,
+        "B": "TUER-M8-R",
+        "C": "C/U",
+        "D": "TUERCA, REMACHE, M8"
+      }
+    },
+    {
+      "row": 49,
+      "cells": {
+        "A": 1513102010,
+        "B": "PERN-M6X3/4-INOX",
+        "C": "C/U",
+        "D": "PERNO, ACERO INOXIDABLE, M6X3/4"
+      }
+    },
+    {
+      "row": 50,
+      "cells": {
+        "A": 1513102020,
+        "B": "PERN-M8X3/4-INOX",
+        "C": "C/U",
+        "D": "PERNO, ACERO INOXIDABLE, M8X3/4"
+      }
+    },
+    {
+      "row": 51,
+      "cells": {
+        "B": "SIRE-EX-NG",
+        "C": "C/U",
+        "D": "SIRENA EXTERIOR NEGRA (NUEVA)"
+      }
+    },
+    {
+      "row": 52,
+      "cells": {
+        "A": 1521102360,
+        "B": "TUER-M4-INOX",
+        "C": "C/U",
+        "D": "TUERCA M4, ACERO INOXIDABLE",
+        "E": "FAMETAL",
+        "F": 37277,
+        "G": 57989,
+        "H": "SERVICIO",
+        "I": 4600,
+        "J": 480,
+        "L": 4120
+      }
+    },
+    {
+      "row": 53,
+      "cells": {
+        "H": "TOTALES",
+        "I": 56239,
+        "J": 5789,
+        "K": 62,
+        "L": 50388
+      }
+    }
+  ]
+}

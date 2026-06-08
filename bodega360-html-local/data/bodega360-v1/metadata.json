@@ -1,0 +1,183 @@
+{
+  "generatedAt": "2026-06-08T13:06:20",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "sheetStats": [
+    {
+      "sheetName": "CODIGOS",
+      "sheetSlug": "codigos",
+      "rowsWithData": 3903,
+      "cellsWithData": 26203,
+      "maxRowDetected": 3903,
+      "maxColumnDetected": 15,
+      "rawFile": "data/raw-sheets/codigos.json"
+    },
+    {
+      "sheetName": "CONTROL SC CHILE",
+      "sheetSlug": "control-sc-chile",
+      "rowsWithData": 2545,
+      "cellsWithData": 38262,
+      "maxRowDetected": 2571,
+      "maxColumnDetected": 20,
+      "rawFile": "data/raw-sheets/control-sc-chile.json"
+    },
+    {
+      "sheetName": "CONTROL SC EXTRANJERO",
+      "sheetSlug": "control-sc-extranjero",
+      "rowsWithData": 781,
+      "cellsWithData": 10237,
+      "maxRowDetected": 816,
+      "maxColumnDetected": 14,
+      "rawFile": "data/raw-sheets/control-sc-extranjero.json"
+    },
+    {
+      "sheetName": "S-A PEND ENTREGA ",
+      "sheetSlug": "s-a-pend-entrega",
+      "rowsWithData": 7728,
+      "cellsWithData": 117203,
+      "maxRowDetected": 7729,
+      "maxColumnDetected": 17,
+      "rawFile": "data/raw-sheets/s-a-pend-entrega.json"
+    },
+    {
+      "sheetName": "ACTIVOS",
+      "sheetSlug": "activos",
+      "rowsWithData": 9,
+      "cellsWithData": 20,
+      "maxRowDetected": 9,
+      "maxColumnDetected": 3,
+      "rawFile": "data/raw-sheets/activos.json"
+    },
+    {
+      "sheetName": "CODIGOS KONEC",
+      "sheetSlug": "codigos-konec",
+      "rowsWithData": 53,
+      "cellsWithData": 518,
+      "maxRowDetected": 53,
+      "maxColumnDetected": 12,
+      "rawFile": "data/raw-sheets/codigos-konec.json"
+    },
+    {
+      "sheetName": "MIN-MAX",
+      "sheetSlug": "min-max",
+      "rowsWithData": 2374,
+      "cellsWithData": 64475,
+      "maxRowDetected": 2375,
+      "maxColumnDetected": 90,
+      "rawFile": "data/raw-sheets/min-max.json"
+    },
+    {
+      "sheetName": "Hoja2",
+      "sheetSlug": "hoja2",
+      "rowsWithData": 48,
+      "cellsWithData": 48,
+      "maxRowDetected": 115,
+      "maxColumnDetected": 7,
+      "rawFile": "data/raw-sheets/hoja2.json"
+    },
+    {
+      "sheetName": "Hoja4",
+      "sheetSlug": "hoja4",
+      "rowsWithData": 45,
+      "cellsWithData": 129,
+      "maxRowDetected": 45,
+      "maxColumnDetected": 3,
+      "rawFile": "data/raw-sheets/hoja4.json"
+    },
+    {
+      "sheetName": "Hoja5",
+      "sheetSlug": "hoja5",
+      "rowsWithData": 0,
+      "cellsWithData": 0,
+      "maxRowDetected": 0,
+      "maxColumnDetected": 0,
+      "rawFile": "data/raw-sheets/hoja5.json"
+    },
+    {
+      "sheetName": "Hoja6",
+      "sheetSlug": "hoja6",
+      "rowsWithData": 0,
+      "cellsWithData": 0,
+      "maxRowDetected": 0,
+      "maxColumnDetected": 0,
+      "rawFile": "data/raw-sheets/hoja6.json"
+    },
+    {
+      "sheetName": "Hoja7",
+      "sheetSlug": "hoja7",
+      "rowsWithData": 7,
+      "cellsWithData": 25,
+      "maxRowDetected": 7,
+      "maxColumnDetected": 4,
+      "rawFile": "data/raw-sheets/hoja7.json"
+    },
+    {
+      "sheetName": "INSUMOS REAMERS",
+      "sheetSlug": "insumos-reamers",
+      "rowsWithData": 48,
+      "cellsWithData": 404,
+      "maxRowDetected": 48,
+      "maxColumnDetected": 12,
+      "rawFile": "data/raw-sheets/insumos-reamers.json"
+    },
+    {
+      "sheetName": "TRICONOS",
+      "sheetSlug": "triconos",
+      "rowsWithData": 14,
+      "cellsWithData": 93,
+      "maxRowDetected": 16,
+      "maxColumnDetected": 8,
+      "rawFile": "data/raw-sheets/triconos.json"
+    },
+    {
+      "sheetName": "REPTOS. MALI",
+      "sheetSlug": "reptos-mali",
+      "rowsWithData": 74,
+      "cellsWithData": 363,
+      "maxRowDetected": 1710,
+      "maxColumnDetected": 7,
+      "rawFile": "data/raw-sheets/reptos-mali.json"
+    },
+    {
+      "sheetName": "Hoja1",
+      "sheetSlug": "hoja1",
+      "rowsWithData": 0,
+      "cellsWithData": 0,
+      "maxRowDetected": 0,
+      "maxColumnDetected": 0,
+      "rawFile": "data/raw-sheets/hoja1.json"
+    },
+    {
+      "sheetName": "MATERIALES SIN CONSUMO",
+      "sheetSlug": "materiales-sin-consumo",
+      "rowsWithData": 45,
+      "cellsWithData": 292,
+      "maxRowDetected": 45,
+      "maxColumnDetected": 7,
+      "rawFile": "data/raw-sheets/materiales-sin-consumo.json"
+    },
+    {
+      "sheetName": "REPUESTOS A PERU",
+      "sheetSlug": "repuestos-a-peru",
+      "rowsWithData": 27,
+      "cellsWithData": 162,
+      "maxRowDetected": 30,
+      "maxColumnDetected": 10,
+      "rawFile": "data/raw-sheets/repuestos-a-peru.json"
+    }
+  ],
+  "stats": {
+    "sheetsDetected": 18,
+    "rawRowsWithData": 17701,
+    "rawCellsWithData": 258434,
+    "materialsNormalized": 4547,
+    "stockRecords": 229,
+    "purchaseRecords": 3318,
+    "pendingRecords": 7720,
+    "costRecords": 1146,
+    "projectReferences": 7720,
+    "assetRecords": 8,
+    "toolRecords": 41,
+    "eppRecords": 5,
+    "duplicateCodesInCodigos": 42
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Bodega360 Material Normalizado v1",
+  "description": "Modelo JSON para lectura web desde Excel maestro. Incluye identidad, stock detectado, compras, pendientes, costos, origenes y texto buscable.",
+  "primaryKey": "codigo",
+  "material": {
+    "codigo": "Código principal del material.",
+    "codigoAlternativo": "Código alternativo principal.",
+    "codigoAlternativos": "Lista de alias/códigos alternativos detectados.",
+    "nombre": "Nombre normalizado del material.",
+    "descripcion": "Descripción normalizada.",
+    "unidadMedida": "Unidad de medida.",
+    "categoria": "Categoría/tipo de producto si existe.",
+    "estado": "Estado del material si existe.",
+    "stock": {
+      "actual": "Suma de stock detectado desde fuentes parciales. Puede ser null.",
+      "minimo": "Umbral mínimo desde MIN-MAX.",
+      "maximo": "Umbral máximo desde MIN-MAX.",
+      "stockSeguridad": "Stock de seguridad desde MIN-MAX.",
+      "ubicaciones": "Detalle por proyecto/localidad/fuente."
+    },
+    "compras": {
+      "pendiente": "True si existe pendiente detectado.",
+      "estadoEntrega": "Entregado, Parcial, Pendiente o Sin información.",
+      "cantidadPendiente": "Suma de pendientes detectados desde S-A PEND ENTREGA.",
+      "montoPendiente": "Suma de valor pend detectado."
+    },
+    "costos": "Costos detectados desde compras, pendientes u hojas de inventario.",
+    "origenes": "Trazabilidad por hoja/fila.",
+    "searchableText": "Texto concatenado para búsqueda rápida."
+  }
+}

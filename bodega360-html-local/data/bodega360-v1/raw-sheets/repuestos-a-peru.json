@@ -1,0 +1,308 @@
+{
+  "sheetName": "REPUESTOS A PERU",
+  "sheetSlug": "repuestos-a-peru",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 30,
+  "maxColumnDetected": 10,
+  "nonEmptyRows": 27,
+  "nonEmptyCells": 162,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "Stock code",
+        "B": "Description",
+        "C": "Search name",
+        "D": "PE01-OC-039489 PE01-OC-039705",
+        "E": "ESTADO",
+        "F": "QC",
+        "G": "OC",
+        "H": "SELLO",
+        "I": "SERIE",
+        "J": "OBSERVACIONES"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": 1522100010,
+        "B": "EXPANSION PIN, Ø110 X 381, MAIN FRAME, 009-01-005",
+        "C": "009-01-005",
+        "D": 3,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 2183,
+        "J": "SIN CONOS"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": 1522100000,
+        "B": "EXPANSION PIN, Ø110 X 483, MAIN FRAME, 009-01-004",
+        "C": "009-01-004",
+        "D": 4,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 10402,
+        "J": "SIN CONOS"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 1512107650,
+        "B": "CHUCK BOLT, M48 X 120, CHUCK, MSC-02-121",
+        "C": "MSC-02-121",
+        "D": 3,
+        "E": "NUEVO",
+        "F": "SINR-005",
+        "G": 5068,
+        "H": "VERDE"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 1524100170,
+        "B": "BREAKOUT RING, 57T, CHUCK, 009-02-081",
+        "C": "009-02-081",
+        "D": 1,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 5049
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": 1515100540,
+        "B": "SPINDLE BOLT ADAPTOR, CHUCK, 83R-02-077",
+        "C": "83R-02-077",
+        "D": 2,
+        "E": "NUEVO",
+        "F": "#61",
+        "G": 10402,
+        "H": "VERDE",
+        "I": "261118-2 / 261118-4"
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": 1515100030,
+        "B": "SEAL CARRIER, CHUCK, 009-02-074",
+        "C": "009-02-074",
+        "D": 1,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 6550
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": 1524101140,
+        "B": "WRAP AROUND, 12 7/8\", 57T, MAIN FRAME, 009-01-037",
+        "C": "009-01-037",
+        "D": 2,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": "(6230) 11211"
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 1522100030,
+        "B": "PLANET PIN, 1ST RED, 009-03-106",
+        "C": "009-03-106",
+        "D": 3,
+        "E": "NUEVO",
+        "F": "#156",
+        "G": 14688,
+        "H": "VERDE",
+        "I": "1 / 3 / 5"
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 1519100110,
+        "B": "RING GEAR SPACER, 1ST RED, 009-03-126",
+        "C": "009-03-126",
+        "D": 1,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 5057,
+        "H": "TARJETA ROJA",
+        "J": "DEBE SER MODIFICADA EN MEDIDAS MENCIONADAS EN INFORME RING GEAR SPACER, PLANOS 009-03-126 y 009-03-162"
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": 1519100100,
+        "B": "BEARING SPACER, 1ST RED, 009-03-086",
+        "C": "009-03-086",
+        "D": 1,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 6550
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": 1522100040,
+        "B": "PLANET PIN, 2ND RED, 009-04-104",
+        "C": "009-04-104",
+        "D": 3,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 5058,
+        "I": "2 / 3 / 6",
+        "J": "ETIQUETA VERDE x REVISIÓN QC"
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": 1322100000,
+        "B": "SHIFTER CYLINDER & CONNECTOR HOUSING, 3RD RED, 009-05-035",
+        "C": "009-05-035",
+        "D": 1,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": 5600
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 1519100220,
+        "B": "SPINDLE SEAL COVER, 3RD RED, 009-05-079",
+        "C": "009-05-079",
+        "D": 1,
+        "E": "NUEVO",
+        "F": "000032",
+        "G": 15367,
+        "H": "VERDE"
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 1519100270,
+        "B": "IDLER BULL GEAR COVER, 3RD RED, 009-05-103",
+        "C": "009-05-103",
+        "D": 4,
+        "E": "NUEVO",
+        "F": "SIN QC",
+        "G": "6550 - 10402",
+        "I": "2886-1 / 2886-2 / ZA02-PO017136 / ZA02-PO017483"
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": 1518100210,
+        "B": "BULL GEAR PINION, 3RD RED, 009-05-177",
+        "C": "009-05-177",
+        "D": 2,
+        "E": "USADO",
+        "F": "#192 - #193",
+        "H": "VERDE",
+        "I": "PJ1210 / ZA02-13237"
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "C": "imponible",
+        "D": "liquido",
+        "F": 20,
+        "G": 9
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "C": 2025873,
+        "D": 1609033,
+        "F": 1623232,
+        "G": 1623232
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "C": 2019057,
+        "D": 1602169,
+        "F": 54107.73333333333,
+        "G": 54107.73333333333
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "C": 1611179,
+        "D": 1658493,
+        "F": 1082154.6666666665,
+        "G": 486969.6,
+        "H": 1569124.2666666666
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "B": "sumatoria 3 liquidaciones",
+        "C": 5656109,
+        "D": 4869695
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "B": "promedio 3 meses",
+        "C": 1885369.6666666667,
+        "D": 1623231.6666666667
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "B": "cotizacion 7% banmedica",
+        "C": 131975.87666666668
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "B": "cotizacion 7% md chile",
+        "C": 18985
+      }
+    },
+    {
+      "row": 28,
+      "cells": {
+        "B": "total cotizacion",
+        "C": 150960.87666666668
+      }
+    },
+    {
+      "row": 29,
+      "cells": {
+        "B": "total pactado",
+        "C": 147585
+      }
+    },
+    {
+      "row": 30,
+      "cells": {
+        "B": "excedente",
+        "C": -3375.876666666678
+      }
+    }
+  ]
+}

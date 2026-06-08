@@ -413,10 +413,6 @@
                             <h3>Importar Excel Maestro</h3>
                             <p>Selecciona un archivo .xlsx o carga automaticamente el maestro desde la carpeta /data cuando la app este servida por HTTP local.</p>
                             <input type="file" id="file-master-catalog" accept=".xlsx,.xls,.json,.csv">
-                            <div class="master-import-actions">
-                                <button id="btn-load-master-excel" class="btn-primary mt-4" type="button">Cargar Excel desde data</button>
-                                <button id="btn-load-local-catalog" class="btn-secondary mt-4" type="button">Cargar JSON local</button>
-                            </div>
                             <div id="master-auto-message" class="master-message hidden"></div>
                         </div>
                         <div class="data-card">
@@ -425,6 +421,7 @@
                             <div class="flex-row">
                                 <button id="btn-download-csv-template" class="btn-secondary">CSV</button>
                                 <button id="btn-download-json-template" class="btn-secondary">JSON</button>
+                                <button id="btn-export-bodega360-package" class="btn-secondary">Exportar paquete JSON</button>
                             </div>
                         </div>
                     </div>
@@ -434,6 +431,8 @@
                         <div id="master-file-summary" class="master-summary mb-4"></div>
                         <div id="master-sheet-selector" class="sheet-selector mb-4"></div>
                         <div id="master-alerts" class="recommendations-list"></div>
+                        <div id="master-validation-summary" class="recommendations-list"></div>
+                        <div id="master-diff-summary" class="master-summary mb-4"></div>
                         <div class="stats-grid" id="master-stats-container">
                             <!-- Stats inyectadas aquí -->
                         </div>

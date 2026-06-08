@@ -1,0 +1,76 @@
+{
+  "sheetName": "ACTIVOS",
+  "sheetSlug": "activos",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 9,
+  "maxColumnDetected": 3,
+  "nonEmptyRows": 9,
+  "nonEmptyCells": 20,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "COMPONENTE",
+        "B": "UBICACIÓN"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "BOMBA AGUA 37KW FLYGT",
+        "B": "TENIENTE-INDAU "
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": "BOMBA AGUA 90KW CHINA",
+        "B": "BODEGA"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": "BOMBA AGUA POZO PROFUNDO (MISIL)",
+        "B": "BODEGA"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": "TABLERO BOMBA 37KW INDUELECTRO",
+        "B": "TENIENTE-INDAU ",
+        "C": "EN BODEGA, RETORNA DE RD3 LENA TENIENTE 07/05/26 GD 6645"
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": "TABLERO BOMBA 90KW",
+        "B": "BODEGA"
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": "LLAVE TORQUE CHINA",
+        "B": "BODEGA"
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": "CAMARA POZO N°1",
+        "B": "BMR CINABRIO",
+        "C": "EN BODEGA, RETORNA DE 71RQ BMR CINABRIO 14/05/26 GD 6682"
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": "CAMARA POZO N°2",
+        "B": "PEÑON-RD3/250"
+      }
+    }
+  ]
+}

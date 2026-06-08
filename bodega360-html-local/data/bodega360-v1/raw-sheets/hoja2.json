@@ -1,0 +1,299 @@
+{
+  "sheetName": "Hoja2",
+  "sheetSlug": "hoja2",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 115,
+  "maxColumnDetected": 7,
+  "nonEmptyRows": 48,
+  "nonEmptyCells": 48,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "HORAS EXTRAS JUAN C. FREDES GUERRERO - MAYO 2026"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "TOTAL: 12,5 HORAS "
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "G": "MIERCOLES 22/04/26 = 1,5 HORA"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "G": "INFORME CONSUMOS EPP RANCAGUA"
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "G": "MARTES 29/04/26 = 1,0 HORA"
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "G": "RECEPCION FACTURAS APRO"
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "G": "STOCK CRITICO PEÑON"
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "G": "MARTES 05/05/26 = 1,5 HORA"
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "G": "RECEPCION FACTURAS IMPORTACIONES"
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "G": "REPOSICION EPP APRO"
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "G": "MIERCOLES 06/05/26 = 1,0 HORA"
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "G": "MATCHING PEÑON"
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "G": "CONSUMO STOCK PEÑON"
+      }
+    },
+    {
+      "row": 32,
+      "cells": {
+        "G": "JUEVES 07/05/26 = 1,5 HORA"
+      }
+    },
+    {
+      "row": 33,
+      "cells": {
+        "G": "CONSUMOS STOCK"
+      }
+    },
+    {
+      "row": 34,
+      "cells": {
+        "G": "MANEJO PLANILLA EPP"
+      }
+    },
+    {
+      "row": 39,
+      "cells": {
+        "G": "MARTES 12/05/26 = 2,0 HORAS"
+      }
+    },
+    {
+      "row": 40,
+      "cells": {
+        "G": "DESPACHO EPP+INS PEÑON"
+      }
+    },
+    {
+      "row": 41,
+      "cells": {
+        "G": "REPOSICION EPP"
+      }
+    },
+    {
+      "row": 46,
+      "cells": {
+        "G": "MIERCOLES 13/05/26 = 1,5 HORA"
+      }
+    },
+    {
+      "row": 47,
+      "cells": {
+        "G": "DESPACHO CONSORCIO"
+      }
+    },
+    {
+      "row": 48,
+      "cells": {
+        "G": "PR CODINSA"
+      }
+    },
+    {
+      "row": 49,
+      "cells": {
+        "G": "CORREOS GRUA "
+      }
+    },
+    {
+      "row": 50,
+      "cells": {
+        "G": "CORREOS DESACARGA BMR"
+      }
+    },
+    {
+      "row": 55,
+      "cells": {
+        "G": "JUEVES 14/05/26 = 1,0 HORA"
+      }
+    },
+    {
+      "row": 56,
+      "cells": {
+        "G": "RECEPCIONES STOCK"
+      }
+    },
+    {
+      "row": 57,
+      "cells": {
+        "G": "RECEPCIONES IMPORTACIONES"
+      }
+    },
+    {
+      "row": 62,
+      "cells": {
+        "G": "LUNES 18/05/26 = 1,5 HORA"
+      }
+    },
+    {
+      "row": 63,
+      "cells": {
+        "G": "INVENTARIO TRICONOS"
+      }
+    },
+    {
+      "row": 64,
+      "cells": {
+        "G": "EMISION VALES CONSUMOS"
+      }
+    },
+    {
+      "row": 73,
+      "cells": {
+        "G": "LUNES 25/05/26"
+      }
+    },
+    {
+      "row": 74,
+      "cells": {
+        "G": "INFORME CONSUMOS EPP"
+      }
+    },
+    {
+      "row": 79,
+      "cells": {
+        "G": "MARTES 26/05/26"
+      }
+    },
+    {
+      "row": 80,
+      "cells": {
+        "G": "DESPACHO ACCIONA"
+      }
+    },
+    {
+      "row": 81,
+      "cells": {
+        "G": "EMISION GD"
+      }
+    },
+    {
+      "row": 82,
+      "cells": {
+        "G": "CONSUMOS EPP"
+      }
+    },
+    {
+      "row": 87,
+      "cells": {
+        "G": "MIERCOLES 27/05/26"
+      }
+    },
+    {
+      "row": 88,
+      "cells": {
+        "G": "COORDINACION CAMION Y GRUA ALHUE"
+      }
+    },
+    {
+      "row": 92,
+      "cells": {
+        "G": "JUEVES 28/05/26"
+      }
+    },
+    {
+      "row": 93,
+      "cells": {
+        "G": "DESPACHO MATERIALES ACCIONA"
+      }
+    },
+    {
+      "row": 99,
+      "cells": {
+        "G": "LUNES 01/06/26"
+      }
+    },
+    {
+      "row": 100,
+      "cells": {
+        "G": "RECEPCIONES FACTURAS MAYO 2026"
+      }
+    },
+    {
+      "row": 105,
+      "cells": {
+        "G": "MARTES 02/06/26"
+      }
+    },
+    {
+      "row": 106,
+      "cells": {
+        "G": "EMISION VALES CONSUMO"
+      }
+    },
+    {
+      "row": 107,
+      "cells": {
+        "G": "REGISTRO FACTURAS ESCANEADAS"
+      }
+    },
+    {
+      "row": 113,
+      "cells": {
+        "G": "MIERCOLES 03/06/26"
+      }
+    },
+    {
+      "row": 114,
+      "cells": {
+        "G": "EMISION VALES CONSUMO TALLER"
+      }
+    },
+    {
+      "row": 115,
+      "cells": {
+        "G": "RECEPCION IMPORTACIONES"
+      }
+    }
+  ]
+}

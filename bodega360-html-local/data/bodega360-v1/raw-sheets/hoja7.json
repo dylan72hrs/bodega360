@@ -1,0 +1,71 @@
+{
+  "sheetName": "Hoja7",
+  "sheetSlug": "hoja7",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 7,
+  "maxColumnDetected": 4,
+  "nonEmptyRows": 7,
+  "nonEmptyCells": 25,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "B": "Entrega año 2025"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "Nombre Trabajador",
+        "B": "Pantalon",
+        "C": "Polera",
+        "D": "Polar"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": "Alfaro Germán",
+        "B": 4,
+        "C": 1,
+        "D": 0
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": "Cornejo Juan",
+        "B": 0,
+        "C": 0,
+        "D": 0
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": "Fredes Juan",
+        "B": 4,
+        "C": 2,
+        "D": 0
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": "Gómez Ives",
+        "B": 1,
+        "C": 1,
+        "D": 1
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": "Tapia Miguel",
+        "B": 4,
+        "C": 4,
+        "D": 0
+      }
+    }
+  ]
+}

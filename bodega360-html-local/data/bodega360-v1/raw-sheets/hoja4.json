@@ -1,0 +1,365 @@
+{
+  "sheetName": "Hoja4",
+  "sheetSlug": "hoja4",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 45,
+  "maxColumnDetected": 3,
+  "nonEmptyRows": 45,
+  "nonEmptyCells": 129,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "LISTADO HERRAMIENTAS E INSUMOS"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "CAJA HERRAMIENTAS 71RP"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": "GD 6720 DEL 25/05/26 FAENA EMBALSE CAREN"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": "DESCRIPCION DEL MATERIAL",
+        "B": "U/M",
+        "C": "CANTIDAD"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": "ALARGADOR CARRETE 4 TOMAS 20 MTS NEGRO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": "ALARGADOR CARRETE 4 TOMAS 40 MTS NEGRO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": "ANILLO CENTRALIZADOR 280 MM",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": "BALDE CONCRETERO PLASTICO, EST. EMERGENCIA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": "BOCINA EMERGENCIA ",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": "BOTELLA LAVA OJOS C/SOPORTE STEELPRO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": "CUELLO CERVICAL GREENWAY, EST. EMERGENCIA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": "CUÑAS DE MADERA",
+        "B": "C/U",
+        "C": 10
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": "ESCUADRA 100 MM",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": "ESMERIL ANGULAR 4 1/2\" MAKITA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": "ESMERIL ANGULAR 7\" RONIX",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": "ESPEJO INSPECCION OVALADO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": "EXTINTOR ABC 10 KGS, EST. EMERGENCIA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": "FRAZADA 1 PLAZA, EST. EMERGENCIA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": "GOLILLA PLANA M30",
+        "B": "C/U",
+        "C": 16
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": "INMOVILIZADOR CABEZA GREENWAY, EST. EMERGNECIA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": "JUEGO ALICATES DIELECTRICOS 1000V STANLEY",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": "JUEGO CORREAS P/CAMILLA ESPINAL GREENWAY",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "A": "JUEGO DADO COMPLETO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "A": "JUEGO DESTORNILLADORES 1000V STANLEY",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "A": "JUEGO LLAVES P/C 10-32 MM",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "A": "KIT CONTROL AGUA",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "A": "LECTOR CHIPS BARRAS",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 28,
+      "cells": {
+        "A": "LLAVE DE BOLA 3\" BSP",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 29,
+      "cells": {
+        "A": "LLAVE STILLSON 12-14\"",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 30,
+      "cells": {
+        "A": "MARCO SIERRA 12\" STANLEY",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 31,
+      "cells": {
+        "A": "MARTILLO MECANICO 2 LBS M/FIBRA SMART",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 32,
+      "cells": {
+        "A": "MORDAZA 11 1/4\" 48T (INFERIOR Y SUPERIOR)",
+        "B": "C/U",
+        "C": 2
+      }
+    },
+    {
+      "row": 33,
+      "cells": {
+        "A": "MORDAZA 13 3/4\" 48T (INFERIOR Y SUPERIOR)",
+        "B": "C/U",
+        "C": 2
+      }
+    },
+    {
+      "row": 34,
+      "cells": {
+        "A": "PALA ANTICHISPA VERDE, EST. AMBIENTAL",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 35,
+      "cells": {
+        "A": "PALA PUNTA HUEVO M/METAL SMART",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 36,
+      "cells": {
+        "A": "PERNO ANCLAJE M30 X 1,20 MTS",
+        "B": "C/U",
+        "C": 16
+      }
+    },
+    {
+      "row": 37,
+      "cells": {
+        "A": "PERNO OJO 3/4\" X 1,20 MTS CON TUERCA",
+        "B": "C/U",
+        "C": 12
+      }
+    },
+    {
+      "row": 38,
+      "cells": {
+        "A": "PIE DE METRO 9\"",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 39,
+      "cells": {
+        "A": "PROFUNDIMETRO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 40,
+      "cells": {
+        "A": "SACO ABSORVENTE AMIC 12 KGS, EST. AMBIENTAL",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 41,
+      "cells": {
+        "A": "TERMOMETRO DIGITAL LASER",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 42,
+      "cells": {
+        "A": "TINETA GRASA BESTOLIFE HILO BARRAS",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 43,
+      "cells": {
+        "A": "TINETA GRASA MOBILGREASE MP MULTIPROPOSITO",
+        "B": "C/U",
+        "C": 1
+      }
+    },
+    {
+      "row": 44,
+      "cells": {
+        "A": "TUERCA HEXAGONAL M30",
+        "B": "C/U",
+        "C": 16
+      }
+    },
+    {
+      "row": 45,
+      "cells": {
+        "A": "VIBROMETRO",
+        "B": "C/U",
+        "C": 2
+      }
+    }
+  ]
+}

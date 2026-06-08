@@ -1,0 +1,174 @@
+{
+  "sheetName": "TRICONOS",
+  "sheetSlug": "triconos",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 16,
+  "maxColumnDetected": 8,
+  "nonEmptyRows": 14,
+  "nonEmptyCells": 93,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "INFORMACION PRECIOS TRICONOS COMPRADOS EN INDIA Y CHINA"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "Código",
+        "B": "Descripción",
+        "C": "Marca",
+        "D": "Pais",
+        "E": "Stock",
+        "F": "Valor Unit.",
+        "G": "OC",
+        "H": "Fecha Compra"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": 1110101800,
+        "B": "TRICONO, RODAMIENTO SELLADO, 12.1/4\", IADC 735",
+        "C": "Shareate",
+        "D": "China",
+        "E": 1,
+        "F": 2406936,
+        "G": 27424,
+        "H": "2022-02-01"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 1110101800,
+        "B": "TRICONO, RODAMIENTO SELLADO, 12.1/4\", IADC 735",
+        "C": "Cenerg",
+        "D": "India",
+        "E": 2,
+        "F": 4374668,
+        "G": 31420,
+        "H": "2023-06-01"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 1110101800,
+        "B": "TRICONO, RODAMIENTO SELLADO, 12.1/4\", IADC 735",
+        "C": "Shareate",
+        "D": "China",
+        "E": 2,
+        "F": 2374801,
+        "G": 31314,
+        "H": "2023-08-01"
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "D": "Total",
+        "E": 5,
+        "F": "Precio Costo AX",
+        "H": 3186360
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": "Código",
+        "B": "Descripción",
+        "C": "Marca",
+        "D": "Pais",
+        "E": "Stock",
+        "F": "Valor Unit.",
+        "G": "OC",
+        "H": "Fecha Compra"
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 1110101810,
+        "B": "TRICONO, RODAMIENTO SELLADO, 13.3/4\", IADC 735",
+        "C": "Cenerg",
+        "D": "India",
+        "E": 2,
+        "F": 5816507,
+        "G": 31420,
+        "H": "2023-06-01"
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 1110101810,
+        "B": "TRICONO, RODAMIENTO SELLADO, 13.3/4\", IADC 735",
+        "C": "Shareate",
+        "D": "China",
+        "E": 2,
+        "F": 3392573,
+        "G": 31347,
+        "H": "2023-08-01"
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "D": "Total",
+        "E": 4,
+        "F": "Precio Costo AX",
+        "H": 4423416
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": "Código",
+        "B": "Descripción",
+        "C": "Marca",
+        "D": "Pais",
+        "E": "Stock",
+        "F": "Valor Unit.",
+        "G": "OC",
+        "H": "Fecha Compra"
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 1110100040,
+        "B": "TRICONO, RODAMIENTO SELLADO 16\", IADC 735",
+        "C": "Cenerg",
+        "D": "India",
+        "E": 2,
+        "F": 7823611,
+        "G": 31348,
+        "H": "2023-06-01"
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 1110100040,
+        "B": "TRICONO, RODAMIENTO SELLADO 16\", IADC 735",
+        "C": "Shareate",
+        "D": "China",
+        "E": 2,
+        "F": 9329575,
+        "G": 31346,
+        "H": "2023-08-01"
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "D": "Total",
+        "E": 4,
+        "F": "Precio Costo AX",
+        "H": 8576593
+      }
+    }
+  ]
+}

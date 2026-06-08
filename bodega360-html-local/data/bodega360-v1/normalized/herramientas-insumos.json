@@ -1,0 +1,330 @@
+[
+  {
+    "descripcion": "ALARGADOR CARRETE 4 TOMAS 20 MTS NEGRO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 5
+  },
+  {
+    "descripcion": "ALARGADOR CARRETE 4 TOMAS 40 MTS NEGRO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 6
+  },
+  {
+    "descripcion": "ANILLO CENTRALIZADOR 280 MM",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 7
+  },
+  {
+    "descripcion": "BALDE CONCRETERO PLASTICO, EST. EMERGENCIA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 8
+  },
+  {
+    "descripcion": "BOCINA EMERGENCIA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 9
+  },
+  {
+    "descripcion": "BOTELLA LAVA OJOS C/SOPORTE STEELPRO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 10
+  },
+  {
+    "descripcion": "CUELLO CERVICAL GREENWAY, EST. EMERGENCIA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 11
+  },
+  {
+    "descripcion": "CUÑAS DE MADERA",
+    "unidadMedida": "C/U",
+    "cantidad": 10,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 12
+  },
+  {
+    "descripcion": "ESCUADRA 100 MM",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 13
+  },
+  {
+    "descripcion": "ESMERIL ANGULAR 4 1/2\" MAKITA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 14
+  },
+  {
+    "descripcion": "ESMERIL ANGULAR 7\" RONIX",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 15
+  },
+  {
+    "descripcion": "ESPEJO INSPECCION OVALADO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 16
+  },
+  {
+    "descripcion": "EXTINTOR ABC 10 KGS, EST. EMERGENCIA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 17
+  },
+  {
+    "descripcion": "FRAZADA 1 PLAZA, EST. EMERGENCIA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 18
+  },
+  {
+    "descripcion": "GOLILLA PLANA M30",
+    "unidadMedida": "C/U",
+    "cantidad": 16,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 19
+  },
+  {
+    "descripcion": "INMOVILIZADOR CABEZA GREENWAY, EST. EMERGNECIA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 20
+  },
+  {
+    "descripcion": "JUEGO ALICATES DIELECTRICOS 1000V STANLEY",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 21
+  },
+  {
+    "descripcion": "JUEGO CORREAS P/CAMILLA ESPINAL GREENWAY",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 22
+  },
+  {
+    "descripcion": "JUEGO DADO COMPLETO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 23
+  },
+  {
+    "descripcion": "JUEGO DESTORNILLADORES 1000V STANLEY",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 24
+  },
+  {
+    "descripcion": "JUEGO LLAVES P/C 10-32 MM",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 25
+  },
+  {
+    "descripcion": "KIT CONTROL AGUA",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 26
+  },
+  {
+    "descripcion": "LECTOR CHIPS BARRAS",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 27
+  },
+  {
+    "descripcion": "LLAVE DE BOLA 3\" BSP",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 28
+  },
+  {
+    "descripcion": "LLAVE STILLSON 12-14\"",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 29
+  },
+  {
+    "descripcion": "MARCO SIERRA 12\" STANLEY",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 30
+  },
+  {
+    "descripcion": "MARTILLO MECANICO 2 LBS M/FIBRA SMART",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 31
+  },
+  {
+    "descripcion": "MORDAZA 11 1/4\" 48T (INFERIOR Y SUPERIOR)",
+    "unidadMedida": "C/U",
+    "cantidad": 2,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 32
+  },
+  {
+    "descripcion": "MORDAZA 13 3/4\" 48T (INFERIOR Y SUPERIOR)",
+    "unidadMedida": "C/U",
+    "cantidad": 2,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 33
+  },
+  {
+    "descripcion": "PALA ANTICHISPA VERDE, EST. AMBIENTAL",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 34
+  },
+  {
+    "descripcion": "PALA PUNTA HUEVO M/METAL SMART",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 35
+  },
+  {
+    "descripcion": "PERNO ANCLAJE M30 X 1,20 MTS",
+    "unidadMedida": "C/U",
+    "cantidad": 16,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 36
+  },
+  {
+    "descripcion": "PERNO OJO 3/4\" X 1,20 MTS CON TUERCA",
+    "unidadMedida": "C/U",
+    "cantidad": 12,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 37
+  },
+  {
+    "descripcion": "PIE DE METRO 9\"",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 38
+  },
+  {
+    "descripcion": "PROFUNDIMETRO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 39
+  },
+  {
+    "descripcion": "SACO ABSORVENTE AMIC 12 KGS, EST. AMBIENTAL",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 40
+  },
+  {
+    "descripcion": "TERMOMETRO DIGITAL LASER",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 41
+  },
+  {
+    "descripcion": "TINETA GRASA BESTOLIFE HILO BARRAS",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 42
+  },
+  {
+    "descripcion": "TINETA GRASA MOBILGREASE MP MULTIPROPOSITO",
+    "unidadMedida": "C/U",
+    "cantidad": 1,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 43
+  },
+  {
+    "descripcion": "TUERCA HEXAGONAL M30",
+    "unidadMedida": "C/U",
+    "cantidad": 16,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 44
+  },
+  {
+    "descripcion": "VIBROMETRO",
+    "unidadMedida": "C/U",
+    "cantidad": 2,
+    "contexto": "LISTADO HERRAMIENTAS E INSUMOS",
+    "sourceSheet": "Hoja4",
+    "sourceRow": 45
+  }
+]

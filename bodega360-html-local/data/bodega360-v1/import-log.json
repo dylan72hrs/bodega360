@@ -1,0 +1,24 @@
+{
+  "generatedAt": "2026-06-08T13:06:20",
+  "steps": [
+    "Se leyó el Excel con valores calculados.",
+    "Se exportó cada hoja a data/raw-sheets/*.json conservando todas las celdas no vacías.",
+    "Se normalizó CODIGOS como catálogo base.",
+    "Se normalizaron compras, pendientes, stock parcial, min/max, proyectos y costos.",
+    "Se generaron índices de búsqueda por código, proyecto y pendientes.",
+    "Se generó reporte de validación con advertencias."
+  ],
+  "mappingRules": {
+    "CODIGOS": "A=codigo, B=codigoAlternativo, C=unidadMedida, D=nombre, E=descripcion, F=alias, G=categoria.",
+    "MIN-MAX": "A=codigo, B=descripcion, C:BV=consumo mensual, BW:CB=totales, CC:CL=promedios/min/max.",
+    "S-A PEND ENTREGA": "C=codigo, D=nombre, F=pedido, G=entrega, I=pendiente, J=localidad, K=proyecto, O=valorUnitario, P=valorPendiente.",
+    "CONTROL SC CHILE": "A=codigo, B=alternativo, C=unidad, D=descripcion, E=cantidad, G=SC, L=OC, N=proveedor, P=estado, R/S=costos.",
+    "CONTROL SC EXTRANJERO": "C=codigo, D=descripcion, E=cantidad, F/G=valores, H=OC, J=proveedor, K=pais, M=estado.",
+    "CODIGOS KONEC": "A=codigo, D=descripcion, I=ingreso, J/K=salidas, L=saldo.",
+    "REPTOS. MALI": "B=codigo, C=descripcion, D=qty, E=stock.",
+    "REPUESTOS A PERU": "A=codigo, B=descripcion, D=cantidad.",
+    "TRICONOS": "A=codigo, E=stock, F=valor unitario.",
+    "INSUMOS REAMERS": "A=codigo, G=disponible, L=stock.",
+    "MATERIALES SIN CONSUMO": "A=codigo, D=cantidad, E/F=valores."
+  }
+}

@@ -1,0 +1,47 @@
+[
+  {
+    "trabajador": "Alfaro Germán",
+    "pantalon": 4,
+    "polera": 1,
+    "polar": 0,
+    "contexto": "Entrega año 2025",
+    "sourceSheet": "Hoja7",
+    "sourceRow": 3
+  },
+  {
+    "trabajador": "Cornejo Juan",
+    "pantalon": 0,
+    "polera": 0,
+    "polar": 0,
+    "contexto": "Entrega año 2025",
+    "sourceSheet": "Hoja7",
+    "sourceRow": 4
+  },
+  {
+    "trabajador": "Fredes Juan",
+    "pantalon": 4,
+    "polera": 2,
+    "polar": 0,
+    "contexto": "Entrega año 2025",
+    "sourceSheet": "Hoja7",
+    "sourceRow": 5
+  },
+  {
+    "trabajador": "Gómez Ives",
+    "pantalon": 1,
+    "polera": 1,
+    "polar": 1,
+    "contexto": "Entrega año 2025",
+    "sourceSheet": "Hoja7",
+    "sourceRow": 6
+  },
+  {
+    "trabajador": "Tapia Miguel",
+    "pantalon": 4,
+    "polera": 4,
+    "polar": 0,
+    "contexto": "Entrega año 2025",
+    "sourceSheet": "Hoja7",
+    "sourceRow": 7
+  }
+]

@@ -1,0 +1,744 @@
+{
+  "sheetName": "REPTOS. MALI",
+  "sheetSlug": "reptos-mali",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 1710,
+  "maxColumnDetected": 7,
+  "nonEmptyRows": 74,
+  "nonEmptyCells": 363,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "No",
+        "B": "ITEMS CODE",
+        "C": "DESCRIPTION",
+        "D": "QTY",
+        "E": "STOCK",
+        "F": "OC PUESTAS",
+        "G": "OBSERVACIONES"
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": 1,
+        "B": 1510105410,
+        "C": "SPHERICAL ROLLER BEARING, 23222 CC/W33",
+        "D": 6,
+        "E": 0
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": 2,
+        "B": 1810101940,
+        "C": "BEARING, DEEP GROOVE BALL, 6028 ZZ",
+        "D": 5,
+        "E": 0
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 3,
+        "B": 1810101920,
+        "C": "BEARING, DEEP GROOVE BALL, SINGLE ROW, 6028",
+        "D": 3,
+        "E": 0
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 4,
+        "B": 1510105280,
+        "C": "BEARING, SPHERICAL ROLLER, 22320 E",
+        "D": 6,
+        "E": 0
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": 5,
+        "B": 1810102580,
+        "C": "BEARING, SPHERICAL ROLLER, 23224 EJW33C3",
+        "D": 4,
+        "E": 2
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": 6,
+        "B": 1522101070,
+        "C": "PLANET PIN, 2ND RED, 71R-04-096",
+        "D": 9,
+        "E": 3
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": 7,
+        "B": 1522101060,
+        "C": "PLANET PIN, 1ST RED, 71R-03-123",
+        "D": 8,
+        "E": 3
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 8,
+        "B": 1518100460,
+        "C": "MOTOR PINION COUPLING, 1ST RED, 71R-03-121",
+        "D": 1,
+        "E": 3
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 9,
+        "B": 1518100440,
+        "C": "SHIFTER GEAR, 1ST RED, 71R-03-118",
+        "D": 1,
+        "E": 2
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": 10,
+        "B": 1518100500,
+        "C": "RING GEAR, 2ND RED, 71R-04-067",
+        "D": 1,
+        "E": 3
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": 11,
+        "B": 1518101850,
+        "C": "RING GEAR, 1ST RED, 71R-03-120",
+        "D": 1,
+        "E": 3
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": 12,
+        "B": 1537101780,
+        "C": "SHROUD, 1ST RED, 71R-03-116",
+        "D": 18,
+        "E": 6
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 13,
+        "B": 1537101790,
+        "C": "RING GEAR THRUST WASHER, 2ND RED, 71R-04-100",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 14,
+        "B": 1537101800,
+        "C": "BRASS WASHER, 1ST RED, 71R-03-122",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": 15,
+        "B": 1519101490,
+        "C": "SUN GEAR THRUST WASHER, 2ND RED, 71R-04-099",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": 16,
+        "B": 1518100430,
+        "C": "INPUT SPLINE COUPLING, 1ST RED, 71R-03-100",
+        "D": 2,
+        "E": 4
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": 17,
+        "B": 1518102520,
+        "C": "OUTPUT SPLINE GEAR, 2ND RED, 71R-04-070",
+        "D": 2,
+        "E": 3
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": 18,
+        "B": 1316106050,
+        "C": "SEAL KIT, LARGE THRUST, CYLINDER, 5740 0065 20,RD6-09-058-SK",
+        "D": 2,
+        "E": 0
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": 19,
+        "B": 1510100070,
+        "C": "BEARING, SPHERICAL ROLLER, 22218 E, SKF",
+        "D": 30,
+        "E": 12
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": 20,
+        "B": 1524100300,
+        "C": "BREAKOUT RING, 56T, CHUCK, 61R-02-055",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": 21,
+        "B": 1518102530,
+        "C": "SUN GEAR, 3RD RED, 71R-05-076",
+        "D": 1,
+        "E": 2
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "A": 22,
+        "B": 1518100520,
+        "C": "SUN GEAR, 3RD RED, 71R-05-053",
+        "D": 1,
+        "E": 2
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "A": 23,
+        "B": 1518100510,
+        "C": "SUN GEAR, 2ND RED, 71R-04-101",
+        "D": 2,
+        "E": 3
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "A": 24,
+        "B": 1545101040,
+        "C": "FILTER ELEMENT, LUBE OIL, 5750057455, TF11A10BD, SCHROEDER",
+        "D": 4,
+        "E": 0
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "A": 25,
+        "B": 1518102550,
+        "C": "PLANET GEAR, 1ST RED, 83R-03-054",
+        "D": 6,
+        "E": 0
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "A": 26,
+        "B": 1518100560,
+        "C": "PLANET GEAR, 3RD RED, 71R-05-117",
+        "D": 3,
+        "E": 3
+      }
+    },
+    {
+      "row": 28,
+      "cells": {
+        "A": 27,
+        "B": 1518102550,
+        "C": "PLANET GEAR, 1ST RED, 83R-03-054",
+        "D": 6,
+        "E": 0
+      }
+    },
+    {
+      "row": 29,
+      "cells": {
+        "A": 28,
+        "B": 1518102540,
+        "C": "SPLINE GEAR, 2ND RED, 71R-04-098",
+        "D": 2,
+        "E": 2
+      }
+    },
+    {
+      "row": 30,
+      "cells": {
+        "A": 29,
+        "B": 1522101190,
+        "C": "PLANET PIN, 3RD RED, 71R-05-119",
+        "D": 3,
+        "E": 3
+      }
+    },
+    {
+      "row": 31,
+      "cells": {
+        "A": 30,
+        "B": 1810102610,
+        "C": "BEARING, DEEP GROOVE BALL, SINGLE ROW, 61936, SKF",
+        "D": 2,
+        "E": 0
+      }
+    },
+    {
+      "row": 32,
+      "cells": {
+        "A": 31,
+        "B": 1316102280,
+        "C": "SEAL KIT, MAIN CYLINDER, 009-09-045-SK",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 33,
+      "cells": {
+        "A": 32,
+        "B": 1518102010,
+        "C": "SELECTOR ARM, 2ND RED, 71R-04-102",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 34,
+      "cells": {
+        "A": 33,
+        "B": 1713102020,
+        "C": "VOLUTE WEAR RING, WATER PUMP, HCP40/26/50,HORMA",
+        "D": 5,
+        "E": 0
+      }
+    },
+    {
+      "row": 35,
+      "cells": {
+        "A": 34,
+        "B": 1316103700,
+        "C": "SEAL, TYPE18, 144,9 X 168,6 X 15",
+        "D": 5,
+        "E": 0
+      }
+    },
+    {
+      "row": 36,
+      "cells": {
+        "A": 35,
+        "B": 1523109610,
+        "C": "SEAL, WIPER, TYPE 38, 4525300, HALLITE",
+        "D": 8,
+        "E": 0
+      }
+    },
+    {
+      "row": 37,
+      "cells": {
+        "A": 36,
+        "B": 1316100500,
+        "C": "SEAL, TYPE 605, 4587400, HALLITE ",
+        "D": 9,
+        "E": 0
+      }
+    },
+    {
+      "row": 38,
+      "cells": {
+        "A": 37,
+        "B": 1545101040,
+        "C": "FILTER ELEMENT, LUBE OIL, 5750057455, TF11A10BD, SCHROEDER",
+        "D": 4,
+        "E": 0
+      }
+    },
+    {
+      "row": 39,
+      "cells": {
+        "A": 38,
+        "B": 1518100450,
+        "C": "SUN GEAR, 1ST RED, 71R-03-119",
+        "D": 1,
+        "E": 2
+      }
+    },
+    {
+      "row": 40,
+      "cells": {
+        "A": 39,
+        "B": 1510103290,
+        "C": "BEARING, DEEP GROOVE BALL, 6324-C3",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 41,
+      "cells": {
+        "A": 40,
+        "B": 1515100260,
+        "C": "WRENCH BODY, CHUCK, 71R-02-056",
+        "D": 1,
+        "E": 1
+      }
+    },
+    {
+      "row": 42,
+      "cells": {
+        "A": 41,
+        "B": 1519106580,
+        "C": "PIN PLUG RING, 1ST RED, 71R-03-114",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 43,
+      "cells": {
+        "A": 42,
+        "B": 1519106670,
+        "C": "COVER, 1ST RED, 71R-03-106",
+        "D": 3,
+        "E": 0
+      }
+    },
+    {
+      "row": 44,
+      "cells": {
+        "A": 43,
+        "B": 1522100150,
+        "C": "PLANET PIN, 2ND RED, 71R-04-052",
+        "D": 6,
+        "E": 6
+      }
+    },
+    {
+      "row": 45,
+      "cells": {
+        "A": 44,
+        "B": 1323101630,
+        "C": "RETURN FILTER, 0660D010BN/HC 0660 D 010 BN4HC",
+        "D": 12,
+        "E": 0
+      }
+    },
+    {
+      "row": 46,
+      "cells": {
+        "A": 45,
+        "B": 1316103620,
+        "C": "CAT SEAL, 76.90 H-81",
+        "D": 53,
+        "E": 88,
+        "F": 50
+      }
+    },
+    {
+      "row": 47,
+      "cells": {
+        "A": 46,
+        "B": 1316103590,
+        "C": "CAT SEAL, 76.90 H-16A4",
+        "D": 12,
+        "E": 140
+      }
+    },
+    {
+      "row": 48,
+      "cells": {
+        "A": 47,
+        "B": 1112100380,
+        "C": "BEARING SPACER, TRB-S, CUTTERS, CUT-15-202",
+        "D": 48,
+        "E": 90
+      }
+    },
+    {
+      "row": 49,
+      "cells": {
+        "A": 48,
+        "B": 1316103620,
+        "C": "CAT SEAL, 76.90 H-81",
+        "D": 26,
+        "E": 88,
+        "F": 50,
+        "G": "repetido en el item 45"
+      }
+    },
+    {
+      "row": 50,
+      "cells": {
+        "A": 49,
+        "B": 1112102140,
+        "C": "SEAL COVER (LARGE), TRBC-S/RS, CUTTERS, CUT-15-331",
+        "D": 29,
+        "E": 134
+      }
+    },
+    {
+      "row": 51,
+      "cells": {
+        "A": 50,
+        "B": 1112102200,
+        "C": "SHAFT, TRBC-T, CUTTERS, CUT-15-330",
+        "D": 10,
+        "E": 70
+      }
+    },
+    {
+      "row": 52,
+      "cells": {
+        "A": 51,
+        "B": 1112100360,
+        "C": "FRONT BEARING COVER",
+        "D": 18,
+        "E": 0
+      }
+    },
+    {
+      "row": 53,
+      "cells": {
+        "A": 52,
+        "B": 1112102200,
+        "C": "SHAFT, TRBC-T, CUTTERS, CUT-15-330",
+        "D": 10,
+        "E": 70,
+        "G": "repetido en el item 50"
+      }
+    },
+    {
+      "row": 54,
+      "cells": {
+        "A": 53,
+        "B": 1112100380,
+        "C": "BEARING SPACER, TRB-S, CUTTERS, CUT-15-202",
+        "D": 51,
+        "E": 90,
+        "G": "repetido en el item 47"
+      }
+    },
+    {
+      "row": 55,
+      "cells": {
+        "A": 54,
+        "B": 1112102190,
+        "C": "REAR COVER, TRBC-T, CUTTERS, CUT-15-334",
+        "D": 24,
+        "E": 50
+      }
+    },
+    {
+      "row": 56,
+      "cells": {
+        "A": 55,
+        "B": 1112100450,
+        "C": "REAR COVER, TRBC-T, CUTTERS, CUT-15-262",
+        "D": 17,
+        "E": 6
+      }
+    },
+    {
+      "row": 57,
+      "cells": {
+        "A": 56,
+        "B": 1810101750,
+        "C": "NOZZLE, CUTTING, 3F HARRIS TYPE",
+        "D": 5,
+        "E": 4
+      }
+    },
+    {
+      "row": 58,
+      "cells": {
+        "A": 57,
+        "B": 1010105720,
+        "C": "FLASHBACK, ACETELEEN, TORCH SIDE",
+        "D": 2,
+        "E": 0
+      }
+    },
+    {
+      "row": 59,
+      "cells": {
+        "A": 58,
+        "B": 1010105910,
+        "C": "FLASHBACK, OXY, TORCH SIDE",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 60,
+      "cells": {
+        "A": 59,
+        "B": 1010106390,
+        "C": "FLASHBACK, ACETELEEN, REGULATOR SIDE",
+        "D": 5,
+        "E": 0
+      }
+    },
+    {
+      "row": 61,
+      "cells": {
+        "A": 60,
+        "B": 1522103450,
+        "C": "PLANET PIN PLATE, 2ND RED, 71R-04-136",
+        "D": 3,
+        "E": 0
+      }
+    },
+    {
+      "row": 62,
+      "cells": {
+        "A": 61,
+        "B": 1010106470,
+        "C": "DIFFUSER, GAS, MIG WELDING TORCH",
+        "D": 13,
+        "E": 12
+      }
+    },
+    {
+      "row": 63,
+      "cells": {
+        "A": 62,
+        "B": 1810101840,
+        "C": "NOZZLE, CUTTING, 0F HARRIS TYPE",
+        "D": 2,
+        "E": 0
+      }
+    },
+    {
+      "row": 64,
+      "cells": {
+        "A": 63,
+        "B": 1810101470,
+        "C": "NOZZLE, CUTTING, 2F HARRIS TYPE",
+        "D": 2,
+        "E": 0
+      }
+    },
+    {
+      "row": 65,
+      "cells": {
+        "A": 64,
+        "B": 1112102190,
+        "C": "REAR COVER, TRBC-T, CUTTERS, CUT-15-334",
+        "D": 56,
+        "E": 50
+      }
+    },
+    {
+      "row": 66,
+      "cells": {
+        "A": 65,
+        "B": 1112100450,
+        "C": "REAR COVER, TRBC-T, CUTTERS, CUT-15-262",
+        "D": 46,
+        "E": 6,
+        "G": "repetido en el item 55"
+      }
+    },
+    {
+      "row": 67,
+      "cells": {
+        "A": 66,
+        "B": 1519101400,
+        "C": "SHIFTER SHAFT B, 1ST RED, 71R-03-060",
+        "D": 1,
+        "E": 1
+      }
+    },
+    {
+      "row": 68,
+      "cells": {
+        "A": 67,
+        "B": 1518100140,
+        "C": "RING GEAR, 2ND RED, 009-04-114",
+        "D": 3,
+        "E": 0
+      }
+    },
+    {
+      "row": 69,
+      "cells": {
+        "A": 68,
+        "B": 1518100030,
+        "C": "RING GEAR, 1ST RED, 009-03-068",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 70,
+      "cells": {
+        "A": 69,
+        "B": 1519100160,
+        "C": "PLANETARY HUB, 2ND RED, 009-04-103",
+        "D": 1,
+        "E": 0
+      }
+    },
+    {
+      "row": 1158,
+      "cells": {
+        "A": 1214100181,
+        "D": "MODULO EXPANSIÓN SM - I/O PLUS CARD MENTOR MP"
+      }
+    },
+    {
+      "row": 1320,
+      "cells": {
+        "D": "SM ETHERNET FOR MP DRIVE 90-31-000013 (MÓD. COMUNICACIÓN) "
+      }
+    },
+    {
+      "row": 1335,
+      "cells": {
+        "D": "CONTACTOR DC BOBINA 24V BF 38T2D LOVATO"
+      }
+    },
+    {
+      "row": 1710,
+      "cells": {
+        "D": "TRANSMISOR PRESIÓN TIPO A-10 0-400 BAR, 4...20MA, 8…30V G1/4´´ "
+      }
+    }
+  ]
+}

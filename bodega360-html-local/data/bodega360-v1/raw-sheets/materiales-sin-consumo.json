@@ -1,0 +1,528 @@
+{
+  "sheetName": "MATERIALES SIN CONSUMO",
+  "sheetSlug": "materiales-sin-consumo",
+  "sourceFile": "CODIGOS HOMOLOGADOS-CL-JFredes-31(2).xlsx",
+  "maxRowDetected": 45,
+  "maxColumnDetected": 7,
+  "nonEmptyRows": 45,
+  "nonEmptyCells": 292,
+  "rows": [
+    {
+      "row": 1,
+      "cells": {
+        "A": "MATERIALES SIN MOVIMIENTO EN INVENTARIO "
+      }
+    },
+    {
+      "row": 2,
+      "cells": {
+        "A": "CODIGO",
+        "B": "DESCRIPCION",
+        "C": "ESTADO",
+        "D": "CANT",
+        "E": "VALOR UNIT",
+        "F": "VALOR TOTAL",
+        "G": "ULTIMO CONSUMO"
+      }
+    },
+    {
+      "row": 3,
+      "cells": {
+        "A": 1010101090,
+        "B": "Tobera Mig Di m. 16Mm Mb-36 Binzel",
+        "C": "DO NOT USE",
+        "D": 9,
+        "E": 6274,
+        "F": 56466,
+        "G": "2015-03-01"
+      }
+    },
+    {
+      "row": 4,
+      "cells": {
+        "A": 1010100790,
+        "B": "Bernard Diffuser 400 Amp. (4435)",
+        "C": "DO NOT USE",
+        "D": 6,
+        "E": 3600,
+        "F": 21600,
+        "G": "2015-09-01"
+      }
+    },
+    {
+      "row": 5,
+      "cells": {
+        "A": 1010100800,
+        "B": "Ceramic Diffuser Mb-36 Mig Binzel",
+        "C": "DO NOT USE",
+        "D": 8,
+        "E": 1202,
+        "F": 9616,
+        "G": "2015-09-01"
+      }
+    },
+    {
+      "row": 6,
+      "cells": {
+        "A": 1010102420,
+        "B": "TOBERA, MAGNUM, 400, 19.1 MM, LINCOLN ELECT.",
+        "D": 5,
+        "E": 2500,
+        "F": 12500,
+        "G": "2015-09-01"
+      }
+    },
+    {
+      "row": 7,
+      "cells": {
+        "A": 1010105630,
+        "B": "Boquilla Contacto Hd 1,2 Mm (Kp14H-45)",
+        "C": "DO NOT USE",
+        "D": 5,
+        "E": 934,
+        "F": 4670,
+        "G": "2015-09-01"
+      }
+    },
+    {
+      "row": 8,
+      "cells": {
+        "A": 1212100650,
+        "B": "Contactor Thread M8 Mig-36 Mb Binzel",
+        "C": "DO NOT USE",
+        "D": 10,
+        "E": 954,
+        "F": 9540,
+        "G": "2015-09-01"
+      }
+    },
+    {
+      "row": 9,
+      "cells": {
+        "A": 1221100390,
+        "B": "Porta Contactor M8 Mig (Short) Mb-36",
+        "C": "DO NOT USE",
+        "D": 10,
+        "E": 6420,
+        "F": 64200,
+        "G": "2015-09-01"
+      }
+    },
+    {
+      "row": 10,
+      "cells": {
+        "A": 1526101430,
+        "B": " Llave Torx T-20 (Llave Estrella)",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 2023,
+        "F": 4046,
+        "G": "2016-03-01"
+      }
+    },
+    {
+      "row": 11,
+      "cells": {
+        "A": 1526101440,
+        "B": "Llave Torx T-25 (Llave Estrella)",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 2310,
+        "F": 4620,
+        "G": "2016-03-01"
+      }
+    },
+    {
+      "row": 12,
+      "cells": {
+        "A": 1022100450,
+        "B": "CILINDRO M20 / 4118 (FOTOCOPIADORA XEROX)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 53111,
+        "F": 53111,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 13,
+      "cells": {
+        "A": 1022101610,
+        "B": "TONER HP LASER CB435A P1005 (IMPRESORA HP-1006)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 33526,
+        "F": 33526,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 14,
+      "cells": {
+        "A": 1022101640,
+        "B": "TONER LASER BROTHER TN-650 (IMP. BROTHER 8085)",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 48887,
+        "F": 97774,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 15,
+      "cells": {
+        "A": 1022101650,
+        "B": "TONER XEROX 106R02180 P/IMP. 3045B",
+        "C": "DO NOT USE",
+        "D": 3,
+        "E": 25432,
+        "F": 76296,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 16,
+      "cells": {
+        "A": 1022101670,
+        "B": "TONER XEROX 4118 (FOTOCOPIADORA XEROX)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 65755,
+        "F": 65755,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 17,
+      "cells": {
+        "A": 1022101680,
+        "B": "TONER XEROX CYAN PHASER 6500 (IMP. 6505MFP)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 54995,
+        "F": 54995,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 18,
+      "cells": {
+        "A": 1022101690,
+        "B": "TONER XEROX MAGENTA PHASER 6500 (IMP. 6505MFP)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 54955,
+        "F": 54955,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 19,
+      "cells": {
+        "A": 1022101700,
+        "B": "TONER XEROX NEGRO PHASER 6500 (IMP. 6505MFP)",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 58984,
+        "F": 117968,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 20,
+      "cells": {
+        "A": 1022101710,
+        "B": "TONER XEROX YELLOW PHASER 6500 (IMP. 6505MFP)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 54995,
+        "F": 54995,
+        "G": "2016-05-01"
+      }
+    },
+    {
+      "row": 21,
+      "cells": {
+        "A": 1018100100,
+        "B": "Ampolleta Dicroica Halog. 50W 12V",
+        "C": "DO NOT USE",
+        "D": 12,
+        "E": 626,
+        "F": 7512,
+        "G": "2017-03-01"
+      }
+    },
+    {
+      "row": 22,
+      "cells": {
+        "A": 1022102490,
+        "B": "Tambor Brother DR-720",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 80447,
+        "F": 80447,
+        "G": "2017-03-01"
+      }
+    },
+    {
+      "row": 23,
+      "cells": {
+        "A": 1022101330,
+        "B": "TAMBOR BROTHER DR-110 (IMP. BROTHER 9045)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 101853,
+        "F": 101853,
+        "G": "2017-04-01"
+      }
+    },
+    {
+      "row": 24,
+      "cells": {
+        "A": 1022101530,
+        "B": "TONER BROTHER TN-115BK IMP. DCP-9045CDN",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 51528,
+        "F": 103056,
+        "G": "2017-06-01"
+      }
+    },
+    {
+      "row": 25,
+      "cells": {
+        "A": 1022101630,
+        "B": "TONER LASER BROTHER TN-550 3500 PAG (IMP. BROTHER)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 45400,
+        "F": 45400,
+        "G": "2017-06-01"
+      }
+    },
+    {
+      "row": 26,
+      "cells": {
+        "A": 1022101540,
+        "B": "TONER BROTHER TN-115C IMP. DCP-9045CDN",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 72553,
+        "F": 145106,
+        "G": "2017-07-01"
+      }
+    },
+    {
+      "row": 27,
+      "cells": {
+        "A": 1022101350,
+        "B": "TAMBOR LASER BROTHER DR-360 12000 PAG (IMP. BROTHER)",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 56833,
+        "F": 113666,
+        "G": "2017-08-01"
+      }
+    },
+    {
+      "row": 28,
+      "cells": {
+        "A": 1022101550,
+        "B": "TONER BROTHER TN-115M IMP. DCP-9045CDN",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 70118,
+        "F": 140236,
+        "G": "2017-08-01"
+      }
+    },
+    {
+      "row": 29,
+      "cells": {
+        "A": 1022101560,
+        "B": "TONER BROTHER TN-115Y IMP. DCP-9045CDN",
+        "C": "DO NOT USE",
+        "D": 2,
+        "E": 72553,
+        "F": 145106,
+        "G": "2017-08-01"
+      }
+    },
+    {
+      "row": 30,
+      "cells": {
+        "A": 1022101360,
+        "B": "TAMBOR LASER BROTHER DR-620 (IMP. BROTHER)",
+        "C": "DO NOT USE",
+        "D": 3,
+        "E": 60851,
+        "F": 182553,
+        "G": "2017-09-01"
+      }
+    },
+    {
+      "row": 31,
+      "cells": {
+        "A": 1022101340,
+        "B": "TAMBOR BROTHER DR-420 (IMP. BROTHER HL-2240)",
+        "C": "DO NOT USE",
+        "D": 3,
+        "E": 49500,
+        "F": 148500,
+        "G": "2017-11-01"
+      }
+    },
+    {
+      "row": 32,
+      "cells": {
+        "A": 1010101080,
+        "B": "TOBERA BERNARD, 1/2\", 400 A",
+        "D": 5,
+        "E": 3947,
+        "F": 19735,
+        "G": "2018-03-01"
+      }
+    },
+    {
+      "row": 33,
+      "cells": {
+        "A": 1022102500,
+        "B": "TAMBOR BROTHER DR-311 CL (IMP. BROTHER MFC-L8850GDW)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 89130,
+        "F": 89130,
+        "G": "2018-04-01"
+      }
+    },
+    {
+      "row": 34,
+      "cells": {
+        "A": 1022101570,
+        "B": "TONER BROTHER TN-360 MFC 7840W /21040/2170/7440",
+        "D": 4,
+        "E": 36059,
+        "F": 144236,
+        "G": "2018-07-01"
+      }
+    },
+    {
+      "row": 35,
+      "cells": {
+        "A": 1022101760,
+        "B": "TAMBOR LASER BROTHER DR-520 25000 PAG (IMP. BROTHER)",
+        "C": "DO NOT USE",
+        "D": 1,
+        "E": 109200,
+        "F": 109200,
+        "G": "2018-07-01"
+      }
+    },
+    {
+      "row": 36,
+      "cells": {
+        "A": 1022101590,
+        "B": "TONER BROTHER TN-450 IMP. 2270DW ",
+        "D": 6,
+        "E": 33622,
+        "F": 201732,
+        "G": "2018-09-01"
+      }
+    },
+    {
+      "row": 37,
+      "cells": {
+        "A": 1022102590,
+        "B": "TONER, BROTHER TN-1060",
+        "D": 2,
+        "E": 18400,
+        "F": 36800,
+        "G": "2019-05-01"
+      }
+    },
+    {
+      "row": 38,
+      "cells": {
+        "A": 1022102540,
+        "B": "TONER, BROTHER TN-319 MG",
+        "D": 1,
+        "E": 91300,
+        "F": 91300,
+        "G": "2019-07-01"
+      }
+    },
+    {
+      "row": 39,
+      "cells": {
+        "A": 1022102550,
+        "B": "TONER, BROTHER TN-319 BK",
+        "D": 1,
+        "E": 52200,
+        "F": 52200,
+        "G": "2019-07-01"
+      }
+    },
+    {
+      "row": 40,
+      "cells": {
+        "A": 1022102560,
+        "B": "TONER, BROTHER TN-319 YE",
+        "D": 1,
+        "E": 91000,
+        "F": 91000,
+        "G": "2019-07-01"
+      }
+    },
+    {
+      "row": 41,
+      "cells": {
+        "A": 1022102520,
+        "B": "TONER BROTHER TN-750",
+        "D": 1,
+        "E": 62305,
+        "F": 62305,
+        "G": "2019-08-01"
+      }
+    },
+    {
+      "row": 42,
+      "cells": {
+        "A": 1026100040,
+        "B": "GRASA HLF UNIVERSAL, NG-0 X 16 KG x TINETA",
+        "D": 6,
+        "E": 117876,
+        "F": 707256,
+        "G": "2019-08-01"
+      }
+    },
+    {
+      "row": 43,
+      "cells": {
+        "A": 1013100160,
+        "B": "GRASA, MOBILUX, EP-023 x 16 KGS x TINETA",
+        "D": 7,
+        "E": 73740,
+        "F": 516180,
+        "G": "2019-11-01"
+      }
+    },
+    {
+      "row": 44,
+      "cells": {
+        "A": 1523100760,
+        "B": "EMPAQUETADURA TRENZ. JM-7223 SECC. 1´´ ACRI/TEFL. x MT",
+        "D": 18,
+        "E": 46393,
+        "F": 835074,
+        "G": "2020-03-01"
+      }
+    },
+    {
+      "row": 45,
+      "cells": {
+        "E": "TOTAL",
+        "F": 4966216
+      }
+    }
+  ]
+}
